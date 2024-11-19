@@ -1,0 +1,17 @@
+{
+    "name": "NAT Website",
+    "description": "This web vue.js application is the website for $NAT.",
+    "website": "https://natgmi.com",
+    "repository": "https://github.com/wgomez23/NAT-site",
+    "logo": "https://cdn.discordapp.com/attachments/950914742627749888/1308227114331541557/NAT_Flat_2.png?ex=673d2cf1&is=673bdb71&hm=ac4addf0dabccd6b127ff1ab96a3139c70a3ca019d7eb949d9247fe1f2e417ff&",
+    "success_url": "/",
+    "stack": "heroku-22",
+    "buildpacks": [
+      {
+        "url": "heroku/nodejs"
+      },
+      {
+        "url": "https://buildpack-registry.s3.amazonaws.com/buildpacks/heroku-community/nginx.tgz"
+      }
+    ]
+}
