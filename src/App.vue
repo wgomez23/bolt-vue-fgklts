@@ -3,21 +3,24 @@
     <NavBar />
     
     <!-- Hero with full viewport height -->
-    <div class="relative h-screen">
+    <div class="relative h-screen flex items-center">
       <FallingSquares />
-      <div class="absolute inset-0 flex items-center justify-center">
-        <div class="text-center">
-          <h1 class="text-6xl font-bold mb-6 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+      <div class=" overflow-x-scroll overflow-x-hidden w-full flex flex-col absolute ">
+        <div class="text-center mb-8">
+          <h1 class="text-6xl font-bold mb-8 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
             $NAT Token
           </h1>
           <p class="text-xl text-gray-400">The First Non-Arbitrary Token Based on Digital Matter Theory</p>
         </div>
+        <MempoolBlocks />
       </div>
     </div>
     
     <main class="container mx-auto px-4 py-16 space-y-32">
       <AnimatedSection>
-        <MissionSection />
+        <MissionSection v-if="token"
+        :natStats="token"
+        :usd="usdValue"/>
       </AnimatedSection>
 
       <AnimatedSection :delay="200">
@@ -97,6 +100,7 @@
 </template>
 
 <script setup lang="ts">
+import {ref,  watchEffect } from 'vue';
 import BitcoinChart from './components/BitcoinChart.vue'
 import NavBar from './components/NavBar.vue'
 import SectionTitle from './components/SectionTitle.vue'
@@ -107,10 +111,43 @@ import MissionSection from './components/MissionSection.vue'
 import Footer from './components/Footer.vue'
 import FallingSquares from './components/FallingSquares.vue'
 import AnimatedSection from './components/AnimatedSection.vue'
-
+import MempoolBlocks from './components/MempoolBlocks.vue'
 const exchanges = [
   { name: 'Taprooswap', logo: null },
   { name: 'SuperEx', logo: null },
   { name: 'OrdinalsWallet', logo: null }
 ];
+const API_URL = 'https://mscribe.io/api/tokens/all';
+const token = (ref());
+const usdValue = (ref());
+let getTotalAvailable = (max:string, left:string)=> {
+      let balance =  BigInt(max ) - BigInt(left);
+      return balance.toString();
+}
+watchEffect(async()=>{
+  try {
+    const request = await fetch(API_URL, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      method: 'POST',
+      body: JSON.stringify({
+        ticker: 'dmt-nat',
+        limit: 1,
+        offset: 0,
+        latest_deployed: 0,
+        isGetHolders: 1
+      })
+    });
+  const response = await request.json();
+  token.value = response.deployments[0];
+  usdValue.value = response.usd_value;
+  } catch (error) {
+    console.log(error);
+  }
+ //change token properties
+ token.value.totalSupply = getTotalAvailable(token.value.max, token.value.mintLeft);
+ token.value.marketcap = token.value.floor_price * token.value.totalSupply;
+})
 </script>
