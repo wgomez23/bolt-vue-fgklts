@@ -5,7 +5,7 @@ const props = defineProps<{
   videoId: string
 }>()
 
-const embedUrl = computed(() => `https://www.youtube.com/embed/${props.videoId}`)
+const embedUrl = computed(() => `${props.videoId}`)
 </script>
 
 <template>

@@ -36,7 +36,7 @@
         <section>
           <SectionTitle>What is DMT?</SectionTitle>
           <div class="flex flex-col lg:grid lg:grid-cols-2 gap-8 items-start">
-            <VideoEmbed videoId="dmt-video-id" class="h-full" />
+            <VideoEmbed :videoId="'https://www.youtube.com/embed/Zcu7FBbNYdU?si=ZglBvNgxcunDNMUW'" class="h-full" />
             <div class="prose prose-invert max-w-none">
               <h3 class="text-2xl font-bold mb-4 text-white">Digital Matter Theory Explained</h3>
               <p class="text-gray-300 mb-4">
@@ -54,7 +54,7 @@
         </section>
       </AnimatedSection>
 
-      <AnimatedSection :delay="600">
+      <!--<AnimatedSection :delay="600">
         <section>
           <SectionTitle>What is $NAT?</SectionTitle>
           <div class="flex flex-col lg:grid lg:grid-cols-2 gap-8 items-start">
@@ -74,6 +74,7 @@
           </div>
         </section>
       </AnimatedSection>
+    -->
 
       <AnimatedSection :delay="800">
         <section>
