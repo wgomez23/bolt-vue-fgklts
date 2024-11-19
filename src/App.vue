@@ -91,7 +91,7 @@
         </section>
       </AnimatedSection>
 
-      <AnimatedSection :delay="1000">
+      <AnimatedSection :delay="1000" id="faq">
         <FAQSection />
       </AnimatedSection>
     </main>

@@ -10,7 +10,8 @@ const isOpen = ref(false)
       <div class="container mx-auto px-6 relative">
         <div class="flex items-center h-14">
           <!-- Logo -->
-          <div class="flex-none">
+          <div class="flex items-center gap-2">
+            <img src="../../public//Nat_logo.png" class="w-[30px] h-[30px]"/>
             <span class="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
               $NAT
             </span>
@@ -31,7 +32,7 @@ const isOpen = ref(false)
                 </svg>
                 Discord
               </a>
-              <a href="#" class="text-gray-300 hover:text-white transition-colors">FAQ</a>
+              <a href="#faq" class="text-gray-300 hover:text-white transition-colors">FAQ</a>
               <a href="#" class="text-gray-300 hover:text-white transition-colors">How to buy</a>
             </div>
           </div>
