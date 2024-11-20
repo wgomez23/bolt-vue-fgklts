@@ -14,11 +14,11 @@ const cardRef = ref<HTMLElement | null>(null);
 const getLogoUrl = (name: string) => {
   switch (name) {
     case 'Taprooswap':
-      return 'https://images.unsplash.com/photo-1621416894569-0f39ed31d247?w=200&h=200&fit=crop';
+      return 'https://mscribe-webapp.s3.us-east-2.amazonaws.com/Taparooswap.jpg';
     case 'SuperEx':
-      return 'https://images.unsplash.com/photo-1518546305927-5a555bb7020d?w=200&h=200&fit=crop';
+      return 'https://mscribe-webapp.s3.us-east-2.amazonaws.com/superex.png';
     case 'OrdinalsWallet':
-      return 'https://images.unsplash.com/photo-1524673450801-b5aa9b621b76?w=200&h=200&fit=crop';
+      return 'https://ordinalswallet.com/logo-icon.svg';
     default:
       return null;
   }
@@ -27,7 +27,7 @@ const getLogoUrl = (name: string) => {
 const getExchangeUrl = (name: string) => {
   switch (name) {
     case 'Taprooswap':
-      return 'https://taprooswap.com';
+      return 'https://taparooswap.com/';
     case 'SuperEx':
       return 'https://superex.com';
     case 'OrdinalsWallet':

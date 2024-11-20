@@ -1,6 +1,6 @@
 <template  >
   <div class=" flex flex-col">
-  <div class="flex items-center gap-2 justify-start relative">
+  <div class="container flex items-center gap-2 justify-start relative mx-auto">
     <div class="pl-[20px]">
       
       <div class="relative bg-[#ED711A] h-[120px] w-[120px] flex flex-col px-[11px] py-[4.5px] mt-[3.5rem] justify-center">
