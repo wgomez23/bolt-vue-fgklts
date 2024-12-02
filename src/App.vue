@@ -117,7 +117,7 @@ const exchanges = [
   { name: 'Taprooswap', logo: null },
   { name: 'SuperEx', logo: null },
   { name: 'OrdinalsWallet', logo: null },
-  { name: 'Satsx', logo: null }
+  { name: 'SatX', logo: null }
 ];
 const API_URL = 'https://mscribe.io/api/tokens/all';
 const token = (ref());
