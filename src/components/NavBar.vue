@@ -33,16 +33,16 @@ const isOpen = ref(false)
                 Discord
               </a>
               <a href="#faq" class="text-gray-300 hover:text-white transition-colors">FAQ</a>
-              <a href="#" class="text-gray-300 hover:text-white transition-colors">How to buy</a>
+              <a href="#whereToBuy" class="text-gray-300 hover:text-white transition-colors">How to buy</a>
             </div>
           </div>
 
           <!-- Buy button -->
-          <div class="hidden md:block flex-none">
+          <a class="hidden md:block flex-none" href="#whereToBuy">
             <button class="bg-primary hover:bg-primary-dark text-white px-6 py-2 rounded-full transition-colors">
               Buy
             </button>
-          </div>
+          </a>
 
           <!-- Mobile menu button -->
           <button 

@@ -44,7 +44,7 @@
                 It establishes a fundamental framework for understanding the intrinsic value of digital entities through
                 mathematical principles and quantum computing concepts.
               </p>
-              <p class="text-gray-300">
+              <p class="text-gray-300" id="whereToBuy">
                 By analyzing the fundamental properties of digital systems, DMT creates a new paradigm for understanding
                 value in the digital realm. This theoretical framework provides the foundation for truly non-arbitrary
                 digital assets, beginning with $NAT.
@@ -79,7 +79,7 @@
       <AnimatedSection :delay="800">
         <section>
           <SectionTitle>Where to Buy</SectionTitle>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
             <ExchangeCard
               v-for="(exchange, index) in exchanges"
               :key="exchange.name"
@@ -116,7 +116,8 @@ import MempoolBlocks from './components/MempoolBlocks.vue'
 const exchanges = [
   { name: 'Taprooswap', logo: null },
   { name: 'SuperEx', logo: null },
-  { name: 'OrdinalsWallet', logo: null }
+  { name: 'OrdinalsWallet', logo: null },
+  { name: 'Satsx', logo: null }
 ];
 const API_URL = 'https://mscribe.io/api/tokens/all';
 const token = (ref());

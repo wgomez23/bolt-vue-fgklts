@@ -19,6 +19,8 @@ const getLogoUrl = (name: string) => {
       return 'https://mscribe-webapp.s3.us-east-2.amazonaws.com/superex.png';
     case 'OrdinalsWallet':
       return 'https://ordinalswallet.com/logo-icon.svg';
+    case 'Satsx':
+      return 'https://www.satsx.io/icons/logo.svg';
     default:
       return null;
   }
@@ -29,9 +31,11 @@ const getExchangeUrl = (name: string) => {
     case 'Taprooswap':
       return 'https://taparooswap.com/';
     case 'SuperEx':
-      return 'https://superex.com';
+      return 'https://www.superex.com/trade/DMT-NAT_USDT';
     case 'OrdinalsWallet':
-      return 'https://ordinalswallet.com';
+      return 'https://ordinalswallet.com/collection/tap-DMT-NAT';
+    case 'Satsx':
+      return 'https://www.satsx.io/ordinals/tap/dmt-nat/listed';
     default:
       return '#';
   }
