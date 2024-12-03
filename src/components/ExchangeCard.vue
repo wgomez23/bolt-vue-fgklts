@@ -13,14 +13,14 @@ const cardRef = ref<HTMLElement | null>(null);
 // Use different placeholder images for each exchange
 const getLogoUrl = (name: string) => {
   switch (name) {
-    case 'Taprooswap':
+    case 'TaparooSwap':
       return 'https://mscribe-webapp.s3.us-east-2.amazonaws.com/Taparooswap.jpg';
     case 'SuperEx':
       return 'https://mscribe-webapp.s3.us-east-2.amazonaws.com/superex.png';
     case 'OrdinalsWallet':
       return 'https://ordinalswallet.com/logo-icon.svg';
     case 'SatX':
-      return 'https://www.satsx.io/icons/logo.svg';
+      return 'https://mscribe-webapp.s3.us-east-2.amazonaws.com/satx_dark.png';
     default:
       return null;
   }
@@ -28,8 +28,8 @@ const getLogoUrl = (name: string) => {
 
 const getExchangeUrl = (name: string) => {
   switch (name) {
-    case 'Taprooswap':
-      return 'https://taparooswap.com/';
+    case 'TaparooSwap':
+      return 'https://swap.taparooswap.com/';
     case 'SuperEx':
       return 'https://www.superex.com/trade/DMT-NAT_USDT';
     case 'OrdinalsWallet':

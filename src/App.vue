@@ -114,7 +114,7 @@ import FallingSquares from './components/FallingSquares.vue'
 import AnimatedSection from './components/AnimatedSection.vue'
 import MempoolBlocks from './components/MempoolBlocks.vue'
 const exchanges = [
-  { name: 'Taprooswap', logo: null },
+  { name: 'TaparooSwap', logo: null },
   { name: 'SuperEx', logo: null },
   { name: 'OrdinalsWallet', logo: null },
   { name: 'SatX', logo: null }
