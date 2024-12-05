@@ -8,6 +8,10 @@
         <p class="text-black font-medium text-sm text-center">{{formatNumber(block.bits)}} NATs</p>
         <p class="text-black  font-medium  text-sm">{{getTimeDifference}}</p>
       </div>
+      <div class="items-center gap-2 flex w-full justify-center py-2">
+        <img class="w-[15px] h-[15px]" :src="'https://mempool.space/resources/mining-pools/'+block.extras.pool.slug+'.svg' " alt="pool-logo" width="15" height="15" />
+        <p class="text-sm">{{block.extras.pool.name}}</p>
+      </div>
       <div v-if="blockSelected == block.height" class="absolute w-0 h-0 border-l-[25px] border-l-transparent border-r-[25px] border-r-transparent border-b-[25px] border-b-[#fff] bottom-[-25px] left-1/2 transform -translate-x-1/2 translate-y-1/2"></div>
   </div>
 </template>

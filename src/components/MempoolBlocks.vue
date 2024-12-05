@@ -2,16 +2,17 @@
   <div class=" flex flex-col">
   <div class="container flex items-center gap-2 justify-start relative mx-auto">
     <div class="pl-[20px]">
-      
+      <p></p>
       <div class="relative bg-[#ED711A] h-[120px] w-[120px] flex flex-col px-[11px] py-[4.5px] mt-[3.5rem] justify-center">
         <div class="absolute skew-y-[50deg] origin-top transition-colors bg-[#58441b]" style="height: 120px; width: calc(20px); top: calc(-12px); left: calc(-20px);"></div>
         <div class="absolute skew-x-[40deg] origin-top transition-colors bg-[#58441b]" style="width: 120px; height: calc(24px); top: calc(-24px); left: calc(-20px);"></div>
         <img :src="CDN_URL+'bitcoin.png'" class="animate-[spin_4s_infinite]" />
       </div>
+      <div class="py-4"></div>
     </div>
     <div class="h-[200px] border-r-[2px] border-dashed mx-3 my-auto">
     </div>
-    <div class="pl-[20px] flex items-center gap-7 justify-start overflow-x-scroll overflow-x-hidden w-full">
+    <div class="pl-[20px] flex items-center gap-7 justify-start overflow-x-scroll overflow-x-hidden w-full ">
       <Block 
       :key="block.id"
       :block="block" v-for="(block,index) in sortedBlocks"
@@ -102,6 +103,16 @@ export default{
 }
 </script>
 <style  scoped>
+*::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+* {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
 .new-block {
   animation: slide-in 3s cubic-bezier(0.36, 1.07, 1, 1)
 }
