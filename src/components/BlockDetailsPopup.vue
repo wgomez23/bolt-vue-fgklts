@@ -2,12 +2,17 @@
   <div v-if="show" class="bg-black bg-opacity-50 flex items-center justify-center z-50 mb-4">
     <div class="bg-[#1a1a1a] p-6 max-w-2xl w-full mx-4 border-t-[3px] border-solid">
       <div class="flex justify-between items-center mb-4">
-        <h2 class="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Block #{{ block.height }}</h2>
+        <h2 class="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent capitalize">{{ block.extras.pool?.name }}</h2>
         <button @click="$emit('close')" class="text-gray-400 hover:text-white">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
+      </div>
+      <div class="my-5 flex items-center" :class="{'animate-pulse bg-gray-700':isLoading}">
+          <p v-if="totalRewards" class="text-gray-400 font-bold flexs items-center">$NAT Historic Earnings: 
+            <span class="text-white font-bold">{{formatNumber(totalRewards)}}</span>
+          </p>
       </div>
       <div class="overflow-x-auto">
         <table class="w-full text-left">
@@ -32,7 +37,12 @@
             
             <!-- Actual data -->
             <tr v-else class="text-gray-300" :class="{'bg-dark': index % 2 == 0}" v-for="(entry,index) in entries " :key="entry.tx">
-              <td class="py-2 px-4">{{ entry.blck }}</td>
+              <td class="py-2 px-4 cursor-pointer">
+                <a :href="'https://mempool.space/tx/'+entry.tx" target="_blank" 
+                class="hover:underline hover:text-primary" >
+                {{ entry.blck }}
+                </a>
+              </td>
               <td class="py-2 px-4">{{ formatTimestamp(entry.ts) }}</td>
               <td class="py-2 px-4">{{ formatRelativeTime(entry.ts) }}</td>
               <td class="py-2 px-4">{{ formatNumber(entry.amt) }}</td>
@@ -59,7 +69,10 @@ export default {
   data() {
     return {
       isLoading: false,
-      entries:[]
+      entries:[],
+      totalRewards:null,
+      offset:0,
+      limit:10
     }
   },
   watch: {
@@ -67,24 +80,15 @@ export default {
       immediate: true,
       async handler(newVal) {
         if (!newVal || !this.block.extras?.pool?.slug) return
-        
+        this.totalRewards = null;
         this.isLoading = true
         try {
-          const response = await fetch('https://mscribe.io/api/pools/get', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              pool: this.block.extras.pool.slug,
-              offset: 0,
-              limit: 10
-            })
-          })
+          const response = await fetch(`https://mscribe-stage-4385d64f074b.herokuapp.com/api/pools/rewards/${this.block.extras.pool?.slug}?offset=${this.offset}&limit=${this.limit}`)
           const data = await response.json();
 
           if (data.success) {
-            this.entries = data.stats;
+            this.entries = data.blocks;
+            this.totalRewards = data.totalRewards;
           }
           // Handle the response data as needed
         } catch (error) {
