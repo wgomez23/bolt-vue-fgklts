@@ -55,13 +55,22 @@
             </tr>
           </tbody>
         </table>
+        <Pagination 
+        :total="total"
+        :limit="limit"
+        :page="currentPage"
+        @onPageChange="handlePageChange"/>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import Pagination from "./Pagination.vue";
 export default {
+  components:{
+    Pagination
+  },  
   props: {
     show: Boolean,
     block: Object
@@ -71,8 +80,12 @@ export default {
       isLoading: false,
       entries:[],
       totalRewards:null,
+      //pagination
+      currentPage:1,
       offset:0,
-      limit:10
+      limit:10,
+      total:0,
+      abortController: null
     }
   },
   watch: {
@@ -81,25 +94,52 @@ export default {
       async handler(newVal) {
         if (!newVal || !this.block.extras?.pool?.slug) return
         this.totalRewards = null;
-        this.isLoading = true
+        this.currentPage = 1;
+        this.limit = 10;
+        this.offset = 0;
+        this.fetchPoolData();
+      }
+    }
+  },
+  methods: {
+    async fetchPoolData(){
+        this.isLoading = true;
+        if (this.abortController) {
+          this.abortController.abort();
+        }
+        this.abortController = new AbortController();
+        const signal = this.abortController.signal;
+
         try {
-          const response = await fetch(`https://mscribe-stage-4385d64f074b.herokuapp.com/api/pools/rewards/${this.block.extras.pool?.slug}?offset=${this.offset}&limit=${this.limit}`)
+          const response = await fetch(`https://mscribe-stage-4385d64f074b.herokuapp.com/api/pools/rewards/${this.block.extras.pool?.slug}?offset=${this.offset}&limit=${this.limit}`, { signal });
+
+          if (!response.ok) {
+            this.isLoading = false;
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
           const data = await response.json();
 
           if (data.success) {
             this.entries = data.blocks;
             this.totalRewards = data.analytics?.total_rewards;
+            this.total = data.analytics?.total;
           }
           // Handle the response data as needed
         } catch (error) {
-          console.error('Error fetching pool data:', error)
+          if (error.name === 'AbortError') {
+            console.log('Fetch aborted');
+          } else {
+            console.error('Error fetching pool data:', error);
+          }
         } finally {
-          this.isLoading = false
+          this.isLoading = false;
         }
-      }
-    }
-  },
-  methods: {
+    },
+    handlePageChange(page){
+      this.currentPage = page;
+      this.offset = (page - 1) * this.limit;
+      this.fetchPoolData();
+    },
     formatTimestamp(timestamp) {
       return new Date(timestamp * 1000).toDateString();
     },
