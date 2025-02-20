@@ -88,7 +88,7 @@ export default {
 
           if (data.success) {
             this.entries = data.blocks;
-            this.totalRewards = data.totalRewards;
+            this.totalRewards = data.analytics?.total_rewards;
           }
           // Handle the response data as needed
         } catch (error) {
