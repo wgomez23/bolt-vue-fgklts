@@ -1,5 +1,5 @@
 <template >
-  <div @click="$emit('click', block)" class="relative my-10">
+  <div @click="$emit('handleClick', block)" class="relative my-10 cursor-pointer">
     <div class="text-center" :class="{'underline text-[#FA951D]': blockSelected == block.height}">{{block.height}} </div>
       <div class="relative bg-[#00FF94] h-[120px] w-[120px] flex flex-col px-[5px] py-[4.5px] mt-[2rem] justify-center gap-1 items-center">
         <div class="absolute skew-y-[50deg] origin-top transition-colors bg-[#1b583b]" style="height: 120px; width: calc(20px); top: calc(-12px); left: calc(-20px);"></div>

@@ -15,16 +15,25 @@
     <div class="pl-[20px] flex items-center gap-7 justify-start overflow-x-scroll overflow-x-hidden w-full ">
       <Block 
       :key="block.id"
-      :block="block" v-for="(block,index) in sortedBlocks"
+      :block="block" v-for="(block) in sortedBlocks"
+      :blockSelected=" selectedBlock?.height"
       :class="{'new-block' : block.id == newBlockHash}"
+      @handleClick="showBlockDetails(block)"
+      :data-block-height="block.height"
       />
     </div>
   </div>
-
+  <BlockDetailsPopup 
+    :show="selectedBlock !== null"
+    :block="selectedBlock"
+    @close="selectedBlock = null"
+  />
 </div>
 </template>
 <script >
 import Block from './Block.vue';
+import BlockDetailsPopup from './BlockDetailsPopup.vue';
+
 export default{
   mounted() {
     this.connectWebSocket();
@@ -37,15 +46,15 @@ export default{
       clearInterval(this.pingInterval);
     }
   },
-  components:{Block},
+  components:{Block, BlockDetailsPopup},
   data(){
     return {
       CDN_URL: 'https://mscribe-webapp.s3.amazonaws.com/',
       blocks: [],
       ws: new WebSocket('wss://mscribe-indexer-32036803921d.herokuapp.com'),
       pingInterval: null,
-      newBlockHash:null
-      
+      newBlockHash:null,
+      selectedBlock: null
     }
   },
   computed:{
@@ -96,6 +105,23 @@ export default{
         setTimeout(() => {
           this.newBlockHash = null;
         }, 1500); // Match the animation duration
+      }
+    },
+    showBlockDetails(block) {
+      if (this.selectedBlock?.height === block.height) {
+        this.selectedBlock = null;
+      } else {
+        this.selectedBlock = block;
+        this.$nextTick(() => {
+          const blockElement = document.querySelector(`[data-block-height="${block.height}"]`);
+          if (blockElement) {
+            blockElement.scrollIntoView({
+              behavior: 'smooth',
+              block: 'nearest',
+              inline: 'center'
+            });
+          }
+        });
       }
     }
   }
