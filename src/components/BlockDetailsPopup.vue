@@ -10,7 +10,7 @@
         </button>
       </div>
       <div class="my-5 flex items-center" :class="{'animate-pulse bg-gray-700':isLoading}">
-          <p v-if="totalRewards" class="text-gray-400 font-bold flexs items-center">$NAT Historic Earnings: 
+          <p v-if="totalRewards" class="text-gray-400 font-bold flexs items-center">$NAT Historic Rewards: 
             <span class="text-white font-bold">{{formatNumber(totalRewards)}}</span>
           </p>
       </div>
@@ -121,8 +121,8 @@ export default {
 
           if (data.success) {
             this.entries = data.blocks;
-            this.totalRewards = data.analytics?.total_rewards;
-            this.total = data.analytics?.total;
+            this.totalRewards = data.analytics?.total_rewards || 0;
+            this.total = data.analytics?.total || 0;
           }
           // Handle the response data as needed
         } catch (error) {
