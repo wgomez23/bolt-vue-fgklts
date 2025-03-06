@@ -21,6 +21,11 @@
         <MissionSection v-if="token"
         :natStats="token"
         :usd="usdValue"/>
+
+      </AnimatedSection >
+      <!-- Miner Leaderboards-->
+      <AnimatedSection :delay="100">
+        <MinerLeaderBoard />
       </AnimatedSection>
 
       <AnimatedSection :delay="200">
@@ -113,6 +118,7 @@ import Footer from './components/Footer.vue'
 import FallingSquares from './components/FallingSquares.vue'
 import AnimatedSection from './components/AnimatedSection.vue'
 import MempoolBlocks from './components/MempoolBlocks.vue'
+import MinerLeaderBoard from './components/MinerLeaderBoard.vue'
 const exchanges = [
   { name: 'TaparooSwap', logo: null },
   { name: 'SuperEx', logo: null },
