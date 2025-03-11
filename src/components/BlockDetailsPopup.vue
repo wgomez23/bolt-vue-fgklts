@@ -29,16 +29,25 @@
         </button>
       </div>
       <div
-        class="my-5 flex items-center"
+        class="my-5 flex items-center justify-between"
         :class="{ 'animate-pulse bg-gray-700': isLoading }"
       >
         <p
           v-if="totalRewards"
-          class="text-gray-400 font-bold flexs items-center"
+          class="text-gray-400 font-bold flex text-center flex-col"
         >
-          $NAT Historic Rewards:
+          $NAT Historic Rewards
           <span class="text-white font-bold">{{
             formatNumber(totalRewards)
+          }}</span>
+        </p>
+        <p
+          v-if="balance"
+          class="text-gray-400 font-bold flex text-center flex-col"
+        >
+          $NAT Balance
+          <span class="text-white font-bold">{{
+            formatNumber(balance)
           }}</span>
         </p>
       </div>
@@ -132,6 +141,7 @@ export default {
       isLoading: false,
       entries: [],
       totalRewards: null,
+      balance: null,
       //pagination
       currentPage: 1,
       offset: 0,
@@ -177,6 +187,7 @@ export default {
         if (data.success) {
           this.entries = data.blocks;
           this.totalRewards = data.analytics?.total_rewards || 0;
+          this.balance = data.analytics?.balance || 0;
           this.total = data.analytics?.total || 0;
         }
         // Handle the response data as needed
