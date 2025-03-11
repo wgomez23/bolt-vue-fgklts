@@ -21,6 +21,7 @@
           <tr class="border-b border-gray-700">
             <th class="py-2 px-4 text-primary text-lg text-center">Pool</th>
             <th class="py-2 px-4 text-primary text-lg text-center">$NAT Reward</th>
+            <th class="py-2 px-4 text-primary text-lg text-center">$NAT Balance</th>
             <th class="py-2 px-4 text-primary text-lg text-center">BTC Reward</th>
           </tr>
         </thead>
@@ -28,7 +29,7 @@
           <!-- Loading skeleton -->
           <template v-if="isLoading">
             <tr v-for="i in 10" :key="i" class="text-gray-300 animate-pulse">
-              <td v-for="j in 3" :key="j" class="py-2 px-4">
+              <td v-for="j in 4" :key="j" class="py-2 px-4">
                 <div class="h-4 bg-gray-700 rounded w-20"></div>
               </td>
             </tr>
@@ -58,6 +59,7 @@
               </div>
             </td>
             <td class="py-2 px-4 text-center">{{ formatNumber(item.total_rewards) }}</td>
+            <td class="py-2 px-4 text-center">{{ formatNumber(item.balance) }}</td>
             <td class="py-2 px-4 text-center">
               {{ formatNumber(satsToBitcoin(item?.extraData?.totalReward, 0)) }} <span class="text-xs text-primary">BTC</span>
             </td>
