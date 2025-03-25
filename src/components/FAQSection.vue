@@ -9,15 +9,23 @@ const faqs = [
   },
   {
     question: "How is Digital Matter Theory related to Bitcoin?",
-    answer: "Digital Matter Theory analyzes Bitcoin's underlying properties like hash power and difficulty adjustment to establish fundamental principles for digital value."
+    answer: "Bitcoin's immutable nature and energy consumption create a direct parallel between the digital and physical worlds. Just as the laws of physics remain constant, the data recorded on Bitcoin's blockchain is permanently unalterable. This fundamental connection is what enables Digital Matter Theory to emerge as a concept uniquely suited to Bitcoin."
   },
   {
     question: "What is the total supply of $NAT?",
-    answer: "The supply of $NAT is determined by mathematical principles derived from Digital Matter Theory, ensuring a non-arbitrary distribution model."
+    answer: "The supply of $NAT is inherently non-arbitrary, as it is derived entirely from Bitcoin's block data. Specifically, it originates from the Bits field, which represents the network's difficulty adjustment—a value that updates every 2,016 blocks. As Bitcoin's hash power increases, the Bits value decreases. By summing the Bits values across all Bitcoin blocks, a deterministic and non-arbitrary supply of $NAT is established. The current supply is displayed at the top of this page."
+  },
+  {
+    question: "Is $NAT inflationary?",
+    answer: "Yes, $NAT has a diminishing inflationary supply that correlates with Bitcoin's increasing security. Since Bitcoin generates a new block approximately every 10 minutes, each block contains a Bits value, which reflects the network's difficulty adjustment every 2,016 blocks. As Bitcoin's hash power rises, the Bits value decreases, naturally reducing the rate at which new $NAT is generated over time."
   },
   {
     question: "How can I participate in the $NAT ecosystem?",
     answer: "You can participate by trading $NAT on supported exchanges, contributing to the protocol development, or joining our community discussions."
+  },
+  {
+    question: "Can $NAT become as valuable as Bitcoin one day?",
+    answer: "Bitcoin remains the dominant force in the digital commodity space and is likely to retain its position as the most valuable asset ever created. However, $NAT stands out as the first commodity derived from Bitcoin's immutable data substrate, which grants it unique value comparable to real-world naturally occurring commodities like rare earth metals and oil. With Bitcoin's established reputation as \"digital gold\" driving it to a market capitalization of around $2 trillion, it's reasonable to expect that $NAT, if viewed as \"digital silver,\" could follow a similar 10:1 value ratio. This would position $NAT at an estimated fair value market cap of around $200 billion today."
   }
 ]
 </script>

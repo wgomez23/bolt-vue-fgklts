@@ -10,7 +10,7 @@
           <h1 class="text-6xl font-bold mb-8 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
             $NAT Token
           </h1>
-          <p class="text-xl text-gray-400">The First Non-Arbitrary Token Based on Digital Matter Theory</p>
+          <p class="text-xl text-gray-400">The First Bitcoin Produced Digital Commodity</p>
         </div>
         <MempoolBlocks />
       </div>
@@ -21,8 +21,8 @@
         <MissionSection v-if="token"
         :natStats="token"
         :usd="usdValue"/>
+      </AnimatedSection>
 
-      </AnimatedSection >
       <!-- Miner Leaderboards-->
       <AnimatedSection :delay="100">
         <MinerLeaderBoard />
@@ -45,41 +45,37 @@
             <div class="prose prose-invert max-w-none">
               <h3 class="text-2xl font-bold mb-4 text-white">Digital Matter Theory Explained</h3>
               <p class="text-gray-300 mb-4">
-                Digital Matter Theory is a groundbreaking meta-protocol that revolutionizes how we think about digital assets.
-                It establishes a fundamental framework for understanding the intrinsic value of digital entities through
-                mathematical principles and quantum computing concepts.
+                Digital Matter Theory (DMT) is a pioneering meta-protocol on Bitcoin that redefines the concept of digital commodities. It introduces a foundational framework that ties Bitcoin's intrinsic value to its thermodynamic properties, transforming how we perceive and apply its unique characteristics.
               </p>
-              <p class="text-gray-300" id="whereToBuy">
-                By analyzing the fundamental properties of digital systems, DMT creates a new paradigm for understanding
-                value in the digital realm. This theoretical framework provides the foundation for truly non-arbitrary
-                digital assets, beginning with $NAT.
+              <p class="text-gray-300 mb-6" id="whereToBuy">
+                By examining Bitcoin's core properties, DMT establishes a new paradigm for valuing digital assets. This framework enables the creation of truly non-arbitrary digital matter, starting with $NAT, and sets the stage for a more structured approach to digital scarcity and value.
               </p>
+              <a 
+                href="https://digital-matter-theory.gitbook.io/"
+                target="_blank"
+                class="inline-block bg-primary hover:bg-primary-dark text-white px-6 py-2 rounded-full transition-colors"
+              >
+                Learn More
+              </a>
             </div>
           </div>
         </section>
       </AnimatedSection>
 
-      <!--<AnimatedSection :delay="600">
+      <AnimatedSection :delay="600">
         <section>
           <SectionTitle>What is $NAT?</SectionTitle>
           <div class="flex flex-col lg:grid lg:grid-cols-2 gap-8 items-start">
-            <VideoEmbed videoId="nat-video-id" class="h-full order-1 lg:order-2" />
             <div class="prose prose-invert max-w-none order-2 lg:order-1">
               <h3 class="text-2xl font-bold mb-4 text-white">Non-Arbitrary Token</h3>
               <p class="text-gray-300 mb-4">
-                $NAT (Non-Arbitrary Token) is the first implementation of Digital Matter Theory principles in a digital asset.
-                Unlike traditional cryptocurrencies, $NAT's value is derived from fundamental digital properties rather than
-                arbitrary market forces.
-              </p>
-              <p class="text-gray-300">
-                Through its unique design and implementation of DMT principles, $NAT represents a new generation of digital
-                assets that bridge the gap between theoretical foundations and practical value creation in the digital realm.
+                $NAT is the first Non-Arbitrary Token that is uniquely designed to be generated with every Bitcoin block and distributed directly to Bitcoin miners as an additional subsidy reward - a first in Bitcoin's history. Its supply is determined by the 'bits' field of Bitcoin's block data and harnesses the thermodynamic properties of Bitcoin's immutable data layer to create an entirely new class of digital commodity.
               </p>
             </div>
+            <VideoEmbed :videoId="'https://www.youtube.com/embed/37MprVMRHhU'" class="h-full order-1 lg:order-2" />
           </div>
         </section>
       </AnimatedSection>
-    -->
 
       <AnimatedSection :delay="800">
         <section>
@@ -120,10 +116,10 @@ import AnimatedSection from './components/AnimatedSection.vue'
 import MempoolBlocks from './components/MempoolBlocks.vue'
 import MinerLeaderBoard from './components/MinerLeaderBoard.vue'
 const exchanges = [
-  { name: 'TaparooSwap', logo: null },
-  { name: 'SuperEx', logo: null },
   { name: 'OrdinalsWallet', logo: null },
-  { name: 'SatX', logo: null }
+  { name: 'TaparooSwap', logo: null },
+  { name: 'SatX', logo: null },
+  { name: 'SuperEx', logo: null }
 ];
 const API_URL = 'https://mscribe.io/api/tokens/all';
 const token = (ref());
