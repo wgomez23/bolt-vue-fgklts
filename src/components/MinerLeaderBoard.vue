@@ -55,7 +55,6 @@
             <tr class="border-b border-gray-700">
               <th class="py-2 px-4 text-primary text-lg text-center whitespace-nowrap">Pool</th>
               <th class="py-2 px-4 text-primary text-lg text-center whitespace-nowrap">$NAT Reward</th>
-              <th class="py-2 px-4 text-primary text-lg text-center whitespace-nowrap">$NAT Balance</th>
               <th class="py-2 px-4 text-primary text-lg text-center whitespace-nowrap">Theoretical USD Value</th>
               <th class="py-2 px-4 text-primary text-lg text-center whitespace-nowrap">BTC Reward</th>
             </tr>
@@ -64,7 +63,7 @@
             <!-- Loading skeleton -->
             <template v-if="isLoading">
               <tr v-for="i in 10" :key="i" class="text-gray-300 animate-pulse">
-                <td v-for="j in 5" :key="j" class="py-2 px-4">
+                <td v-for="j in 4" :key="j" class="py-2 px-4">
                   <div class="h-4 bg-gray-700 rounded w-20"></div>
                 </td>
               </tr>
@@ -94,8 +93,7 @@
                 </div>
               </td>
               <td class="py-2 px-4 text-center whitespace-nowrap">{{ formatNumber(item.total_rewards) }}</td>
-              <td class="py-2 px-4 text-center whitespace-nowrap">{{ formatNumber(item.balance) }}</td>
-              <td class="py-2 px-4 text-center text-green-400 whitespace-nowrap">${{ calculateTheoreticalValue(item.balance) }}</td>
+              <td class="py-2 px-4 text-center text-green-400 whitespace-nowrap">${{ new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(calculateTheoreticalValueRaw(item.balance)) }}</td>
               <td class="py-2 px-4 text-center whitespace-nowrap">
                 {{ formatNumber(satsToBitcoin(item?.extraData?.totalReward, 0)) }} <span class="text-xs text-primary">BTC</span>
               </td>
@@ -121,14 +119,29 @@ export default {
   components: {
     Pagination,
   },
+  props: {
+    currentMarketCap: {
+      type: Number,
+      required: true
+    }
+  },
+  watch: {
+    currentMarketCap: {
+      immediate: true,
+      handler(newValue) {
+        if (newValue) {
+          // Divide by 100,000,000 to convert to correct scale
+          const adjustedMarketCap = newValue / 100000000;
+          const minValue = Math.log10(1e6);
+          const maxValue = Math.log10(1e12);
+          const currentValue = Math.log10(adjustedMarketCap);
+          this.sliderValue = ((currentValue - minValue) / (maxValue - minValue)) * 100;
+        }
+      }
+    }
+  },
   mounted() {
     this.initChart();
-    // Calculate initial slider value based on current market cap
-    const currentMarketCap = 386038124 * 0.12; // Current market cap from Mission section
-    const minValue = Math.log10(1e6);
-    const maxValue = Math.log10(1e12);
-    const currentValue = Math.log10(currentMarketCap);
-    this.sliderValue = ((currentValue - minValue) / (maxValue - minValue)) * 100;
   },
   data() {
     return {
@@ -139,7 +152,7 @@ export default {
       limit: 10,
       total: 0,
       abortController: null,
-      sliderValue: 0, // Will be set in mounted
+      sliderValue: 0,
       totalSupply: 386057444,
       currentBlockBits: 386038124,
       lastTrillionConfetti: 0, // To prevent multiple confetti bursts
@@ -229,9 +242,12 @@ export default {
       if (value >= 1e6) return `${(value / 1e6).toFixed(2)}M`;
       return this.formatNumber(value);
     },
+    calculateTheoreticalValueRaw(balance) {
+      if (!balance || !this.marketCapValue || !this.totalSupply) return 0;
+      return ((balance / this.totalSupply) * this.marketCapValue) / 1000000;
+    },
     calculateTheoreticalValue(balance) {
-      if (!balance || !this.marketCapValue || !this.totalSupply) return "0";
-      const value = ((balance / this.totalSupply) * this.marketCapValue) / 1000000;
+      const value = this.calculateTheoreticalValueRaw(balance);
       return this.formatLargeNumber(value);
     },
     calculateTheoreticalBlockValue() {

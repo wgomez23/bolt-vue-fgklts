@@ -25,7 +25,7 @@
 
       <!-- Miner Leaderboards-->
       <AnimatedSection :delay="100">
-        <MinerLeaderBoard />
+        <MinerLeaderBoard :currentMarketCap="token?.marketcap * usdValue" />
       </AnimatedSection>
 
       <AnimatedSection :delay="200">
