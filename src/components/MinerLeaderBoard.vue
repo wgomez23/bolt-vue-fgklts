@@ -55,6 +55,7 @@
             <tr class="border-b border-gray-700">
               <th class="py-2 px-4 text-primary text-lg text-center whitespace-nowrap">Pool</th>
               <th class="py-2 px-4 text-primary text-lg text-center whitespace-nowrap">$NAT Reward</th>
+              <th class="py-2 px-4 text-primary text- lg text-center whitespace">$NAT Balance</th>
               <th class="py-2 px-4 text-primary text-lg text-center whitespace-nowrap">Theoretical USD Value</th>
               <th class="py-2 px-4 text-primary text-lg text-center whitespace-nowrap">BTC Reward</th>
             </tr>
@@ -63,7 +64,7 @@
             <!-- Loading skeleton -->
             <template v-if="isLoading">
               <tr v-for="i in 10" :key="i" class="text-gray-300 animate-pulse">
-                <td v-for="j in 4" :key="j" class="py-2 px-4">
+                <td v-for="j in 5" :key="j" class="py-2 px-4">
                   <div class="h-4 bg-gray-700 rounded w-20"></div>
                 </td>
               </tr>
@@ -93,6 +94,7 @@
                 </div>
               </td>
               <td class="py-2 px-4 text-center whitespace-nowrap">{{ formatNumber(item.total_rewards) }}</td>
+              <td class="py-2 px-4 text-center whitespace-nowrap">{{ formatNumber(item.balance) }}</td>
               <td class="py-2 px-4 text-center text-green-400 whitespace-nowrap">${{ new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(calculateTheoreticalValueRaw(item.balance)) }}</td>
               <td class="py-2 px-4 text-center whitespace-nowrap">
                 {{ formatNumber(satsToBitcoin(item?.extraData?.totalReward, 0)) }} <span class="text-xs text-primary">BTC</span>
