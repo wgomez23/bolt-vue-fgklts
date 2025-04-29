@@ -22,6 +22,7 @@
               </a>
               <a href="#faq" class="text-gray-300 hover:text-white transition-colors">FAQ</a>
               <a href="#whereToBuy" class="text-gray-300 hover:text-white transition-colors">How to buy</a>
+              <a href="https://listing.natgmi.com/" target="_blank" class="text-gray-300 hover:text-white transition-colors">Listing</a>
             </div>
           </div>
 
@@ -75,6 +76,7 @@
             </a>
             <a href="#faq" class="block text-gray-300 hover:text-white transition-colors">FAQ</a>
             <a href="#whereToBuy" class="block text-gray-300 hover:text-white transition-colors">How to buy</a>
+            <a href="https://listing.natgmi.com/" target="_blank" class="block text-gray-300 hover:text-white transition-colors">Listing</a>
             <button class="w-full bg-primary hover:bg-primary-dark text-white px-6 py-2 rounded-full transition-colors">
               Buy
             </button>

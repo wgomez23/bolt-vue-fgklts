@@ -77,6 +77,11 @@
         </section>
       </AnimatedSection>
 
+      <!-- Features Section -->
+      <AnimatedSection :delay="500">
+        <FeaturesSection />
+      </AnimatedSection>
+
       <AnimatedSection :delay="800">
         <section>
           <SectionTitle>Where to Buy</SectionTitle>
@@ -115,6 +120,8 @@ import FallingSquares from './components/FallingSquares.vue'
 import AnimatedSection from './components/AnimatedSection.vue'
 import MempoolBlocks from './components/MempoolBlocks.vue'
 import MinerLeaderBoard from './components/MinerLeaderBoard.vue'
+import FeaturesSection from './components/FeaturesSection.vue'
+
 const exchanges = [
   { name: 'OrdinalsWallet', logo: null },
   { name: 'TaparooSwap', logo: null },
