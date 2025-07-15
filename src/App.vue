@@ -47,7 +47,7 @@
               <p class="text-gray-300 mb-4">
                 Digital Matter Theory (DMT) is a pioneering meta-protocol on Bitcoin that redefines the concept of digital commodities. It introduces a foundational framework that ties Bitcoin's intrinsic value to its thermodynamic properties, transforming how we perceive and apply its unique characteristics.
               </p>
-              <p class="text-gray-300 mb-6" id="whereToBuy">
+              <p class="text-gray-300 mb-6">
                 By examining Bitcoin's core properties, DMT establishes a new paradigm for valuing digital assets. This framework enables the creation of truly non-arbitrary digital matter, starting with $NAT, and sets the stage for a more structured approach to digital scarcity and value.
               </p>
               <a 
@@ -83,7 +83,7 @@
       </AnimatedSection>
 
       <AnimatedSection :delay="800">
-        <section>
+        <section id="whereToBuy">
           <SectionTitle>Where to Buy</SectionTitle>
           <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
             <ExchangeCard
