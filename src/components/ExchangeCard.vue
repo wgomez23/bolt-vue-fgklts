@@ -21,6 +21,8 @@ const getLogoUrl = (name: string) => {
       return 'https://ordinalswallet.com/logo-icon.svg';
     case 'SatX':
       return 'https://mscribe-webapp.s3.us-east-2.amazonaws.com/satx_dark.png';
+    case 'Hypermall':
+      return 'https://mscribe-webapp.s3.us-east-2.amazonaws.com/hypermall.png';
     default:
       return null;
   }
@@ -36,6 +38,8 @@ const getExchangeUrl = (name: string) => {
       return 'https://ordinalswallet.com/collection/tap-DMT-NAT';
     case 'SatX':
       return 'https://www.satsx.io/ordinals/tap/dmt-nat/listed';
+    case 'Hypermall':
+      return 'https://www.hypermall.io';
     default:
       return '#';
   }

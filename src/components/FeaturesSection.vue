@@ -26,22 +26,22 @@ const features = [
         With $NAT's mission firmly established and its perpetual alignment with Bitcoin as a network security enhancement subsidy token, the time has come to shift into high gear. $NAT is ready to move beyond experimental territory and emerge as a serious force in the crypto space. Contribute your tokens today and be part of the movement that strengthens Bitcoin's future and cements $NAT's place in history.
       </p>
       
-      <div class="flex flex-col-reverse md:grid md:grid-cols-2 gap-12 items-center">
+      <div class="flex  items-center">
         <!-- Features List -->
-        <div class="space-y-6 w-full flex flex-col items-center">
+        <div class="space-y-6 mx-auto flex flex-col items-center">
           <div v-for="feature in features" 
                :key="feature" 
-               class="flex items-center space-x-4 group transition-transform duration-300 hover:translate-x-2 w-full max-w-md">
+               class="flex items-center space-x-4 group transition-transform duration-300 hover:translate-x-2 w-full max-w-md justify-center">
             <div class="flex-shrink-0 w-6 h-6 rounded-full bg-secondary/20 flex items-center justify-center group-hover:bg-secondary/30 transition-colors">
               <svg class="w-4 h-4 text-secondary" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
               </svg>
             </div>
-            <span class="text-gray-300 group-hover:text-white transition-colors">{{ feature }}</span>
+            <span class="  text-gray-300 group-hover:text-white transition-colors w-[60%]">{{ feature }}</span>
           </div>
         </div>
 
-        <!-- Lottie Animation -->
+        <!-- Lottie Animation 
         <div class="relative flex justify-center items-center h-[400px] rounded-xl">
           <DotLottieVue
             src="https://lottie.host/3303623d-a47f-4ee3-9663-67c66c00494e/ld5BPUvnbX.lottie"
@@ -49,7 +49,7 @@ const features = [
             loop
             class="lottie-animation"
           />
-        </div>
+        </div>-->
       </div>
 
       <!-- Contribute Button -->
