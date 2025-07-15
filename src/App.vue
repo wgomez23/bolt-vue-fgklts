@@ -123,6 +123,7 @@ import MinerLeaderBoard from './components/MinerLeaderBoard.vue'
 import FeaturesSection from './components/FeaturesSection.vue'
 
 const exchanges = [
+  { name: 'Hypermall', logo: null },
   { name: 'OrdinalsWallet', logo: null },
   { name: 'TaparooSwap', logo: null },
   { name: 'SatX', logo: null },
