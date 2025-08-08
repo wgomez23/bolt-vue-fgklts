@@ -23,6 +23,8 @@ const getLogoUrl = (name: string) => {
       return 'https://mscribe-webapp.s3.us-east-2.amazonaws.com/satx_dark.png';
     case 'Hypermall':
       return 'https://mscribe-webapp.s3.us-east-2.amazonaws.com/hypermall.png';
+    case 'Uniswap':
+      return 'https://mscribe-webapp.s3.us-east-2.amazonaws.com/uniswap.png';
     default:
       return null;
   }
@@ -40,6 +42,8 @@ const getExchangeUrl = (name: string) => {
       return 'https://www.satsx.io/ordinals/tap/dmt-nat/listed';
     case 'Hypermall':
       return 'https://www.hypermall.io';
+    case 'Uniswap':
+      return 'https://app.uniswap.org/explore/pools/ethereum/0xa1eeec225bf382384e92e00f2c5224a23634c29c3e1d86ea7f017b73e55668f9';
     default:
       return '#';
   }
