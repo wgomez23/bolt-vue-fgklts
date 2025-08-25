@@ -174,7 +174,7 @@ export default {
 
       try {
         const response = await fetch(
-          `https://mscribe-stage-4385d64f074b.herokuapp.com/api/pools/rewards/${this.block.extras.pool?.slug}?offset=${this.offset}&limit=${this.limit}`,
+          `https://mscribe.io/api/pools/rewards/${this.block.extras.pool?.slug}?offset=${this.offset}&limit=${this.limit}`,
           { signal }
         );
 
