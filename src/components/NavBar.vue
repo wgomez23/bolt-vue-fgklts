@@ -4,12 +4,12 @@
       <div class="container mx-auto px-6 relative">
         <div class="flex items-center h-14">
           <!-- Logo -->
-          <div class="flex items-center gap-2">
-            <img src="../../public//Nat_logo.png" class="w-[30px] h-[30px]"/>
+          <RouterLink to="/" class="flex items-center gap-2">
+            <img src="/Nat_logo.png" class="w-[30px] h-[30px]"/>
             <span class="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
               $NAT
             </span>
-          </div>
+          </RouterLink>
           
           <!-- Center navigation -->
           <div class="hidden md:flex flex-1 justify-center items-center">
@@ -20,18 +20,19 @@
                 </svg>
                 Gitbook
               </a>
-              <a href="#faq" class="text-gray-300 hover:text-white transition-colors">FAQ</a>
-              <a href="#whereToBuy" class="text-gray-300 hover:text-white transition-colors">How to buy</a>
+              <RouterLink :to="{ name: 'natpaper' }" class="text-gray-300 hover:text-white transition-colors">NATpaper</RouterLink>
+              <RouterLink :to="{ path: '/', hash: '#faq' }" class="text-gray-300 hover:text-white transition-colors">FAQ</RouterLink>
+              <RouterLink :to="{ path: '/', hash: '#whereToBuy' }" class="text-gray-300 hover:text-white transition-colors">How to buy</RouterLink>
               <a href="https://listing.natgmi.com/" target="_blank" class="text-gray-300 hover:text-white transition-colors">Listing</a>
             </div>
           </div>
 
           <!-- Buy button -->
-          <a class="hidden md:block flex-none" href="#whereToBuy">
+          <RouterLink class="hidden md:block flex-none" :to="{ path: '/', hash: '#whereToBuy' }">
             <button class="bg-primary hover:bg-primary-dark text-white px-6 py-2 rounded-full transition-colors">
               Buy
             </button>
-          </a>
+          </RouterLink>
 
           <!-- Mobile menu button -->
           <button 
@@ -74,12 +75,15 @@
               </svg>
               Gitbook
             </a>
-            <a href="#faq" class="block text-gray-300 hover:text-white transition-colors">FAQ</a>
-            <a href="#whereToBuy" class="block text-gray-300 hover:text-white transition-colors">How to buy</a>
+            <RouterLink :to="{ name: 'natpaper' }" class="block text-gray-300 hover:text-white transition-colors" @click="isOpen = false">NATpaper</RouterLink>
+            <RouterLink :to="{ path: '/', hash: '#faq' }" class="block text-gray-300 hover:text-white transition-colors" @click="isOpen = false">FAQ</RouterLink>
+            <RouterLink :to="{ path: '/', hash: '#whereToBuy' }" class="block text-gray-300 hover:text-white transition-colors" @click="isOpen = false">How to buy</RouterLink>
             <a href="https://listing.natgmi.com/" target="_blank" class="block text-gray-300 hover:text-white transition-colors">Listing</a>
-            <button class="w-full bg-primary hover:bg-primary-dark text-white px-6 py-2 rounded-full transition-colors">
-              Buy
-            </button>
+            <RouterLink :to="{ path: '/', hash: '#whereToBuy' }" class="block" @click="isOpen = false">
+              <button class="w-full bg-primary hover:bg-primary-dark text-white px-6 py-2 rounded-full transition-colors">
+                Buy
+              </button>
+            </RouterLink>
           </div>
         </div>
       </div>
@@ -89,6 +93,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { RouterLink } from 'vue-router'
 
 const isOpen = ref(false)
 </script>
