@@ -38,7 +38,7 @@
       <section>
         <SectionTitle>What is DMT?</SectionTitle>
         <div class="flex flex-col lg:grid lg:grid-cols-2 gap-8 items-start">
-          <VideoEmbed :videoId="'https://www.youtube.com/embed/Zcu7FBbNYdU?si=ZglBvNgxcunDNMUW'" class="h-full" />
+          <VideoEmbed :videoId="'https://www.youtube.com/embed/1mCpgkYfVng?si=piKUJY2ppjwzLRxQ'" class="h-full" />
           <div class="prose prose-invert max-w-none">
             <h3 class="text-2xl font-bold mb-4 text-white">Digital Matter Theory Explained</h3>
             <p class="text-gray-300 mb-4">
@@ -69,7 +69,7 @@
               $NAT is the first Non-Arbitrary Token that is uniquely designed to be generated with every Bitcoin block and distributed directly to Bitcoin miners as an additional subsidy reward - a first in Bitcoin's history. Its supply is determined by the 'bits' field of Bitcoin's block data and harnesses the thermodynamic properties of Bitcoin's immutable data layer to create an entirely new class of digital commodity.
             </p>
           </div>
-          <VideoEmbed :videoId="'https://www.youtube.com/embed/37MprVMRHhU'" class="h-full order-1 lg:order-2" />
+          <VideoEmbed :videoId="'https://www.youtube.com/embed/46saZxONdcM?si=hmejU1Wsmj8uY74H'" class="h-full order-1 lg:order-2" />
         </div>
       </section>
     </AnimatedSection>

@@ -17,7 +17,7 @@ const features = [
 
 <template>
   <section>
-    <div class="bg-dark-card rounded-xl p-8">
+    <div class="bg-dark-card rounded-xl p-6 max-w-2xl mx-auto">
       <h2 class="text-5xl font-bold mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent text-center">
         How to contribute
       </h2>

@@ -15,11 +15,12 @@
         </div>
 
         <!-- Inline TOC (responsive) -->
-        <div class="mt-8 grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
-          <a href="#problems" class="rounded-md border border-dark-lighter/50 px-3 py-2 text-center text-gray-300 hover:bg-dark-card/50 transition-colors">Key Problems</a>
-          <a href="#solutions" class="rounded-md border border-dark-lighter/50 px-3 py-2 text-center text-gray-300 hover:bg-dark-card/50 transition-colors">Solutions</a>
-          <a href="#fallacies" class="rounded-md border border-dark-lighter/50 px-3 py-2 text-center text-gray-300 hover:bg-dark-card/50 transition-colors">Fallacies</a>
-          <a href="#conclusion" class="rounded-md border border-dark-lighter/50 px-3 py-2 text-center text-gray-300 hover:bg-dark-card/50 transition-colors">Conclusion</a>
+        <div class="mt-8 flex flex-wrap justify-center gap-3 text-sm">
+          <a href="#problems" class="inline-flex items-center justify-center rounded-md border border-dark-lighter/50 px-3 py-2 text-center text-gray-300 hover:bg-dark-card/50 transition-colors min-w-[120px]">Key Problems</a>
+          <a href="#solutions" class="inline-flex items-center justify-center rounded-md border border-dark-lighter/50 px-3 py-2 text-center text-gray-300 hover:bg-dark-card/50 transition-colors min-w-[120px]">Solutions</a>
+          <a href="#fallacies" class="inline-flex items-center justify-center rounded-md border border-dark-lighter/50 px-3 py-2 text-center text-gray-300 hover:bg-dark-card/50 transition-colors min-w-[120px]">Fallacies</a>
+          <a href="#ecosystem" class="inline-flex items-center justify-center rounded-md border border-dark-lighter/50 px-3 py-2 text-center text-gray-300 hover:bg-dark-card/50 transition-colors min-w-[120px]">Ecosystem</a>
+          <a href="#conclusion" class="inline-flex items-center justify-center rounded-md border border-dark-lighter/50 px-3 py-2 text-center text-gray-300 hover:bg-dark-card/50 transition-colors min-w-[120px]">Conclusion</a>
         </div>
       </div>
     </section>
@@ -70,6 +71,182 @@
       </div>
     </section>
 
+    <!-- Preface (fixed height, scroll on hover) -->
+    <section id="preface">
+      <div class="mx-auto max-w-6xl px-4 py-8 border-2 border-orange-500 relative">
+        <div ref="prefaceScroll" class="h-[38rem] overflow-y-auto pr-2">
+          <div class="sticky top-0 z-10 bg-black/70 backdrop-blur-sm px-2 py-3 border-b border-orange-500/30">
+            <h2 class="text-3xl md:text-4xl font-bold">Bitcoin is NAT Certain</h2>
+            <h3 class="mt-1 text-xl md:text-2xl font-semibold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">The Preface</h3>
+            <!-- Preface scroll progress bar -->
+            <div class="mt-2 h-1 w-full bg-orange-500/20 rounded">
+              <div class="h-1 bg-orange-500 rounded" :style="{ width: prefaceProgress + '%' }"></div>
+            </div>
+          </div>
+          <div class="prose prose-invert max-w-none mt-4 space-y-4 text-gray-300">
+            <p>
+              Bitcoin, at its core, is not merely a technological artifact or a digital currency; it is a profound cultural and philosophical construct that challenges humanity's longstanding conceptions of value, trust, and power. Born from the ashes of the 2008 global financial crisis, Bitcoin emerged as Satoshi Nakamoto's audacious response to centralized fiat systems, encoded in a pseudonymous whitepaper that blended cryptography with a vision of decentralized sovereignty. 
+            </p>
+            <p>
+              Since then Bitcoin's interpretive value has taken many forms, shaped by collective narratives, power dynamics, and evolving societal needs. It is less a fixed "thing" than a mirror reflecting our anxieties about authority and freedom. Value in Bitcoin does not derive solely from utility or scarcity (though these are foundational); it arises from how we imbue it with meaning. However, the underlying unifier must be identified as Bitcoin's ability to consume energy to maintain network security. This energetic commitment is the bedrock upon which all interpretations of Bitcoin's value rest.
+            </p>
+            <p>
+              To effectively track the status of energy consumption in relation to the preservation of network security, new metrics need to be utilized that provide a dynamic lens to assess whether Bitcoin’s energetic foundation remains robust against evolving threats, ensuring that its decentralized sovereignty and interpretive value can endure as societal needs and power dynamics continue to shift.
+            </p>
+            <p>
+              <strong>The Bitcoin Security Intensity (BSI)</strong> is a critical metric that quantifies the proportion of Bitcoin's market capitalization actively defended by miner revenue, calculated as the annualized miner revenue (block subsidies plus fees) divided by the market cap.
+            </p>
+            <p>
+              Bitcoin’s proof-of-work consensus relies on significant energy consumption to secure its network against 51% attacks, where an adversary could control the majority of the hash rate. To assess this vulnerability, we use the Energy Security Ratio (ESR), defined as Bitcoin’s energy consumption divided by the global electricity surplus. This surplus represents the energy pool available for potential attacks, assuming equivalent mining efficiency.
+            </p>
+            <p>
+              <h4 class="text-xl font-semibold text-white">Energy Security Ratio for Proof-of-Work Systems (ESR)</h4>
+              Bitcoin’s proof-of-work consensus relies on significant energy consumption to secure its network against 51% attacks, where an adversary could control the majority of the hash rate. To assess this vulnerability, we use the Energy Security Ratio (ESR), defined as Bitcoin’s energy consumption divided by the global electricity surplus. This surplus represents the energy pool available for potential attacks, assuming equivalent mining efficiency.
+            </p>
+            <p>
+              Using 2024 data as a benchmark
+              <ul class="mt-2 text-gray-300 list-disc pl-6 space-y-2">
+                    <li><strong>30,856 TWh</strong>: Global electricity generation</li>
+                    <li><strong>27,000 TWh</strong>: 2023 Global electricity consumption</li>
+                    <li><strong>3,856 TWh</strong>: Global electricity surplus (though adjusted estimates suggest 1,187 TWh when aligning year-over-year figures for consistency)</li>
+                    <li><strong>186 TWh</strong>: Bitcoin's annualized energy footprint</li>
+                  </ul>
+            </p>
+            <p>
+              The ESR is thus calculated as:
+            </p>
+            <!-- Pretty ESR equation -->
+            <div class="my-6 flex justify-center select-none" aria-hidden="true">
+              <div class="inline-block font-serif text-base md:text-lg text-gray-100">
+                <div class="flex items-center gap-3">
+                  <span class="font-semibold tracking-wide">ESR</span>
+                  <span class="text-gray-400">=</span>
+                  <div class="inline-block align-middle leading-tight">
+                    <div class="text-center px-3">Bitcoin Energy Consumption</div>
+                    <div class="border-t border-gray-400 my-1"></div>
+                    <div class="text-center px-3">Global Electricity Surplus</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <p>
+              For 2024: ESR ≈ 186 / 3,856 ≈ 0.048 (4.8%).
+            </p>
+            <p>
+              The <strong>Attack Opportunity Index (AOI)</strong>, defined as 1 - ESR ≈ 0.952 (95.2%), indicates that 95.2% of the surplus could theoretically be redirected to attack the network. To enhance security, Bitcoin’s energy use must exceed 50% of the surplus (>1,928 TWh), making attacks infeasible by dominating available resources. Optimizing the ESR involves channeling surplus electricity, strengthening decentralized finance while leveraging global energy abundance.
+            </p>
+            <p></p>
+            <!-- Benchmark table -->
+            <div class="mt-8 overflow-x-auto rounded-lg border border-dark-lighter/50 bg-dark-card/30">
+              <table class="min-w-full text-left">
+                <thead>
+                  <tr class="text-gray-300 text-sm uppercase tracking-wide">
+                    <th class="px-4 py-3 border-b border-dark-lighter/50">Metric Component</th>
+                    <th class="px-4 py-3 border-b border-dark-lighter/50">Description</th>
+                    <th class="px-4 py-3 border-b border-dark-lighter/50">2024 Benchmark</th>
+                    <th class="px-4 py-3 border-b border-dark-lighter/50">Optimization Target</th>
+                  </tr>
+                </thead>
+                <tbody class="text-gray-200">
+                  <tr class="odd:bg-white/0 even:bg-white/5/5">
+                    <td class="px-4 py-4 align-top font-medium">Global Generation</td>
+                    <td class="px-4 py-4 align-top">Total electricity produced worldwide</td>
+                    <td class="px-4 py-4 align-top">30,856 TWh</td>
+                    <td class="px-4 py-4 align-top text-gray-400">N/A (exogenous variable)</td>
+                  </tr>
+                  <tr class="odd:bg-white/0 even:bg-white/5/5">
+                    <td class="px-4 py-4 align-top font-medium">Global Consumption</td>
+                    <td class="px-4 py-4 align-top">End-user electricity demand</td>
+                    <td class="px-4 py-4 align-top">~27,000 TWh (2023)</td>
+                    <td class="px-4 py-4 align-top">Minimize growth to expand surplus</td>
+                  </tr>
+                  <tr class="odd:bg-white/0 even:bg-white/5/5">
+                    <td class="px-4 py-4 align-top font-medium">Surplus Energy</td>
+                    <td class="px-4 py-4 align-top">Generation minus consumption (incl. losses)</td>
+                    <td class="px-4 py-4 align-top">~3,856 TWh</td>
+                    <td class="px-4 py-4 align-top">Maximize to support secure allocation</td>
+                  </tr>
+                  <tr class="odd:bg-white/0 even:bg-white/5/5">
+                    <td class="px-4 py-4 align-top font-medium">Bitcoin Consumption</td>
+                    <td class="px-4 py-4 align-top">Network's annual energy use</td>
+                    <td class="px-4 py-4 align-top">186 TWh</td>
+                    <td class="px-4 py-4 align-top">Scale to >50% of surplus</td>
+                  </tr>
+                  <tr class="odd:bg-white/0 even:bg-white/5/5">
+                    <td class="px-4 py-4 align-top font-medium">Energy Security Ratio (ESR)</td>
+                    <td class="px-4 py-4 align-top">Bitcoin / Surplus</td>
+                    <td class="px-4 py-4 align-top">0.048 (4.8%)</td>
+                    <td class="px-4 py-4 align-top">>0.5 (50%) for attack resistance</td>
+                  </tr>
+                  <tr class="odd:bg-white/0 even:bg-white/5/5">
+                    <td class="px-4 py-4 align-top font-medium">Attack Opportunity Index (AOI)</td>
+                    <td class="px-4 py-4 align-top">1 − ESR</td>
+                    <td class="px-4 py-4 align-top">0.952 (95.2%)</td>
+                    <td class="px-4 py-4 align-top"><0.5 (minimize vulnerability)</td>
+                  </tr>
+                  <tr class="odd:bg-white/0 even:bg-white/5/5">
+                    <td class="px-4 py-4 align-top font-medium">Bitcoin Security Intensity (BSI)</td>
+                    <td class="px-4 py-4 align-top">Annualized miner revenue / Market Cap</td>
+                    <td class="px-4 py-4 align-top">0.0088 (0.88%)</td>
+                    <td class="px-4 py-4 align-top">>0.01 (1%) for robust defense</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <h4 class="mt-8 md:mt-10 text-xl font-semibold text-white">Why the Existing Economic Model of Bitcoin Fails to Reduce the Attack Opportunity Index (AOI) Below 50%, Perpetuating Feasible and Increasingly Likely Attacks</h4>
+            <p>
+              The existing economic model of Bitcoin, centered on miner revenue from block subsidies and transaction fees, is structurally inadequate to drive the Energy Security Ratio (ESR) to a level where the Attack Opportunity Index (AOI) falls below 50%, thereby ensuring absolute security against 51% attacks. This vulnerability is exacerbated over time by declining Bitcoin Security Intensity (BSI) and the evolving cost-benefit dynamics of attacking the network.
+            </p>
+            <p>
+              The BSI has dropped to 0.88% in 2025, a significant decline from historical levels (e.g., 3.9% in 2014). This metric reflects the proportion of Bitcoin’s valuation actively defended by miners. The current block subsidy of 3.125 BTC, post the 2024 halving, combined with stagnant fee growth, has eroded miner revenue. This trend projects a further collapse to 0.21% by 2032 without intervention, signaling that the economic incentive to secure the network is shrinking relative to its value. With miner revenue failing to scale with market cap, the cost of maintaining hash rate outpaces returns, reducing the willingness or ability of miners to invest in security, thus keeping the BSI perilously low.
+            </p>
+            <p>
+              The Energy Security Ratio (ESR), currently stands at 4.8% (186 TWh / 3,856 TWh), yielding an AOI of 95.2%. To render 51% attacks infeasible, Bitcoin’s energy use must exceed 50% of the surplus, approximately 1,928 TWh based on the higher estimate, reducing the AOI below 50%. The existing model, reliant on miner profitability, cannot sustain this scale-up. With energy consumption at 186 TWh in 2024, achieving 1,928 TWh requires a tenfold increase, far beyond the organic growth driven by current subsidies and fees. As BSI declines, miners lack the financial capacity to expand operations, leaving the ESR static or growing minimally, ensuring the AOI remains high and attacks feasible.
+            </p>
+            <p>
+              Bitcoin’s halving mechanism, reducing block rewards every four years, is a deliberate scarcity design but a security liability under the current model. The transition from 6.25 BTC to 3.125 BTC in 2024 halved miner revenue (absent fee increases), and future halvings (e.g., 2028, 2032) will further diminish subsidies. Transaction fees, which should compensate, have not scaled with network usage or value. This revenue contraction, against a rising market cap, lowers BSI, reducing the energy budget. Concurrently, the cost of attack decreases as hardware efficiency improves and energy prices drop, lowering the threshold for adversaries to muster surplus energy (e.g., 95.2% of 3,856 TWh), making attacks not only feasible but increasingly opportunistic over time.
+            </p>
+            <p>
+              The current model assumes miners will self-regulate through market competition, acquiring better technology and efficient energy to outpace others. However, as BSI falls, this competition becomes unsustainable without  an ever increasing monetary incentive. <strong>The economic incentive to mine erodes, forcing miners to either exit or operate altruistically, neither of which scales energy consumption to dominate the surplus.</strong> Without external intervention the model cannot align miner behavior with the ESR target, perpetuating an AOI above 50% and leaving the network exposed to state or corporate attackers with access to surplus energy.
+            </p>
+            <p>
+              As BSI declines and ESR remains low, the attack opportunity grows. The AOI of 95.2% indicates that 3,669 TWh of the 2024 surplus could theoretically be redirected to mining, a feasible target for well-resourced adversaries (e.g., nation-states) as energy costs fall and ASIC efficiency rises. With Bitcoin’s value and attack surface expanding, the reduced cost of entry coupled with a shrinking security budget makes attacks more likely over time, as the economic model fails to incentivize sufficient energy consumption to outpace this threat.
+            </p>
+            <h4 class="mt-8 md:mt-10 text-xl font-semibold text-white">This leads us to the ultimate question, who's going to foot the bill for security in the era of post economic incentives?</h4>
+            <p>
+              Without sustainable monetary incentives in Bitcoin’s security model, nation-states may become the most likely actors to sustain it. Motivated less by ideological devotion to decentralization and sovereignty, and more by strategic self-interest. The United States, already has a vested interest in maintaining Bitcoin’s security to support a dollar-centric financial reset and can absorb costs by treating Bitcoin mining as a strategic investment, akin to military spending that reinforces the dominance of the dollar as the world's reserve currency.
+            </p>
+            <p>
+              The United States faces a structural debt challenge, with liabilities now exceeding annual GDP and interest costs compounding at an unsustainable pace. Traditional policy responses like taxation or inflation offer limited relief and carry severe political or economic tradeoffs. A strategic alternative lies in the integration of Bitcoin into the nation’s financial architecture, both as a reserve asset and as an instrument to reinforce dollar hegemony.
+            </p>
+            <p>
+              Accumulating Bitcoin within U.S. reserves creates a parallel balance-sheet asset that can appreciate over time, offsetting long-term obligations without requiring explicit debt restructuring. The recognition of Bitcoin as part of the sovereign reserve structure would, by design, accelerate its repricing. This controlled revaluation would strengthen the federal balance sheet, operating as a de facto hedge against inflation and the erosion of Treasury securities.
+            </p>
+            <p>
+              A rising Bitcoin reserve allows the United States to implicitly restructure its liabilities in real terms. As the market capitalization of Bitcoin grows, U.S. holdings provide a stabilizing counterweight to escalating debt. Unlike inflationary measures, this form of balance-sheet relief preserves credibility while projecting an image of fiscal innovation. The debt burden, while nominally unchanged, is effectively reset against a stronger reserve base.
+            </p>
+            <p>
+              By aligning Bitcoin settlement with dollar-denominated stablecoins and regulated financial infrastructure, global crypto-liquidity would continue to route through dollar channels. At the same time, U.S. mining dominance and regulatory clarity would secure leverage over Bitcoin’s network security and integration pathways. This dual-asset strategy that maintains the dollar as the world’s unit of account while holding Bitcoin as a neutral reserve ensures that rival states cannot appropriate Bitcoin as a tool to bypass dollar influence. Such a posture would neutralize attempts by adversarial economies to weaponize Bitcoin as an alternative reserve system. It would also reinforce U.S. soft power by embedding Bitcoin into a dollar-anchored regulatory framework. The outcome is a monetary order where Bitcoin strengthens rather than supplants dollar dominance, enabling the United States to manage its debt trajectory while preserving its central role in global finance.
+            </p>
+            <p>
+              In this scenario, the United States will likely prioritize security to protect their BTC holdings and dollar stability, driving energy consumption toward dominance of the global surplus (e.g., >50% of 3,856 TWh). This could stabilize the Energy Security Ratio (ESR), reducing the Attack Opportunity Index (AOI) below 50%, but <strong>at the cost of losing Bitcoin's decentralized ethos.</strong> The U.S., as a dominant miner, might control 30–40% of hash rate by 2035, leveraging surplus energy and advanced ASICs, ensuring network integrity while safeguarding its monetary apparatus. This altruism is inherently selfish. A U.S.-led network could censor transactions or enforce compliance, undermining censorship resistance. In the end, if nation-states maintain the responsibility of sustaining security, Bitcoin’s value as sound money and store of value may persist, bolstered by state-backed legitimacy but <strong>at the cost of Bitcoin's decentralized ethos.</strong>
+            </p>
+            <!-- Bitcoin timeline split animation -->
+            <div class="mt-6">
+              <BitcoinTimelineSplit />
+            </div>
+          </div>
+        </div>
+        <!-- Scroll hint arrow (bottom-right, within preface container) -->
+        <div v-if="showPrefaceScrollHint" class="pointer-events-none absolute bottom-3 right-3 md:bottom-4 md:right-4 z-20 text-orange-400/90">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="animate-bounce drop-shadow">
+            <path d="M12 5v14M19 12l-7 7-7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="sr-only">Scroll down</span>
+        </div>
+      </div>
+    </section>
+
     <!-- Key Problems -->
     <section id="problems" class="border-b border-dark-lighter/50">
       <div class="mx-auto max-w-6xl px-4 py-16 md:py-20">
@@ -80,7 +257,7 @@
             <h2 class="text-3xl md:text-4xl font-bold">Is Bitcoin NAT Worth Securing?</h2>
             <h3 class="mt-6 text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">The Problem</h3>
             <p class="mt-3 text-gray-300">
-              The Bitcoin network secures its decentralized ledger through proof-of-work mining, incentivized primarily by block subsidies that halve approximately every four years or 210,000 blocks. As these subsidies diminish, the network's long-term security increasingly relies on transaction fees, which historical data indicates constitute a negligible and volatile portion of miner revenue—often less than 5% of total rewards over the past three years. This trajectory risks insufficient incentives for miners, potentially leading to reduced hash rate, centralization, or vulnerability to attacks as Bitcoin rewards approach zero.
+              The Bitcoin network secures its decentralized ledger through proof-of-work mining, incentivized primarily by block subsidies that halve approximately every four years or 210,000 blocks. As these subsidies diminish, the network's long-term security increasingly relies on transaction fees, which historical data indicates constitute a negligible and volatile portion of miner revenue, often less than 5% of total rewards over the past three years. This trajectory risks insufficient incentives for miners, potentially leading to reduced hash rate, centralization, which results in a low cost to attack Bitcoin as rewards approach zero.
             </p>
             <div class="mt-6">
               <SupplySubsidyChart />
@@ -96,7 +273,7 @@
                 <div class="sm:col-span-5">
                   <h4 class="text-xl font-semibold text-white">Broken fee model (Store of Value vs digital cash)</h4>
                   <p class="mt-2 text-gray-300">
-                    Bitcoin's shift to a store of value, rather than a peer-to-peer cash system, suppresses transaction fee revenue—critical as block subsidies halve. The "HODL" mentality reduces on-chain transactions, keeping fees too low to sustain security long-term.
+                    Bitcoin’s growing adoption as a store of value, rather than a peer-to-peer electronic cash system as originally envisioned, exacerbates the security budget issue by suppressing transaction fee revenue, which is critical to sustaining miner incentives as block subsidies halve every four years. The emphasis on holding Bitcoin as a long-term asset reduces on-chain transaction volume, as users opt to store rather than spend, leading to consistently low fee contributions.
                   </p>
                   <!-- Moved chart here below content -->
                   <div class="mt-4 w-full h-40 md:h-56">
@@ -112,7 +289,7 @@
                 <div class="sm:col-span-5">
                   <h4 class="text-xl font-semibold text-white">Miner revenue falters implies greater security risks</h4>
                   <p class="mt-2 text-gray-300">
-                    Declining miner revenue in Bitcoin, driven by the programmed halving of block subsidies every four years and insufficient growth in transaction fees to offset the shortfall, undermines the network's incentive structure, leading to a reduced hash rate as profit-driven miners scale back operations or exit the ecosystem. This erosion of computational power heightens Bitcoin's vulnerability to several security risks, including:
+                    Declining miner revenue in Bitcoin, driven by the programmed halving of block subsidies every four years and insufficient growth in transaction fees to offset the shortfall, undermines the network's incentive structure, leading to a reduced cost to attack as profit-driven miners scale back operations or exit the ecosystem. This erosion of computational power heightens Bitcoin's vulnerability to several security risks, including:
                   </p>
                   <ul class="mt-2 text-gray-300 list-disc pl-6 space-y-2">
                     <li><strong>51% Attacks</strong>: With a lower overall hash rate, it becomes cheaper for a malicious actor or coalition to amass more than half of the network's mining power, enabling them to rewrite transaction history, execute double-spends by reversing confirmed transactions, censor specific addresses or transactions from being included in blocks, or produce empty blocks to halt network activity and disrupt usability.</li>
@@ -135,7 +312,7 @@
                 <div class="sm:col-span-5">
                   <h4 class="text-xl font-semibold text-white">Why This Problem Cannot Be Ignored</h4>
                   <p class="mt-2 text-gray-300">
-                    As Bitcoin integrates more deeply into the traditional financial system—evidenced by the proliferation of spot ETFs, institutional custody solutions, and regulatory frameworks that treat it as a legitimate asset class—the security budget problem becomes increasingly critical to address, as any vulnerability could trigger cascading failures in interconnected markets, eroding investor confidence and inviting regulatory crackdowns. With trillions in value potentially flowing into Bitcoin through these channels, a declining miner revenue stream risks weakening the network's hash power, exposing it to attacks that could compromise transaction integrity and immutability, thereby undermining its appeal as a reliable store of value or settlement layer for global finance.
+                    As Bitcoin integrates more deeply into the traditional financial system, evidenced by the proliferation of spot ETFs, institutional custody solutions, and regulatory frameworks that treat it as a legitimate asset class,the security budget problem becomes increasingly critical to address, as any vulnerability could trigger cascading failures in interconnected markets, eroding investor confidence and inviting regulatory crackdowns. With trillions in value potentially flowing into Bitcoin through these channels, a declining miner revenue stream risks weakening the network's hash power, exposing it to attacks that could compromise transaction integrity and immutability, thereby undermining its appeal as a reliable store of value or settlement layer for global finance.
                   </p>
                 </div>
                 
@@ -201,6 +378,9 @@
               <article>
                 <h3 class="text-xl font-semibold text-white">Additional Network Subsidy (NEW)</h3>
                 <p class="mt-2 text-gray-300">By providing a perpetual, inflationary yet difficulty-adjusted subsidy that increases overall miner profitability, encouraging greater participation and investment in hash rate without altering any of the core design principles or economic foundations to Bitcoin itself, fostering long-term network resilience as Bitcoin's traditional subsidy wanes.</p>
+                <div class="mt-4">
+                  <BlockchainFlow />
+                </div>
               </article>
             </div>
           </div>
@@ -359,16 +539,17 @@
           <!-- Sidebar -->
           <aside class="md:pr-8 md:border-r border-dark-lighter/50 pb-10 md:pb-0 md:sticky md:top-20 self-start">
             <h2 class="text-3xl md:text-4xl font-bold mb-6">NAT Another Aircoin</h2>
+            
+            <h3 class="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">First Principles</h3>
+            <p class="mt-3 text-gray-300">
+              For NAT to fulfill its mission as a complementary subsidy to the Bitcoin mining network, it must overcome skepticism about its core fundamental value proposition. Only then can its value rise in a trajectory comparable to Bitcoin’s original subsidy reward.
+            </p>
             <img
               :src="zerovalueUrl"
               alt="Zero Value"
               class="mt-4 rounded-md border border-dark-lighter/50 cursor-zoom-in"
               @click="openLightbox(zerovalueUrl)"
             />
-            <h3 class="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">First Principles</h3>
-            <p class="mt-3 text-gray-300">
-              For NAT to fulfill its mission as a complementary subsidy to the Bitcoin mining network, it must overcome skepticism about its core fundamental value proposition. Only then can its value rise in a trajectory comparable to Bitcoin’s original subsidy reward.
-            </p>
           </aside>
 
           <!-- Main content -->
@@ -386,7 +567,7 @@
                     <li>Tokens like BTC gain value through collective belief in their utility (e.g., store of value, medium of exchange).</li>
                     <li>For $NAT: If people believe it solves Bitcoin's subsidy problem, they buy/hold it. This increases demand, raising price and market cap.</li>
                     <li>Result: Each $NAT mined becomes worth more in dollars, effectively boosting miners' total rewards per block (BTC subsidy + fees + $NAT value).</li>
-                    <li>Defense: This is not circular; it's bootstrapped like BTC itself. Early BTC had no value until belief in its scarcity and decentralization grew adoption. $NAT leverages Bitcoin's existing network effects—its tie to blocks ensures perpetual issuance tied to real activity.</li>
+                    <li>Defense: This is not circular; it's bootstrapped like BTC itself. Early BTC had no value until belief in its scarcity and decentralization grew adoption. $NAT leverages Bitcoin's existing network effects, its tie to blocks ensures perpetual issuance tied to real activity.</li>
                   </ul>
                 </p>
               </article>
@@ -408,7 +589,7 @@
                 <div class="mt-2 text-gray-300">
                   <ul class="list-disc pl-5 space-y-2">
                     <li>Scarcity alone isn't enough (e.g., many tokens fail). $NAT's utility is anchoring to Bitcoin's difficulty (bits field), making it a proxy for network health.</li>
-                    <li>Inverse Property: As difficulty rises (bits decreases), $NAT's narrative strengthens—it's "harder to mine," akin to BTC's halving scarcity story.</li>
+                    <li>Inverse Property: As difficulty rises (bits decreases), $NAT's narrative strengthens, it's "harder to mine," akin to BTC's halving scarcity story.</li>
                     <li>Defense: This grounds $NAT in verifiable, on-chain data, reducing arbitrariness. Users can audit issuance via Bitcoin explorers, building trust. If Bitcoin thrives, $NAT supply remains predictable, but its value can grow unbounded via demand.</li>
                   </ul>
                 </div>
@@ -427,16 +608,17 @@
           <!-- Sidebar -->
           <aside class="md:pr-8 md:border-r border-dark-lighter/50 pb-10 md:pb-0 md:sticky md:top-20 self-start">
             <h2 class="text-3xl md:text-4xl font-bold mb-6">NAT Another Premine</h2>
+      
+            <h3 class="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Distribution Lore</h3>
+            <p class="mt-3 text-gray-300">
+              The $NAT token was first distributed through a fair mint system. This meant anyone could participate on a first-come, first-served (FCFS) basis, no pre-mines, no reserved allocations, keeping the launch open and decentralized in line with Bitcoin’s ethos.
+            </p>
             <img
               :src="premineUrl"
               alt="Premine"
               class="mt-4 rounded-md border border-dark-lighter/50 cursor-zoom-in"
               @click="openLightbox(premineUrl)"
             />
-            <h3 class="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Distribution Lore</h3>
-            <p class="mt-3 text-gray-300">
-              The $NAT token was first distributed through a fair mint system. This meant anyone could participate on a first-come, first-served (FCFS) basis — no pre-mines, no reserved allocations — keeping the launch open and decentralized in line with Bitcoin’s ethos.
-            </p>
           </aside>
 
           <!-- Main content -->
@@ -496,7 +678,7 @@
     </section>
 
     <!-- NATstoppable Force -->
-    <section class="border-b border-dark-lighter/50">
+    <section id="ecosystem"class="border-b border-dark-lighter/50">
       <div class="mx-auto max-w-6xl px-4 py-16 md:py-20">
         <!-- Two-column layout: sidebar + content -->
         <div class="grid grid-cols-1 md:grid-cols-3">
@@ -557,6 +739,9 @@
             <p class="mt-3 text-gray-300">
               A successful NAT = precursor to a non-arbitrary crypto era with Bitcoin at the center of the digital universe (<strong>Activate God Mode</strong>)
             </p>
+            <div class="mt-6">
+              <OrbitingCrypto />
+            </div>
           </aside>
 
           <!-- Main content (replaced with Motion.dev Smooth Tabs) -->
@@ -691,6 +876,55 @@
                   <NATworkFlywheel />
                 </div>
               </article>
+
+              <article>
+                <h3 class="text-xl font-semibold text-white">Minimally Invasive</h3>
+                <p class="mt-2 text-gray-300">
+                  DMT cross-chain integration enables applications to anchor authenticity in Bitcoin while executing the majority of operations such as minting, trading, and transferring to faster, lower-cost chains. This design minimizes reliance on Bitcoin's blockspace, limiting interactions to occasional data fetches or initial inscriptions for asset genesis. As a result, the system avoids the congestion, fee volatility, and UTXO bloat seen in prior inscription-based protocols, while ensuring that asset provenance and scarcity remain secured by Bitcoin's tamper-proof substrate.
+                </p>
+                <p class="mt-2 text-gray-300">
+                  Below is a structured comparison between BRC20 (an Ordinals-based fungible token standard) and DMT (Digital Matter Theory protocol) based on on-chain data and impacts.
+                </p>
+                <!-- BRC20 vs DMT Comparison Table -->
+                <div class="mt-4 overflow-x-auto rounded-lg border border-dark-lighter/50">
+                  <table class="min-w-full table-auto text-left text-sm">
+                    <thead class="bg-dark-lighter/50">
+                      <tr>
+                        <th class="px-4 py-3 font-semibold text-gray-200 border-b border-dark-lighter/50">Category</th>
+                        <th class="px-4 py-3 font-semibold text-gray-200 border-b border-dark-lighter/50">BRC20 Protocol</th>
+                        <th class="px-4 py-3 font-semibold text-gray-200 border-b border-dark-lighter/50">DMT Protocol</th>
+                      </tr>
+                    </thead>
+                    <tbody class="divide-y divide-dark-lighter/50">
+                      <tr>
+                        <td class="align-top px-4 py-3 font-medium text-gray-100">Onchain Dependency</td>
+                        <td class="align-top px-4 py-3 text-gray-300">Fully reliant on Bitcoin's main chain for all operations: inscriptions for minting ("mint" ops), transfers ("transfer" inscriptions), and trading (bundled tx).</td>
+                        <td class="align-top px-4 py-3 text-gray-300">Uses Bitcoin for initial asset genesis (e.g., referencing "bits" field), but offloads minting, trading, and transfers to other chains (e.g., Solana), limiting Bitcoin to data reads.</td>
+                      </tr>
+                      <tr class="bg-dark/20">
+                        <td class="align-top px-4 py-3 font-medium text-gray-100">Network Bloat Impact</td>
+                        <td class="align-top px-4 py-3 text-gray-300">High: Embeds large data payloads, bloating UTXO set by 10–20% during peaks and causing mempool backlogs (&gt;300,000 unconfirmed tx).</td>
+                        <td class="align-top px-4 py-3 text-gray-300">Low: Minimal writes on Bitcoin (occasional inscriptions). Offloading reduces bloat; if scaled, could shrink UTXO growth by avoiding persistent data‑heavy tx.</td>
+                      </tr>
+                      <tr>
+                        <td class="align-top px-4 py-3 font-medium text-gray-100">Fee and Congestion Effects</td>
+                        <td class="align-top px-4 py-3 text-gray-300">Drove average fees to &gt;50 sat/vB in late 2023; non‑monetary tx accounted for 36% of 2023 fees, totaling &gt;5,000 BTC in cumulative BRC20 fees since March 2023.</td>
+                        <td class="align-top px-4 py-3 text-gray-300">Lowers fees natively on Bitcoin, stabilizing the network for monetary usage while harnessing fees from other execution layers to deliver back to Bitcoin in the form of $NAT subsidy.</td>
+                      </tr>
+                      <tr class="bg-dark/20">
+                        <td class="align-top px-4 py-3 font-medium text-gray-100">Scalability and Mitigation Potential</td>
+                        <td class="align-top px-4 py-3 text-gray-300">Limited: All activity stays on Bitcoin, exacerbating congestion without Layer 2 solutions; no inherent offloading.</td>
+                        <td class="align-top px-4 py-3 text-gray-300">High: Hybrid model preserves Bitcoin as secure substrate but shifts volume off‑chain, reducing concerns drastically while maintaining non‑arbitrary value through data references.</td>
+                      </tr>
+                      <tr>
+                        <td class="align-top px-4 py-3 font-medium text-gray-100">Overall Network Benefits</td>
+                        <td class="align-top px-4 py-3 text-gray-300">Neutral to negative: Increases miner fees short‑term but risks long‑term usability and centralization from bloat.</td>
+                        <td class="align-top px-4 py-3 text-gray-300">Positive: Minimal footprint enhances scalability, with potential economic boosts (e.g., tariffs funding miner subsidies via $NAT).</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </article>
             </div>
           </div>
         </div>
@@ -717,7 +951,7 @@
               <article>
                 <h3 class="text-xl font-semibold text-white">Untapped Substrate</h3>
                 <p class="mt-2 text-gray-300">
-                  $NAT addresses one of Bitcoin’s most pressing sustainability challenges by realigning miner incentives and helping to offset the declining security budget—thus supporting the long-term viability of the network. It introduces a novel mechanism for digital asset creation that enhances the value proposition of Proof-of-Work (PoW) chains by leveraging the thermodynamically preserved properties within block data to create new digital substance. This opens the door to a wide range of new applications that reference this previously untapped substrate, enabling the creation of derivative products in a multi-chain economy that can return value to the Bitcoin network—reinforcing its efforts to preserve and strengthen the immutability of the information stored in it.
+                  The integration of multi-chain mechanisms, exemplified by the $NAT token and Digital Matter Theory (DMT) protocol, represents a transformative step toward addressing Bitcoin's sustainability and security challenges. By realigning miner incentives and tapping into the untapped substrate of block data, $NAT not only offsets the declining security budget but also enhances the value proposition of Proof-of-Work (PoW) through the creation of derivative assets and applications. This approach strengthens Bitcoin's immutability while fostering a multi-chain economy that reinvests value into the network. The Bitcoin Security Intensity (BSI), currently at 0.88% in 2025, underscores the urgent need to bolster miner revenue relative to Bitcoin's growing market cap, while the Energy Security Ratio (ESR), at 4.8%, highlights the vulnerability posed by the 95.2% of global electricity surplus available for potential attacks. For humanity to secure Bitcoin as the world's monetary foundation in the future, the goal must be a concerted effort to optimize both metrics, elevating BSI above 1% through innovative incentives like $NAT and driving ESR beyond 50% by channeling surplus energy into mining via higher monetary incentives. This dual optimization will ensure a robust, energy-backed monetary system capable of withstanding adversarial threats, thereby cementing Bitcoin's role as a cornerstone of global financial stability.
                 </p>
               </article>
             </div>
@@ -753,6 +987,9 @@ import CensorshipResistance from '../components/CensorshipResistance.vue'
 import TransparencyReveal from '../components/TransparencyReveal.vue'
 import SmoothTabs from '../components/SmoothTabs.vue'
 import NATworkFlywheel from '../components/NATworkFlywheel.vue'
+import BlockchainFlow from '../components/BlockchainFlow.vue'
+import OrbitingCrypto from '../components/OrbitingCrypto.vue'
+import BitcoinTimelineSplit from '../components/BitcoinTimelineSplit.vue'
 
 // Live data: Market Cap (reuse Home.vue logic)
 // Image Lightbox state/handlers
@@ -765,6 +1002,34 @@ onBeforeUnmount(() => { window.removeEventListener('keydown', onKeydown) })
 
 // Toggle for NAT live data section (hidden by default)
 const showNatData = ref(false)
+
+// Preface section scroll progress
+const prefaceScroll = ref<HTMLDivElement | null>(null)
+const prefaceProgress = ref(0)
+const showPrefaceScrollHint = ref(false)
+const updatePrefaceProgress = () => {
+  const el = prefaceScroll.value
+  if (!el) { prefaceProgress.value = 0; showPrefaceScrollHint.value = false; return }
+  const max = el.scrollHeight - el.clientHeight
+  if (max <= 0) { prefaceProgress.value = 0; showPrefaceScrollHint.value = false; return }
+  prefaceProgress.value = Math.min(100, Math.max(0, (el.scrollTop / max) * 100))
+  // Show hint only if there's something to scroll and we are not at the bottom
+  showPrefaceScrollHint.value = el.scrollTop < max - 4
+}
+onMounted(() => {
+  if (prefaceScroll.value) {
+    prefaceScroll.value.addEventListener('scroll', updatePrefaceProgress, { passive: true } as AddEventListenerOptions)
+    // initialize
+    updatePrefaceProgress()
+  }
+  window.addEventListener('resize', updatePrefaceProgress)
+})
+onBeforeUnmount(() => {
+  if (prefaceScroll.value) {
+    prefaceScroll.value.removeEventListener('scroll', updatePrefaceProgress as EventListener)
+  }
+  window.removeEventListener('resize', updatePrefaceProgress)
+})
 
 // Live data: Market Cap (reuse Home.vue logic)
 const natEndTabs = [
