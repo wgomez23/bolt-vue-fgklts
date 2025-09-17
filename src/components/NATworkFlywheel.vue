@@ -102,16 +102,20 @@
 <script setup lang="ts">
 import { animate } from '@motionone/dom'
 import { onMounted, onBeforeUnmount, ref, nextTick } from 'vue'
-// Use direct string paths so build doesn't fail if images are missing.
-// Dev server will 404 gracefully until assets are added.
+// Import assets so Vite resolves paths correctly in production
+import gear1Url from '../assets/gear1.png'
+import gear2Url from '../assets/gear2.png'
+import nat1Url from '../assets/nat1.png'
+import fallbackUrl from '../assets/vue.svg'
+
 const paths = {
-  gear1: '/src/assets/gear1.png',
-  gear2: '/src/assets/gear2.png',
-  nat1: '/src/assets/nat1.png'
+  gear1: gear1Url,
+  gear2: gear2Url,
+  nat1: nat1Url,
 }
 
 // Replace missing images with a neutral fallback
-const fallback = '/src/assets/vue.svg'
+const fallback = fallbackUrl
 
 function onImgError(ev: Event) {
   const img = ev.target as HTMLImageElement
