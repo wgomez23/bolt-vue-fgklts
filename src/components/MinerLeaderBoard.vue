@@ -64,6 +64,23 @@
         <table class="w-full text-left border border-gray-700">
           <thead>
             <tr class="border-b border-gray-700">
+              <th class="py-2 px-4 text-primary text-lg text-center whitespace-nowrap">
+                <div class="inline-flex items-center justify-center gap-2">
+                  <span>Adopted</span>
+                  <span class="relative group inline-flex items-center justify-center">
+                    <span
+                      class="w-4 h-4 rounded-full bg-gray-600 text-white text-[10px] leading-none flex items-center justify-center cursor-default select-none"
+                      aria-label="Info"
+                      role="img"
+                    >i</span>
+                    <div
+                      class="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-64 p-2 text-xs text-gray-200 bg-gray-900 border border-gray-700 rounded shadow-lg whitespace-normal hidden group-hover:block z-50"
+                    >
+                      Miners that have moved or integrated $NAT for their pools
+                    </div>
+                  </span>
+                </div>
+              </th>
               <th class="py-2 px-4 text-primary text-lg text-center whitespace-nowrap">Pool</th>
               <th class="py-2 px-4 text-primary text-lg text-center whitespace-nowrap">$NAT Reward</th>
               <th class="py-2 px-4 text-primary text-lg text-center whitespace-nowrap">$NAT Balance</th>
@@ -75,7 +92,7 @@
             <!-- Loading skeleton -->
             <template v-if="isLoading">
               <tr v-for="i in 10" :key="i" class="text-gray-300 animate-pulse">
-                <td v-for="j in 5" :key="j" class="py-2 px-4">
+                <td v-for="j in 6" :key="j" class="py-2 px-4">
                   <div class="h-4 bg-gray-700 rounded w-20"></div>
                 </td>
               </tr>
@@ -88,6 +105,14 @@
               v-for="(item, index) in list"
               :key="item.id"
             >
+              <td class="py-2 px-4 text-center whitespace-nowrap">
+                <input
+                  type="checkbox"
+                  class="h-5 w-5 accent-[#00FF94] cursor-pointer"
+                  v-model="adopted[item.slug || item.name]"
+                  :aria-label="`Mark ${item.name} as adopted`"
+                />
+              </td>
               <td class="py-2 px-4">
                 <div class="items-center gap-2 flex w-full justify-center py-2">
                   <p class="text-sm whitespace-nowrap">{{ item.name }}</p>
@@ -183,6 +208,7 @@ export default {
       currentBlockBits: 386038124,
       lastTrillionConfetti: 0, // To prevent multiple confetti bursts
       userNatInput: null,
+      adopted: {},
       _sliderHandlers: null,
     };
   },
@@ -300,6 +326,15 @@ export default {
         if (success) {
           this.list = data?.pools || [];
           this.total = data?.total || 0;
+          // Initialize adopted checkboxes without overriding user changes.
+          const defaults = new Set(['antpool', 'spiderpool']);
+          this.list.forEach((it) => {
+            const key = it.slug || it.name;
+            if (!(key in this.adopted)) {
+              const normName = String(it.name || '').toLowerCase();
+              this.adopted[key] = defaults.has(normName);
+            }
+          });
         }
       } catch (error) {
         if (error.name === "AbortError") {

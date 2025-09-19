@@ -49,7 +49,7 @@ const fallbackSeries: Array<[number, number]> = fallbackPoints.map(([d, v]) => [
 const option = ref<EChartsOption>({
   backgroundColor: 'transparent',
   title: {
-    text: 'Miner revenue / market cap (annualized %)',
+    text: 'BSI = Miner revenue * 365 / Market cap (annualized %)',
     left: 8,
     top: 0,
     textStyle: { color: AXIS_TEXT, fontSize: 12, fontWeight: 'bold' }

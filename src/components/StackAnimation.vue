@@ -3,24 +3,78 @@
     <div ref="stage" class="relative w-full">
       <div class="flex flex-col space-y-4 relative pb-28">
         <!-- NAT (top) -->
-        <div ref="natRef" class="h-24 rounded bg-emerald-300 text-black flex items-center justify-center shadow-lg will-change-transform">
-          NAT
+        <div
+          ref="natRef"
+          class="lego-brick h-24 rounded bg-emerald-300 text-black flex items-center justify-center gap-2 shadow-lg will-change-transform relative"
+          style="--lego-color:#6ee7b7"
+        >
+          <div class="studs pointer-events-none">
+            <span class="stud"></span>
+            <span class="stud"></span>
+            <span class="stud"></span>
+            <span class="stud"></span>
+          </div>
+          <img :src="natLogo" alt="NAT" class="h-7 w-7" />
+          <span>NAT</span>
         </div>
         <!-- DMT -->
-        <div ref="dmtRef" class="h-24 rounded bg-green-600 text-white flex items-center justify-center shadow-lg will-change-transform">
+        <div
+          ref="dmtRef"
+          class="lego-brick h-24 rounded text-white flex items-center justify-center shadow-lg will-change-transform bg-cover bg-center relative"
+          :style="{ backgroundImage: `linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), url(${psychedelicBg})`, '--lego-color': '#333333' }"
+        >
+          <div class="studs pointer-events-none">
+            <span class="stud"></span>
+            <span class="stud"></span>
+            <span class="stud"></span>
+            <span class="stud"></span>
+          </div>
           DMT
         </div>
         <!-- TAP Protocol -->
-        <div ref="tapRef" class="h-24 rounded bg-fuchsia-500 text-white flex items-center justify-center shadow-lg will-change-transform">
-          TAP Protocol
+        <div
+          ref="tapRef"
+          class="lego-brick h-24 rounded bg-fuchsia-500 text-white flex items-center justify-center gap-2 shadow-lg will-change-transform relative"
+          style="--lego-color:#d946ef"
+        >
+          <div class="studs pointer-events-none">
+            <span class="stud"></span>
+            <span class="stud"></span>
+            <span class="stud"></span>
+            <span class="stud"></span>
+          </div>
+          <img :src="tapLogo" alt="TAP Protocol" class="h-7 w-7" />
+          <span>TAP Protocol</span>
         </div>
         <!-- Ordinals -->
-        <div ref="ordinalsRef" class="h-24 rounded bg-gray-500 text-white flex items-center justify-center shadow-lg will-change-transform">
-          Ordinals
+        <div
+          ref="ordinalsRef"
+          class="lego-brick h-24 rounded bg-gray-500 text-white flex items-center justify-center gap-2 shadow-lg will-change-transform relative"
+          style="--lego-color:#6b7280"
+        >
+          <div class="studs pointer-events-none">
+            <span class="stud"></span>
+            <span class="stud"></span>
+            <span class="stud"></span>
+            <span class="stud"></span>
+          </div>
+          <img :src="ordinalsLogo" alt="Ordinals" class="h-7 w-7" />
+          <span>Ordinals</span>
         </div>
         <!-- Bitcoin (bottom) -->
-        <div ref="bitcoinRef" class="h-24 rounded bg-orange-500 text-black flex items-center justify-center shadow-lg will-change-transform sticky bottom-0 z-10">
-          Bitcoin
+        <div
+          ref="bitcoinRef"
+          class="lego-brick h-24 rounded bg-orange-500 text-black flex items-center justify-center gap-2 shadow-lg will-change-transform sticky bottom-0 z-10 relative"
+          style="--lego-color:#f97316"
+        >
+          <div class="studs pointer-events-none">
+            <span class="stud"></span>
+            <span class="stud"></span>
+            <span class="stud"></span>
+            <span class="stud"></span>
+          </div>
+          <img :src="bitcoinLogo" alt="Bitcoin" class="h-7 w-7" />
+          <span>Bitcoin</span>
         </div>
       </div>
     </div>
@@ -29,6 +83,11 @@
 
 <script setup lang="ts">
 import { onMounted, onBeforeUnmount, ref } from 'vue'
+import psychedelicBg from '../assets/psychedelic2.png'
+import bitcoinLogo from '../assets/bitcoin.png'
+import ordinalsLogo from '../assets/ordinals.png'
+import tapLogo from '../assets/tap.png'
+import natLogo from '../assets/nat1.png'
 
 const stage = ref<HTMLElement | null>(null)
 const bitcoinRef = ref<HTMLElement | null>(null)
@@ -203,4 +262,48 @@ onBeforeUnmount(() => {
 <style scoped>
 /* Ensure the sticky column has enough height to visualize the stacking */
 :host { display: block; }
+
+/* Lego brick styling */
+.lego-brick {
+  position: relative;
+  border-radius: 12px;
+  /* subtle bevel via shadows */
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.25),
+    inset 0 -3px 0 rgba(0, 0, 0, 0.25),
+    0 6px 14px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(0,0,0,0.2);
+}
+
+.lego-brick .studs {
+  position: absolute;
+  top: -10px; /* raise studs above brick top */
+  left: 0;
+  right: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  padding: 0 18px;
+  z-index: 2;
+}
+
+.lego-brick .stud {
+  width: 28px;
+  height: 16px;
+  background-color: var(--lego-color, #9ca3af);
+  border-radius: 10px 10px 6px 6px;
+  box-shadow:
+    inset 0 -2px 0 rgba(0, 0, 0, 0.25),
+    inset 0 2px 0 rgba(255, 255, 255, 0.25),
+    0 2px 4px rgba(0, 0, 0, 0.25);
+  background-image:
+    radial-gradient(ellipse at 50% 20%, rgba(255,255,255,0.35), rgba(255,255,255,0) 45%),
+    linear-gradient(180deg, rgba(255,255,255,0.15), rgba(0,0,0,0.15));
+}
+
+/* ensure content is above background effects */
+.lego-brick > :not(.studs) {
+  position: relative;
+  z-index: 3;
+}
 </style>

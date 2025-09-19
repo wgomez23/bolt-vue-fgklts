@@ -1,5 +1,5 @@
 <template>
-  <div ref="root" class="w-full" aria-label="Bitcoin timeline split animation">
+  <div ref="root" class="w-full" :class="{ ready }" aria-label="Bitcoin timeline split animation">
     <svg
       ref="svgEl"
       class="w-full h-auto"
@@ -18,10 +18,10 @@
 
       <!-- Images and captions -->
       <image :href="ponzi" x="540" y="70" width="300" height="170" preserveAspectRatio="xMidYMid slice" />
-      <text x="690" y="255" text-anchor="middle" :fill="captionColor" font-size="14" font-family="ui-sans-serif, system-ui">Bitcoin running at a loss</text>
+      <text x="690" y="255" text-anchor="middle" :fill="captionColor" font-size="14" font-family="ui-sans-serif, system-ui">Bitcoin centralized by nation states</text>
 
       <image :href="subsidy" x="540" y="300" width="300" height="170" preserveAspectRatio="xMidYMid slice" />
-      <text x="690" y="485" text-anchor="middle" :fill="captionColor" font-size="14" font-family="ui-sans-serif, system-ui">Bitcoin with sound economic incentives</text>
+      <text x="690" y="485" text-anchor="middle" :fill="captionColor" font-size="14" font-family="ui-sans-serif, system-ui">Bitcoin decentralized</text>
 
       <!-- Animated dots -->
       <g v-show="phase === 'main'">
@@ -44,6 +44,7 @@ import ponzi from '../assets/ponzi.png'
 import subsidy from '../assets/subsidy.png'
 
 const root = ref<HTMLDivElement | null>(null)
+const ready = ref(false)
 const svgEl = ref<SVGSVGElement | null>(null)
 const mainPath = ref<SVGPathElement | null>(null)
 const topPath = ref<SVGPathElement | null>(null)
@@ -64,6 +65,7 @@ const pulseColor = '#F97316' // orange-500
 let rafId = 0
 let active = true
 let started = 0
+let positioned = false
 
 // Durations in ms
 const MAIN_DUR = 1400
@@ -100,6 +102,7 @@ const animate = (now: number) => {
     const p = mainPath.value.getPointAtLength(mainLen * t)
     positionCircle(mainDot.value, p.x, p.y)
     positionCircle(mainDotHalo.value, p.x, p.y)
+    if (!positioned) { ready.value = true; positioned = true }
   } else if (elapsed < MAIN_DUR + BRANCH_DUR) {
     // Split along both branches
     phase.value = 'split'
@@ -110,6 +113,7 @@ const animate = (now: number) => {
     positionCircle(topDotHalo.value, pTop.x, pTop.y)
     positionCircle(bottomDot.value, pBot.x, pBot.y)
     positionCircle(bottomDotHalo.value, pBot.x, pBot.y)
+    if (!positioned) { ready.value = true; positioned = true }
   } else {
     // Pause (keep last position)
   }
@@ -118,10 +122,28 @@ const animate = (now: number) => {
 }
 
 const resize = () => {
-  // No-op: using viewBox; but recompute lengths in case of dynamic changes
+  // Recompute lengths in case of dynamic changes
   if (mainPath.value) mainLen = mainPath.value.getTotalLength()
   if (topPath.value) topLen = topPath.value.getTotalLength()
   if (bottomPath.value) bottomLen = bottomPath.value.getTotalLength()
+
+  // Initialize positions so dots/halos start at their respective path origins
+  // This prevents any halo from appearing at (0,0) before the first RAF update
+  if (mainPath.value) {
+    const p0 = mainPath.value.getPointAtLength(0)
+    positionCircle(mainDot.value, p0.x, p0.y)
+    positionCircle(mainDotHalo.value, p0.x, p0.y)
+  }
+  if (topPath.value) {
+    const pt0 = topPath.value.getPointAtLength(0)
+    positionCircle(topDot.value, pt0.x, pt0.y)
+    positionCircle(topDotHalo.value, pt0.x, pt0.y)
+  }
+  if (bottomPath.value) {
+    const pb0 = bottomPath.value.getPointAtLength(0)
+    positionCircle(bottomDot.value, pb0.x, pb0.y)
+    positionCircle(bottomDotHalo.value, pb0.x, pb0.y)
+  }
 }
 
 let observer: IntersectionObserver | null = null
@@ -164,10 +186,9 @@ onBeforeUnmount(() => {
   0%, 100% { transform: scale(1); opacity: 0.25; }
   50% { transform: scale(1.8); opacity: 0; }
 }
-.halo {
-  animation: pulse 1.2s infinite;
-  transform-origin: center;
-}
+/* Default: no animation/visibility until we're positioned */
+.halo { transform-origin: center; opacity: 0; }
+.ready .halo { animation: pulse 1.2s infinite; opacity: 0.25; }
 
 .dot {
   filter: drop-shadow(0 0 6px rgba(249, 115, 22, 0.8));

@@ -25,6 +25,8 @@
       </div>
     </section>
 
+    
+
     <!-- Live data overview (placeholder cards to mirror layout) -->
     <section v-if="showNatData" class="border-b border-dark-lighter/50" aria-labelledby="live-data">
       <div class="mx-auto max-w-6xl px-4 py-12 md:py-16">
@@ -77,7 +79,7 @@
         <div ref="prefaceScroll" class="h-[38rem] overflow-y-auto pr-2">
           <div class="sticky top-0 z-10 bg-black/70 backdrop-blur-sm px-2 py-3 border-b border-orange-500/30">
             <h2 class="text-3xl md:text-4xl font-bold">Bitcoin is NAT Certain</h2>
-            <h3 class="mt-1 text-xl md:text-2xl font-semibold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">The Preface</h3>
+            <h3 class="mt-1 text-xl md:text-2xl font-semibold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Introduction</h3>
             <!-- Preface scroll progress bar -->
             <div class="mt-2 h-1 w-full bg-orange-500/20 rounded">
               <div class="h-1 bg-orange-500 rounded" :style="{ width: prefaceProgress + '%' }"></div>
@@ -94,11 +96,22 @@
               To effectively track the status of energy consumption in relation to the preservation of network security, new metrics need to be utilized that provide a dynamic lens to assess whether Bitcoin’s energetic foundation remains robust against evolving threats, ensuring that its decentralized sovereignty and interpretive value can endure as societal needs and power dynamics continue to shift.
             </p>
             <p>
-              <strong>The Bitcoin Security Intensity (BSI)</strong> is a critical metric that quantifies the proportion of Bitcoin's market capitalization actively defended by miner revenue, calculated as the annualized miner revenue (block subsidies plus fees) divided by the market cap.
+              <strong><a href="https://x.com/het_tk/status/1967302913287709102" target="_blank" rel="noopener noreferrer" class="text-orange-400 hover:text-orange-300 transition-colors">The Bitcoin Security Intensity (BSI)</a></strong> is a critical metric that quantifies the proportion of Bitcoin's market capitalization actively defended by miner revenue, calculated as the annualized miner revenue (block subsidies plus fees) divided by the market cap.
             </p>
-            <p>
-              Bitcoin’s proof-of-work consensus relies on significant energy consumption to secure its network against 51% attacks, where an adversary could control the majority of the hash rate. To assess this vulnerability, we use the Energy Security Ratio (ESR), defined as Bitcoin’s energy consumption divided by the global electricity surplus. This surplus represents the energy pool available for potential attacks, assuming equivalent mining efficiency.
-            </p>
+            <!-- Pretty BSI equation -->
+            <div class="my-6 flex justify-center select-none" aria-hidden="true">
+              <div class="inline-block font-serif text-base md:text-lg text-gray-100">
+                <div class="flex items-center gap-3">
+                  <span class="font-semibold tracking-wide">BSI</span>
+                  <span class="text-gray-400">=</span>
+                  <div class="inline-block align-middle leading-tight">
+                    <div class="text-center px-3">Miner Revenue × 365</div>
+                    <div class="border-t border-gray-400 my-1"></div>
+                    <div class="text-center px-3">Market Cap</div>
+                  </div>
+                </div>
+              </div>
+            </div>
             <p>
               <h4 class="text-xl font-semibold text-white">Energy Security Ratio for Proof-of-Work Systems (ESR)</h4>
               Bitcoin’s proof-of-work consensus relies on significant energy consumption to secure its network against 51% attacks, where an adversary could control the majority of the hash rate. To assess this vulnerability, we use the Energy Security Ratio (ESR), defined as Bitcoin’s energy consumption divided by the global electricity surplus. This surplus represents the energy pool available for potential attacks, assuming equivalent mining efficiency.
@@ -135,6 +148,10 @@
             <p>
               The <strong>Attack Opportunity Index (AOI)</strong>, defined as 1 - ESR ≈ 0.952 (95.2%), indicates that 95.2% of the surplus could theoretically be redirected to attack the network. To enhance security, Bitcoin’s energy use must exceed 50% of the surplus (>1,928 TWh), making attacks infeasible by dominating available resources. Optimizing the ESR involves channeling surplus electricity, strengthening decentralized finance while leveraging global energy abundance.
             </p>
+            <!-- ESR vs AOI donut chart -->
+            <div class="mt-4">
+              <EsrAoiPieChart />
+            </div>
             <p></p>
             <!-- Benchmark table -->
             <div class="mt-8 overflow-x-auto rounded-lg border border-dark-lighter/50 bg-dark-card/30">
@@ -312,7 +329,7 @@
                 <div class="sm:col-span-5">
                   <h4 class="text-xl font-semibold text-white">Why This Problem Cannot Be Ignored</h4>
                   <p class="mt-2 text-gray-300">
-                    As Bitcoin integrates more deeply into the traditional financial system, evidenced by the proliferation of spot ETFs, institutional custody solutions, and regulatory frameworks that treat it as a legitimate asset class,the security budget problem becomes increasingly critical to address, as any vulnerability could trigger cascading failures in interconnected markets, eroding investor confidence and inviting regulatory crackdowns. With trillions in value potentially flowing into Bitcoin through these channels, a declining miner revenue stream risks weakening the network's hash power, exposing it to attacks that could compromise transaction integrity and immutability, thereby undermining its appeal as a reliable store of value or settlement layer for global finance.
+                    As Bitcoin integrates more deeply into the traditional financial system, evidenced by the proliferation of spot ETFs, institutional custody solutions, and regulatory frameworks that treat it as a legitimate asset class, the security budget problem becomes increasingly critical to address, as any vulnerability could trigger cascading failures in interconnected markets, eroding investor confidence and inviting regulatory crackdowns. With trillions in value potentially flowing into Bitcoin through these channels, a declining miner revenue stream risks weakening the network's hash power, exposing it to attacks that could compromise transaction integrity and immutability, thereby undermining its appeal as a reliable store of value or settlement layer for global finance.
                   </p>
                 </div>
                 
@@ -356,6 +373,9 @@
             <p class="mt-3 text-gray-300">
               Introducing the Non-Arbitrary Token (NAT), a meta-protocol-derived digital commodity produced natively from Bitcoin's block data patterns, as a <strong>complementary subsidy</strong> token to bolster miner incentives without altering Bitcoin's core infrastructure, OP codes, or consensus rules.
             </p>
+            <div class="mt-6">
+              <RadialOrbitCycle />
+            </div>
           </aside>
 
           <!-- Main content -->
@@ -408,28 +428,28 @@
               <article>
                 <h3 class="text-xl font-semibold text-white">Meta-protocols On Bitcoin</h3>
                 <p class="mt-2 text-gray-300">
-                  Meta-protocols in the context of Bitcoin are secondary layers or frameworks built atop the Bitcoin blockchain that leverage its existing data structures, such as block headers and transaction outputs, to create new functionalities, assets, or incentive mechanisms without altering Bitcoin’s core code. 
+                  Meta-protocols in the context of Bitcoin are secondary layers or frameworks built on top of the Bitcoin blockchain that leverage its existing data structures, such as block headers and transaction outputs, to create new functionalities, assets, or incentive mechanisms without altering Bitcoin’s core code. 
                 </p>
               </article>
               
               <article>
                 <h3 class="text-xl font-semibold text-whitet">Ordinals</h3>
                 <p class="mt-2 text-gray-300">
-                  The Ordinal Protocol, built on Bitcoin, assigns unique identities to individual satoshis by tracking their mining order, using SegWit and Taproot to embed data like text or images as inscriptions. This enables the creation of distinct digital assets, such as NFTs or tokens, validated by Bitcoin’s decentralized network.
+                  The <a href="https://docs.ordinals.com/" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">Ordinals Protocol</a>, built on Bitcoin, assigns unique identities to individual satoshis by tracking their mining order, using SegWit and Taproot to embed data like text or images as inscriptions. This enables the creation of distinct digital assets, such as NFTs or tokens, validated by Bitcoin's decentralized network.
                 </p>
               </article>
               
               <article>
                 <h3 class="text-xl font-semibold text-white">TAP Protocol</h3>
                 <p class="mt-2 text-gray-300">
-                  The TAP Protocol enhances Bitcoin’s Ordinals by providing a flexible framework for complex token issuance models, such as the Digital Matter Theory based Non-Arbitrary Tokens (NATs). This is achieved through structured inscriptions that are validated by a decentralized indexer network, allowing for sophisticated, rule-based token logic.
+                  The <a href="https://docs.tap-protocol.com/" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">TAP Protocol</a> enhances Bitcoin's Ordinals by providing a flexible framework for complex token issuance models, such as the Digital Matter Theory based Non-Arbitrary Tokens (NATs). This is achieved through structured inscriptions that are validated by a decentralized indexer network, allowing for sophisticated, rule-based token logic.
                 </p>
               </article>
               
               <article>
                 <h3 class="text-xl font-semibold text-white">DMT/NAT</h3>
                 <p class="mt-2 text-gray-300">
-                  The Digital Matter Theory (DMT) protocol creates non-arbitrary tokens by treating Bitcoin’s blockchain data as a thermodynamically secured substrate for deriving digital commodities that are generated through inscriptions that tie token issuance to the occurrence of patterns within Bitcoin blocks.
+                  The <a href="https://digital-matter-theory.gitbook.io/" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">Digital Matter Theory</a> (DMT) protocol creates non-arbitrary tokens by treating Bitcoin’s blockchain data as a thermodynamically secured substrate for deriving digital commodities that are generated through inscriptions that tie token issuance to the occurrence of patterns within Bitcoin blocks.
                 </p>
               </article>
             </div>
@@ -465,6 +485,10 @@
                   As network hash power increases, the target decreases (more leading zeros), which reduces s (smaller exponent) and c (coefficient), leading to a numerically smaller Bits value. 
                   <br>Hash Power ↑ → Difficulty ↑ → Target ↓ → Bits Numerical Value ↓
                 </p>
+                <!-- Hash Power vs Bits chart (ECharts + Motion.dev) -->
+                <div class="mt-4">
+                  <BitsVsHashrateChart />
+                </div>
                 <div class="mt-4 p-4 bg-dark-card/30 rounded-md space-y-4">
                   <p class="font-mono text-center text-lg">$NAT = bits = s × 2²⁴ + c</p>
                   <div class="p-3 bg-yellow-900/30 border-l-4 border-yellow-500">
@@ -689,31 +713,60 @@
             <p class="mt-3 text-gray-300">
               Aligning $NAT with Bitcoin’s ethos requires open-source, peer-to-peer indexing and validation to preserve the value of both systems. These measures ensure $NAT operates as an unstoppable extension of Bitcoin’s resilient architecture, propagating securely and autonomously while remaining impervious to interference or shutdown.
             </p>
+            <div class="mt-6">
+              <BtcNatPulse />
+            </div>
           </aside>
 
           <!-- Main content -->
           <div class="md:col-span-2 md:pl-8">
             <div class="space-y-8">
               <article>
+                <h2 class="text-2xl font-bold mb-4 text-white">Open Source Principles</h2>
+                <p class="mb-6">
+                  The TAP Protocol, developed by pseudonymous creator BennyTheDev, leverages Bitcoin’s security and immutability. This infrastructure inherently ties NAT transactions to a secure, Bitcoin-backed layer, amplifying its alignment with Bitcoin’s principles.
+                </p>
+                <p class="mb-6">
+                  <a href="https://github.com/Trac-Systems/ord-tap/" target="_blank" rel="noopener noreferrer" class="text-orange-400 hover:text-orange-300 transition-colors">Open-sourcing the indexing of NAT</a> transactions involves making the process of tracking, validating, and verifying token data on the Bitcoin blockchain publicly accessible and community-maintained. This contrasts with centralized or proprietary indexing, where a single entity controls data interpretation.
+                </p>
+                
+                <h3 class="text-xl font-semibold text-white mt-4">Key Aspects Include:</h3>
+                <ul class="mt-2 list-disc pl-6 space-y-2 text-gray-300">
+                  <li><strong>Validation Process:</strong> Indexing ensures that NAT transactions (e.g., inscriptions, supply expansions based on Bitcoin) are accurately recorded and verifiable against Bitcoin’s blockchain state, using tools like ordinals explorers or custom parsers.</li>
+                  <li><strong>Community Oversight:</strong> By open-sourcing, developers and nodes worldwide can contribute to and audit the indexing code, preventing manipulation and ensuring consensus on transaction validity.</li>
+                  <li><strong>Scalability:</strong> Distributed indexing reduces reliance on centralized servers, enabling real-time validation as Bitcoin’s transaction volume grows.</li>
+                </ul>
+                <p class="mt-4">
+                    This approach leverages Bitcoin’s existing decentralized infrastructure, extending it to NAT, and forms a critical support mechanism for the TAP Protocol’s operations.
+                </p>
+                <p class="mt-2">
+                  How does this align with the pillars of Bitcoin's Ethos?
+                </p>
+              </article>
+
+              <article>
                 <h3 class="text-xl font-semibold text-white">The Three Pillars of Bitcoin's Ethos</h3>
                 <ul class="mt-2 text-gray-300 space-y-4 text-left">
                   <li>
                     <span class="block font-bold text-white text-l md:text-1xl">Decentralization</span>
-                    <span>No single entity controls the network, enabling trustless, peer-to-peer interactions.</span>
+                    <p><strong>Bitcoin:</strong> No single entity controls the network, enabling trustless, peer-to-peer interactions.</p>
+                    <p class="mt-2"><strong>$NAT:</strong> The TAP Protocol's reliance on Bitcoin's Ordinals Protocol ensures that asset creation and management occur without a central authority, as inscriptions are validated by the Bitcoin network's miners. Open-sourced indexing decentralizes data validation, allowing any node to verify NAT transactions. This eliminates single points of failure (e.g., centralized APIs) and aligns with Bitcoin's peer-to-peer architecture, where no entity can unilaterally dictate transaction records.</p>
                     <div class="mt-4 rounded-md border border-dark-lighter/50 bg-transparent overflow-hidden h-52 md:h-72">
                       <DecentralizationNetwork />
                     </div>
                   </li>
                   <li>
                     <span class="block font-bold text-white text-l md:text-1xl">Censorship Resistance</span>
-                    <span>Transactions cannot be stopped or altered, protecting financial sovereignty without intermediaries.</span>
+                    <p><strong>Bitcoin:</strong> Transactions cannot be stopped or altered, protecting financial sovereignty without intermediaries.</p>
+                    <p class="mt-2"><strong>$NAT:</strong> By leveraging Bitcoin's proof-of-work security, TAP ensures that NAT transactions are resistant to censorship. Once inscribed, assets cannot be altered or blocked by any single entity, aligning with Bitcoin's design to thwart centralized interference (e.g., government bans). Open-sourced indexing decentralizes the validation process, preventing any authority from suppressing or altering transaction records. This distributed validation mirrors Bitcoin's resistance to 51% attack censorship, as no single indexer can control the narrative.</p>
                     <div class="mt-4 rounded-md border border-dark-lighter/50 bg-transparent overflow-hidden h-52 md:h-72">
                       <CensorshipResistance />
                     </div>
                   </li>
                   <li>
                     <span class="block font-bold text-white text-l md:text-1xl">Transparency</span>
-                    <span>An open-source, auditable blockchain ensures verifiable integrity, making Bitcoin a secure and enduring store of value.</span>
+                    <p><strong>Bitcoin:</strong> An open-source, auditable blockchain ensures verifiable integrity, making Bitcoin a secure and enduring store of value.</p>
+                    <p class="mt-2"><strong>$NAT:</strong> TAP's use of Bitcoin's immutable blockchain as a data root provides full transparency in asset issuance and supply dynamics. Every NAT transaction is inscribed and publicly verifiable, with parameters (e.g., supply tied to block data) openly defined via the TAP standard. Open-sourcing indexing makes the validation logic transparent, allowing anyone to inspect how NAT transactions are processed and confirmed. This mirrors Bitcoin's open-source codebase, where transparency fosters trust and auditability.</p>
                     <div class="mt-4 rounded-md border border-dark-lighter/50 bg-transparent overflow-hidden h-52 md:h-72">
                       <TransparencyReveal />
                     </div>
@@ -909,7 +962,7 @@
                       <tr>
                         <td class="align-top px-4 py-3 font-medium text-gray-100">Fee and Congestion Effects</td>
                         <td class="align-top px-4 py-3 text-gray-300">Drove average fees to &gt;50 sat/vB in late 2023; non‑monetary tx accounted for 36% of 2023 fees, totaling &gt;5,000 BTC in cumulative BRC20 fees since March 2023.</td>
-                        <td class="align-top px-4 py-3 text-gray-300">Lowers fees natively on Bitcoin, stabilizing the network for monetary usage while harnessing fees from other execution layers to deliver back to Bitcoin in the form of $NAT subsidy.</td>
+                        <td class="align-top px-4 py-3 text-gray-300">Lowers fees natively on Bitcoin, stabilizing the network for monetary usage while harnessing fees from other execution layers to deliver back to Bitcoin in the form of a $NAT buyback to increase the value of the $NAT subsidy for miners.</td>
                       </tr>
                       <tr class="bg-dark/20">
                         <td class="align-top px-4 py-3 font-medium text-gray-100">Scalability and Mitigation Potential</td>
@@ -951,10 +1004,49 @@
               <article>
                 <h3 class="text-xl font-semibold text-white">Untapped Substrate</h3>
                 <p class="mt-2 text-gray-300">
-                  The integration of multi-chain mechanisms, exemplified by the $NAT token and Digital Matter Theory (DMT) protocol, represents a transformative step toward addressing Bitcoin's sustainability and security challenges. By realigning miner incentives and tapping into the untapped substrate of block data, $NAT not only offsets the declining security budget but also enhances the value proposition of Proof-of-Work (PoW) through the creation of derivative assets and applications. This approach strengthens Bitcoin's immutability while fostering a multi-chain economy that reinvests value into the network. The Bitcoin Security Intensity (BSI), currently at 0.88% in 2025, underscores the urgent need to bolster miner revenue relative to Bitcoin's growing market cap, while the Energy Security Ratio (ESR), at 4.8%, highlights the vulnerability posed by the 95.2% of global electricity surplus available for potential attacks. For humanity to secure Bitcoin as the world's monetary foundation in the future, the goal must be a concerted effort to optimize both metrics, elevating BSI above 1% through innovative incentives like $NAT and driving ESR beyond 50% by channeling surplus energy into mining via higher monetary incentives. This dual optimization will ensure a robust, energy-backed monetary system capable of withstanding adversarial threats, thereby cementing Bitcoin's role as a cornerstone of global financial stability.
+                  The integration of multi-chain mechanisms, exemplified by the $NAT token and Digital Matter Theory (DMT) protocol, represents a transformative step toward addressing Bitcoin's sustainability and security challenges. By realigning miner incentives and tapping into the untapped substrate of block data, $NAT not only offsets the declining security budget but also enhances the value proposition of Proof-of-Work (PoW) through the creation of derivative assets and applications. This approach strengthens Bitcoin's immutability while fostering a multi-chain economy that reinvests value into the network.
+                </p>
+                
+                <p class="mt-4 text-gray-300">
+                  The <a href="https://x.com/het_tk/status/1967302913287709102" target="_blank" rel="noopener noreferrer" class="text-orange-400 hover:text-orange-300 transition-colors">Bitcoin Security Intensity (BSI)</a>, currently at 0.88% in 2025, underscores the urgent need to bolster miner revenue relative to Bitcoin's growing market cap. This metric highlights the direct relationship between miner rewards and network security, where a higher BSI indicates stronger security through increased mining incentives.
+                </p>
+                
+                <p class="mt-4 text-gray-300">
+                  Similarly, the Energy Security Ratio (ESR) at 4.8% reveals a critical vulnerability: 95.2% of global electricity remains available for potential attacks. This surplus energy represents a significant attack vector that could be exploited if not properly secured through economic incentives.
+                </p>
+                
+                <p class="mt-4 text-gray-300">
+                  To secure Bitcoin's role as the foundation of a global monetary system, we must optimize both BSI and ESR. The target is to elevate BSI above 1% through innovative incentives like $NAT while driving ESR beyond 50% by channeling surplus energy into productive mining activities. This dual optimization will create a robust, energy-backed monetary system capable of withstanding adversarial threats and cementing Bitcoin's position as a cornerstone of global financial stability.
+                </p>
+              </article>
+              <article>
+                <h3 class="text-xl font-semibold text-white">Call To Action</h3>
+                <p class="mt-4 text-gray-300">
+                  In the shadow of centralized powers that seek to control the flow of value and information, we, the architects and advocates of NAT, draw inspiration from the genesis of Bitcoin. It championed the relentless pursuit of sovereignty through cryptographic proof, a decentralized network where no single entity holds dominion, and an immutable ledger secured by the collective ingenuity of participants worldwide. This ethos, is not merely a technical innovation but a philosophical stand for individual autonomy, financial freedom, and the democratization of trust, ideals that echo the unyielding spirit of resistance against tyranny.
+                </p>
+                <p class="mt-4 text-gray-300">
+                  NAT emerges as a steadfast guardian of this legacy, extending Bitcoin's core principles into new frontiers. By fostering protocols that amplify decentralization, resist censorship, and empower users to reclaim control over their digital destinies, NAT aligns inextricably with Satoshi's dream. It counters the creeping threats of mining centralization and institutional overreach that have tested Bitcoin's resilience over the years, ensuring that the flame of sovereignty burns brighter for all who seek it. In this NATpaper, we articulated not just a framework, but a covenant. A call to action for innovators, builders, and visionaries to fortify the decentralized revolution against the encroaching shadows of control. Thus, with the weight of history upon us and the promise of tomorrow before us, we stand resolute.
                 </p>
               </article>
             </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Oath Section (full-width) -->
+    <section id="oath" class="border-b border-dark-lighter/50">
+      <div class="mx-auto max-w-6xl px-4 py-16 md:py-20">
+        <div class="space-y-6">
+          <h2 class="text-3xl md:text-4xl font-bold text-center bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+            The Oath of Unity In Preservation Of Bitcoin's Ethos
+          </h2>
+          <p class="text-gray-300 text-lg leading-relaxed">
+            Bound by Satoshi Nakamoto’s vision of a decentralized, trustless world as set forth in Bitcoin’s genesis, we, and all who share this conviction, pledge our collective wisdom to innovate in harmony with Bitcoin’s core principles, our relentless efforts to fortify its resilient network, and our profound honor to uphold NAT as a unifying beacon, not to fracture but to realign the steadfast guardians of decentralization. With no intent to divide, we stand together to strengthen Bitcoin’s ethos, ensuring its promise of sovereignty and freedom endures ethically and inclusively for generations unbound.
+          </p>
+          <!-- Reused BtcNatPulse animation, full width -->
+          <div class="mt-6">
+            <BtcNatPulse :fullWidth="true" />
           </div>
         </div>
       </div>
@@ -990,6 +1082,10 @@ import NATworkFlywheel from '../components/NATworkFlywheel.vue'
 import BlockchainFlow from '../components/BlockchainFlow.vue'
 import OrbitingCrypto from '../components/OrbitingCrypto.vue'
 import BitcoinTimelineSplit from '../components/BitcoinTimelineSplit.vue'
+import RadialOrbitCycle from '../components/RadialOrbitCycle.vue'
+import BtcNatPulse from '../components/BtcNatPulse.vue'
+import BitsVsHashrateChart from '../components/BitsVsHashrateChart.vue'
+import EsrAoiPieChart from '../components/EsrAoiPieChart.vue'
 
 // Live data: Market Cap (reuse Home.vue logic)
 // Image Lightbox state/handlers
