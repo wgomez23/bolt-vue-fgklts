@@ -419,7 +419,7 @@
                       </thead>
                       <tbody class="text-gray-300">
                         <tr class="odd:bg-white/[0.02] even:bg-transparent">
-                          <td class="py-3 px-4 align-top font-medium">$50M <span class="text-gray-400">(current est.)</span></td>
+                          <td class="py-3 px-4 align-top font-medium">$50M <span class="text-gray-400"></span></td>
                           <td class="py-3 px-4 align-top">$50</td>
                           <td class="py-3 px-4 align-top">Negligible (1.5% of fees)</td>
                           <td class="py-3 px-4 align-top">Minimal (0.01% of subsidy)</td>
@@ -461,6 +461,9 @@
                           <td class="py-3 px-4 align-top">Matches subsidy (99% of subsidy; doubles total rewards)</td>
                         </tr>
                       </tbody>
+                      <caption class="text-xs text-gray-400 text-center py-2 px-4 border-t border-gray-700/70">
+                        These values assume today's supply at each market cap milestone
+                      </caption>
                     </table>
                   </div>
                 </div>
@@ -1127,7 +1130,7 @@
             The Oath of Unity In Preservation Of Bitcoin's Ethos
           </h2>
           <p class="text-gray-300 text-lg leading-relaxed">
-            Bound by Satoshi Nakamoto’s vision of a decentralized, trustless world as set forth in Bitcoin’s genesis, we, and all who share this conviction, pledge our collective wisdom to innovate in harmony with Bitcoin’s core principles, our relentless efforts to fortify its resilient network, and our profound honor to uphold NAT as a unifying beacon, not to fracture but to realign the steadfast guardians of decentralization. With no intent to divide, we stand together to strengthen Bitcoin’s ethos, ensuring its promise of sovereignty and freedom endures ethically and inclusively for generations unbound.
+            Rooted in Satoshi Nakamoto's vision of a decentralized and trustless world, we join with all who share this conviction to advance innovation in harmony with Bitcoin's core principles. With unwavering commitment, we work to strengthen its resilient network and uphold NAT as a unifying beacon. Not to divide, but to realign and empower the true guardians of decentralization. Our purpose is not separation but solidarity, ensuring that Bitcoin's ethos of sovereignty and freedom endures, ethically, inclusively, and for generations to come.
           </p>
           <!-- Reused BtcNatPulse animation, full width -->
           <div class="mt-6">
