@@ -401,6 +401,91 @@
                 <div class="mt-4">
                   <BlockchainFlow />
                 </div>
+                <!-- NAT comparison table under the animation -->
+                <p class="mt-4 text-gray-300">
+                  The following are network milestones that will help increase the security budget of Bitcoin:
+                </p>
+                <div class="mt-6 overflow-x-auto">
+                  <!-- Let the table fully fit the available width on desktop; only small screens will scroll horizontally -->
+                  <div class="w-full sm:min-w-[720px] md:min-w-0 rounded-lg border border-gray-700/70 bg-dark-card/40">
+                    <table class="w-full text-left md:table-fixed">
+                      <thead>
+                        <tr class="text-gray-200 text-sm">
+                          <th class="py-3 px-4 border-b border-gray-700/70">$NAT Market Cap</th>
+                          <th class="py-3 px-4 border-b border-gray-700/70">Additional USD per Block from $NAT</th>
+                          <th class="py-3 px-4 border-b border-gray-700/70">Comparison to BTC Transaction Fees (~$3,390/block)</th>
+                          <th class="py-3 px-4 border-b border-gray-700/70">Comparison to BTC Block Subsidy (~$353,125/block)</th>
+                        </tr>
+                      </thead>
+                      <tbody class="text-gray-300">
+                        <tr class="odd:bg-white/[0.02] even:bg-transparent">
+                          <td class="py-3 px-4 align-top font-medium">$50M <span class="text-gray-400">(current est.)</span></td>
+                          <td class="py-3 px-4 align-top">$50</td>
+                          <td class="py-3 px-4 align-top">Negligible (1.5% of fees)</td>
+                          <td class="py-3 px-4 align-top">Minimal (0.01% of subsidy)</td>
+                        </tr>
+                        <tr class="odd:bg-white/[0.02] even:bg-transparent">
+                          <td class="py-3 px-4 align-top font-medium">$500M</td>
+                          <td class="py-3 px-4 align-top">$500</td>
+                          <td class="py-3 px-4 align-top">Minor boost (15% of fees)</td>
+                          <td class="py-3 px-4 align-top">Negligible (0.1% of subsidy)</td>
+                        </tr>
+                        <tr class="odd:bg-white/[0.02] even:bg-transparent">
+                          <td class="py-3 px-4 align-top font-medium">$1B</td>
+                          <td class="py-3 px-4 align-top">$1,000</td>
+                          <td class="py-3 px-4 align-top">Approaches fees (30% of fees)</td>
+                          <td class="py-3 px-4 align-top">Minor (0.3% of subsidy)</td>
+                        </tr>
+                        <tr class="odd:bg-white/[0.02] even:bg-transparent">
+                          <td class="py-3 px-4 align-top font-medium">$3B</td>
+                          <td class="py-3 px-4 align-top">$3,000</td>
+                          <td class="py-3 px-4 align-top">Near parity (89% of fees)</td>
+                          <td class="py-3 px-4 align-top">Small (0.8% of subsidy)</td>
+                        </tr>
+                        <tr class="odd:bg-white/[0.02] even:bg-transparent">
+                          <td class="py-3 px-4 align-top font-medium">$6B</td>
+                          <td class="py-3 px-4 align-top">$6,000</td>
+                          <td class="py-3 px-4 align-top">Exceeds fees (177% of fees; surpasses typical tx revenue)</td>
+                          <td class="py-3 px-4 align-top">Modest (1.7% of subsidy)</td>
+                        </tr>
+                        <tr class="odd:bg-white/[0.02] even:bg-transparent">
+                          <td class="py-3 px-4 align-top font-medium">$100B</td>
+                          <td class="py-3 px-4 align-top">$100,000</td>
+                          <td class="py-3 px-4 align-top">Significant (29× fees; dwarfs tx revenue)</td>
+                          <td class="py-3 px-4 align-top">~1/3 of subsidy (28% of subsidy)</td>
+                        </tr>
+                        <tr class="odd:bg-white/[0.02] even:bg-transparent">
+                          <td class="py-3 px-4 align-top font-medium">$350B</td>
+                          <td class="py-3 px-4 align-top">$350,000</td>
+                          <td class="py-3 px-4 align-top">Massive (103× fees; far exceeds tx revenue)</td>
+                          <td class="py-3 px-4 align-top">Matches subsidy (99% of subsidy; doubles total rewards)</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <!-- Key Insights list below the table -->
+                <div class="mt-8">
+                  <h4 class="text-xl font-semibold text-white">Key Insights</h4>
+                  <ul class="mt-3 space-y-4 text-gray-300 list-disc pl-6">
+                    <li>
+                      <span class="font-semibold text-white">Low Market Caps ($50M–$1B):</span>
+                      <span> $NAT provides a small supplemental income, similar to or below current transaction fees. This could help during low-fee periods but wouldn't dramatically alter mining dynamics.</span>
+                    </li>
+                    <li>
+                      <span class="font-semibold text-white">Mid-Range ($3B–$6B):</span>
+                      <span> Achieves "transaction fee parity," where $NAT rewards rival or exceed Bitcoin's fees. This could stabilize miner revenue, reducing reliance on volatile tx fees.</span>
+                    </li>
+                    <li>
+                      <span class="font-semibold text-white">High Market Caps ($100B+):</span>
+                      <span> $NAT becomes a game-changer, adding revenue comparable to a significant portion (or all) of Bitcoin's block subsidy. At $350B, it effectively doubles miner rewards per block, potentially increasing network security by incentivizing more mining, further increasing decentralization.</span>
+                    </li>
+                    <li>
+                      <span class="font-semibold text-white">Overall Impact on Mining:</span>
+                      <span> Higher $NAT market caps could lower the break-even point for miners (e.g., by offsetting electricity costs), attract new participants, and boost Bitcoin's hashrate.</span>
+                    </li>
+                  </ul>
+                </div>
               </article>
             </div>
           </div>
