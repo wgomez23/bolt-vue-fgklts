@@ -288,7 +288,7 @@
             <div class="md:border-t border-dark-lighter/50 pt-4">
               <div class="grid grid-cols-1 sm:grid-cols-5 gap-6 items-start">
                 <div class="sm:col-span-5">
-                  <h4 class="text-xl font-semibold text-white">Broken fee model (Store of Value vs digital cash)</h4>
+                  <h4 class="text-xl font-semibold text-white">Broken Fee Model (Store of Value vs Digital Cash)</h4>
                   <p class="mt-2 text-gray-300">
                     Bitcoin’s growing adoption as a store of value, rather than a peer-to-peer electronic cash system as originally envisioned, exacerbates the security budget issue by suppressing transaction fee revenue, which is critical to sustaining miner incentives as block subsidies halve every four years. The emphasis on holding Bitcoin as a long-term asset reduces on-chain transaction volume, as users opt to store rather than spend, leading to consistently low fee contributions.
                   </p>
@@ -304,7 +304,7 @@
             <div class="md:border-t border-dark-lighter/50 pt-6 md:pt-8">
               <div class="grid grid-cols-1 sm:grid-cols-5 gap-6 items-start">
                 <div class="sm:col-span-5">
-                  <h4 class="text-xl font-semibold text-white">Miner revenue falters implies greater security risks</h4>
+                  <h4 class="text-xl font-semibold text-white">Miner Revenue Declining Implies Greater Security Risks</h4>
                   <p class="mt-2 text-gray-300">
                     Declining miner revenue in Bitcoin, driven by the programmed halving of block subsidies every four years and insufficient growth in transaction fees to offset the shortfall, undermines the network's incentive structure, leading to a reduced cost to attack as profit-driven miners scale back operations or exit the ecosystem. This erosion of computational power heightens Bitcoin's vulnerability to several security risks, including:
                   </p>
@@ -382,17 +382,17 @@
           <div class="md:col-span-2 md:pl-8">
             <div class="space-y-8">
               <article>
-                <h3 class="text-xl font-semibold text-white">Pioneers began questioning the sustainability of Bitcoin's security model.</h3>
+                <h3 class="text-xl font-semibold text-white">Pioneers Began Questioning The Sustainability of Bitcoin's Security Model</h3>
                 <p class="mt-2 text-gray-300">The Bitcoin security budget concern is not a contrived narrative engineered to support the value thesis of innovations like NAT; rather, it is a genuine, long-standing debate that has preoccupied the Bitcoin community for well over a decade, with early discussions emerging as far back as the network's formative years around 2010-2015, when pioneers began questioning the sustainability of incentives post-subsidy era.</p>
               </article>
               <article>
                 <h3 class="text-xl font-semibold text-white">Existing Proposed Solutions</h3>
                 <p class="mt-2 text-gray-300">
-                  <strong>On-chain scaling enhancements</strong>: Increasing block size limits to accommodate more transactions and foster a robust fee market, reducing block times for higher throughput.
+                  <strong>On-chain Scaling Enhancements</strong>: Increasing block size limits to accommodate more transactions and foster a robust fee market, reducing block times for higher throughput.
                   <br><br>
-                  <strong>Consensus mechanism shifts</strong>: Transitioning from Proof-of-Work to alternatives like Proof-of-Stake or Proof-of-Authority, though these raise centralization and trust concerns that clash with Bitcoin's foundational principles.
+                  <strong>Consensus Mechanism Shifts</strong>: Transitioning from Proof-of-Work to alternatives like Proof-of-Stake or Proof-of-Authority, though these raise centralization and trust concerns that clash with Bitcoin's foundational principles.
                   <br><br>
-                  <strong>Monetary policy alterations</strong>: Implementing tail emission to introduce perpetual low-level inflation beyond the 21 million cap for ongoing miner rewards; introducing demurrage fees to tax holdings and redistribute funds to security; or burning dormant coins (e.g., those attributed to Satoshi Nakamoto) to reduce supply and justify new issuance, despite ethical and property rights controversies.
+                  <strong>Monetary Policy Alterations</strong>: Implementing tail emission to introduce perpetual low-level inflation beyond the 21 million cap for ongoing miner rewards; introducing demurrage fees to tax holdings and redistribute funds to security; or burning dormant coins (e.g., those attributed to Satoshi Nakamoto) to reduce supply and justify new issuance, despite ethical and property rights controversies.
                 </p>
               </article>
               <article>
@@ -487,6 +487,19 @@
                       <span class="font-semibold text-white">Overall Impact on Mining:</span>
                       <span> Higher $NAT market caps could lower the break-even point for miners (e.g., by offsetting electricity costs), attract new participants, and boost Bitcoin's hashrate.</span>
                     </li>
+                  </ul>
+                </div>
+              </article>
+
+              <article>
+                <h3 class="text-xl font-semibold text-white">Principle 4: Thermodynamic Alignment with Non-Arbitrary Commodities</h3>
+                <div class="mt-2 text-gray-300">
+                  <ul class="list-disc pl-5 space-y-2">
+                    <li>Real-world commodities (e.g., gold, oil) derive intrinsic value from energy flows between high- and low-entropy states, producing goods that serve human-centric economic loops.</li>
+                    <li>Bitcoin mining converts physical energy (electricity) into digital security (hashpower), creating a non-arbitrary foundation for value.</li>
+                    <li>$NAT, as a Bitcoin-native asset, inherits this thermodynamic grounding by quantifying block data (e.g., Bits) as a digital commodity with intrinsic utility.</li>
+                    <li>Just as energy-intensive processes (e.g., mining gold) produce scarce, valuable commodities for human use, $NAT’s issuance via Bitcoin’s energy-intensive proof-of-work links the asset to real-world energy costs, supporting intrinsic value.</li>
+                    <li><strong>Defense:</strong> This alignment with thermodynamic principles enhances $NAT’s legitimacy. By leveraging Bitcoin’s energy-backed security, $NAT becomes a digital analogue of a physical commodity, supporting economic loops in digital ecosystems; its value potential scales with Bitcoin’s energy-driven growth, reinforcing its role in a non-arbitrary digital economy.</li>
                   </ul>
                 </div>
               </article>
@@ -599,17 +612,17 @@
               
               <article>
                 <h3 class="text-xl font-semibold text-whitet">Invoking Bits Value Using Digital Matter Theory & TAP Protocol</h3>
-                <div class="space-y-6 text-gray-300 mt-4">
+                <div class="space-y-6 text-gray-300 mt-4 [&_a]:text-orange-400 [&_a:hover]:text-orange-300">
                   <div>
-                    <h4 class="font-semibold text-white">1. Pattern Registration - Ordinals</h4>
+                    <h4 class="font-semibold text-white">1. Pattern Registration - <a href="https://docs.ordinals.com/" target="_blank" rel="noopener noreferrer">Ordinals</a></h4>
                     <p>Pattern: <code class="bg-gray-800 px-1.5 py-0.5 rounded">dmt.11.element</code></p>
-                    <p>Inscription ID: <a href="https://ordinals.com/inscription/63b5bd2e28c043c4812981718e65d202ab8f68c0f6a1834d9ebea49d8fac7e62i0" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:underline">
+                    <p>Inscription ID: <a href="https://ordinals.com/inscription/63b5bd2e28c043c4812981718e65d202ab8f68c0f6a1834d9ebea49d8fac7e62i0" target="_blank" rel="noopener noreferrer">
                       <code class="bg-gray-800 px-1.5 py-0.5 rounded text-xs break-all hover:bg-gray-700 transition-colors">63b5bd2e28c043c4812981718e65d202ab8f68c0f6a1834d9ebea49d8fac7e62i0</code>
                     </a></p>
                   </div>
 
                   <div>
-                    <h4 class="font-semibold text-white">2. Protocol Syntax - TAP</h4>
+                    <h4 class="font-semibold text-white">2. Protocol Syntax - <a href="https://github.com/Trac-Systems/tap-protocol-specs" target="_blank" rel="noopener noreferrer">TAP</a></h4>
                     <pre class="bg-gray-900 p-4 rounded-md overflow-x-auto text-sm mt-2"><code>{
   "p": "tap",
   "op": "dmt-deploy",
@@ -617,20 +630,20 @@
   "tick": "nat",
   "dt": "n"
 }</code></pre>
-                    <p class="mt-2">Inscription ID: <a href="https://ordinals.com/inscription/4d967af36dcacd7e6199c39bda855d7b1b37268f4c8031fed5403a99ac57fe67i0" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:underline">
+                    <p class="mt-2">Inscription ID: <a href="https://ordinals.com/inscription/4d967af36dcacd7e6199c39bda855d7b1b37268f4c8031fed5403a99ac57fe67i0" target="_blank" rel="noopener noreferrer">
                       <code class="bg-gray-800 px-1.5 py-0.5 rounded text-xs break-all hover:bg-gray-700 transition-colors">4d967af36dcacd7e6199c39bda855d7b1b37268f4c8031fed5403a99ac57fe67i0</code>
                     </a></p>
                   </div>
 
                   <div>
-                    <h4 class="font-semibold text-white">3. Execution Miner Redirect Child Inscription - DMT/NAT</h4>
+                    <h4 class="font-semibold text-white">3. Execution Miner Redirect Child Inscription - <a href="https://digital-matter-theory.gitbook.io/digital-matter-theory" target="_blank" rel="noopener noreferrer">DMT/NAT</a></h4>
                     <pre class="bg-gray-900 p-4 rounded-md overflow-x-auto text-sm mt-2"><code>{
   "p": "tap",
   "op": "reward",
   "type": "miner",
   "block": "885588"
 }</code></pre>
-                    <p class="mt-2">Inscription ID: <a href="https://ordinals.com/inscription/9c33ddf46e6cefec2924b366d9994d1c0880efa98004471da18f154a239597edi0" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:underline">
+                    <p class="mt-2">Inscription ID: <a href="https://ordinals.com/inscription/9c33ddf46e6cefec2924b366d9994d1c0880efa98004471da18f154a239597edi0" target="_blank" rel="noopener noreferrer">
                       <code class="bg-gray-800 px-1.5 py-0.5 rounded text-xs break-all hover:bg-gray-700 transition-colors">9c33ddf46e6cefec2924b366d9994d1c0880efa98004471da18f154a239597edi0</code>
                     </a></p>
                   </div>
@@ -691,7 +704,7 @@
                     <li>Miners seek profit maximization. If $NAT's value rises, mining becomes more lucrative, attracting more hashpower.</li>
                     <li>Holders benefit: Higher hashpower increases Bitcoin's security, enhancing BTC's value proposition, which indirectly supports $NAT (as it's Bitcoin-native).</li>
                     <li>Feedback Loop: More belief → higher $NAT price → higher miner rewards → more hashpower → stronger Bitcoin security → more belief in $NAT as a solution.</li>
-                    <li>Defense: This mirrors Bitcoin's halving dynamics but adds an uncapped layer. Unlike fees (volatile and dependent on usage), $NAT's value can scale with market sentiment, potentially outpacing halvings. This decouples security from fees alone. If adoption reaches BTC-like levels, it could multiply the budget exponentially, making attacks costlier.</li>
+                    <li>Defense: This mirrors Bitcoin's halving dynamics but adds an uncapped layer. Unlike fees (volatile and dependent on usage), $NAT's value can scale with market sentiment, potentially outpacing halvings. This decouples security from fees alone. If adoption reaches BTC-like levels, it could multiply the budget significantly, making attacks costlier.</li>
                   </ul>
                 </div>
               </article>
@@ -763,7 +776,6 @@
                     <li>The FCFS minting method continued unchanged until block 885,588.</li>
                     <li>After that, the system switched to a miner-redirect model: instead of open minting, Bitcoin miners automatically receive newly generated $NAT with each block.</li>
                     <li>Result: Each $NAT mined becomes worth more in dollars, effectively boosting miners' total rewards per block (BTC subsidy + fees + $NAT value).</li>
-                    <li>To secure this change, the original deployment inscriptions were burned to Satoshi’s address, making the rules permanent.</li>
                     <li>The system is further backed by TRAC Network validators, ensuring decentralized enforcement.</li>
                   </ul>
                 </p>
@@ -781,7 +793,7 @@
         <h2 class="text-3xl md:text-4xl font-bold">BLOCKOUT</h2>
         <div class="prose prose-invert mt-6 max-w-3xl mx-auto">
           <p class="text-lg">
-            This event — where every available Bitcoin block was claimed — became known as the “blockout.” You can view the current distribution of holders at
+            This event, where every available Bitcoin block was claimed, became known as a “blockout.” You can view the current distribution of holders at
             <a href="https://www.tapalytics.xyz/token/dmt-nat" target="_blank" class="text-blue-400 hover:text-blue-300 underline">TAPALYTICS</a>
           </p>
           <StaggeredGrid />
@@ -1220,22 +1232,22 @@ const natEndTabs = [
   {
     title: 'Metaverse & Gaming',
     content:
-      'The earliest implementation of Digital Matter Theory (DMT), Bitmap, showcases how non-arbitrary Bitcoin blockchain data can be used to generate digital land. Bitmap is a protocol that leverages Ordinals to inscribe individual Bitcoin blocks as unique, non-fungible assets, each block representing a district composed of parcels. These parcels inherit their uniqueness from the immutable, thermodynamically secured data of the block itself. The transaction data within each block shapes the topography, transforming raw blockchain information into a procedurally generated digital landscape.\n\nBy further using the substrate data embedded in each block, additional layers of the virtual ecosystem can be built under the same tamper-proof, verifiable rules. This enables features such as resource distribution, landscapes that evolve with underlying patterns, or in gaming contexts,the probabilistic appearance of a world boss in specific locations. All of these elements inherit the trustless, immutable qualities of Bitcoin, ensuring consistent and fair digital environments free from the arbitrary parameters that dominate most virtual worlds today.'
+      'The earliest implementation of Digital Matter Theory (DMT), Bitmap, showcases how non-arbitrary Bitcoin blockchain data can be used to generate digital land. Bitmap is a protocol that leverages Ordinals to inscribe individual Bitcoin blocks as unique, non-fungible assets, each block representing a district composed of parcels. These parcels inherit their uniqueness from the immutable, thermodynamically secured data of the block itself. The transaction data within each block shapes the topography, transforming raw blockchain information into a procedurally generated digital landscape.\n\nBy further using the substrate data embedded in each block, additional layers of the virtual ecosystem can be built under the same tamper-proof, verifiable rules. This enables features such as resource distribution, landscapes that evolve with underlying patterns, or in gaming contexts, the probabilistic appearance of a world boss in specific locations. All of these elements inherit the trustless, immutable qualities of Bitcoin, ensuring consistent and fair digital environments free from the arbitrary parameters that dominate most virtual worlds today.'
   },
   {
     title: 'AI',
     content:
-      "Stanford's \"Generative Agents\" initiative, led by researchers at the Human-Centered Artificial Intelligence (HAI) institute, simulated 25 AI agents in a virtual town (\"Smallville\") using large language models (LLMs) to generate human-like behaviors based on predefined personality traits (e.g., Big Five model: openness, conscientiousness, extraversion, agreeableness, neuroticism). Agents formed memories, planned actions, and interacted socially/economically, demonstrating emergent behaviors like information diffusion and relationship formation.\n\nhttps://hai.stanford.edu/news/ai-agents-simulate-1052-individuals-personalities-with-impressive-accuracy\n\nFor non-arbitrary variables to apply to this experiment and others like it, assign each agent a unique Bitcoin block in the form of a UNAT (Unique Non-Arbitrary Token) as its foundational \"DNA\". Then extract non-arbitrary patterns from block header data:\n\n- Bits field (e.g., 386,018,193 from block 912,962): Encodes mining difficulty; use its value to derive \"openness\" trait (higher difficulty → higher openness, reflecting adaptability to \"harsh\" environments).\n- Nonce (e.g., 3,182,121,568): A random-like value solved via proof-of-work; map its digits or parity to \"extraversion\".\n- Merkle Root (hash string, e.g., starting with \"d9\"): Convert hex to numerical values or entropy measures for \"agreeableness\" (higher entropy → lower agreeableness, simulating \"complex\" interpersonal dynamics).\n- Timestamp and Tx Count (e.g., Sep 03, 2025, 3:31:42 AM; 1,663 txs): Use epoch time components for \"conscientiousness\" (e.g., minute/second for punctuality proxy) and tx count for \"neuroticism\" (higher volume → higher neuroticism, reflecting \"stressful\" block activity).\n\nResult: Each agent possesses a verifiably unique, non-arbitrary personality that is queryable on the blockchain and linked to a distinct \"DNA\" signature. This prevents duplication and ensures full traceability. These features reduce bias in trait assignment, lending to greater credibility to the personality's influence in AI psychology research. Additionally, the uniqueness of each agent better reflects the genetic and environmental diversity found in humans, supporting more robust and statistically meaningful analyses comparable to real-world studies."
+      "Stanford's \"Generative Agents\" initiative, led by researchers at the Human-Centered Artificial Intelligence (HAI) institute, simulated 25 AI agents in a virtual town (\"Smallville\") using large language models (LLMs) to generate human-like behaviors based on predefined personality traits (e.g., Big Five model: openness, conscientiousness, extraversion, agreeableness, neuroticism). Agents formed memories, planned actions, and interacted socially/economically, demonstrating emergent behaviors like information diffusion and relationship formation.\n\nhttps://arxiv.org/abs/2304.03442\n\nFor non-arbitrary variables to apply to this experiment and others like it, assign each agent a unique Bitcoin block in the form of a UNAT (Unique Non-Arbitrary Token) as its foundational \"DNA\". Then extract non-arbitrary patterns from block header data:\n\n- Bits field (e.g., 386,018,193 from block 912,962): Encodes mining difficulty; use its value to derive \"openness\" trait (higher difficulty → higher openness, reflecting adaptability to \"harsh\" environments).\n- Nonce (e.g., 3,182,121,568): A random-like value solved via proof-of-work; map its digits or parity to \"extraversion\".\n- Merkle Root (hash string, e.g., starting with \"d9\"): Convert hex to numerical values or entropy measures for \"agreeableness\" (higher entropy → lower agreeableness, simulating \"complex\" interpersonal dynamics).\n- Timestamp and Tx Count (e.g., Sep 03, 2025, 3:31:42 AM; 1,663 txs): Use epoch time components for \"conscientiousness\" (e.g., minute/second for punctuality proxy) and tx count for \"neuroticism\" (higher volume → higher neuroticism, reflecting \"stressful\" block activity).\n\nResult: Each agent possesses a verifiably unique, non-arbitrary personality that is queryable on the blockchain and linked to a distinct \"DNA\" signature. This prevents duplication and ensures full traceability. These features reduce bias in trait assignment, lending to greater credibility to the personality's influence in AI psychology research. Additionally, the uniqueness of each agent better reflects the genetic and environmental diversity found in humans, supporting more robust and statistically meaningful analyses comparable to real-world studies."
   },
   {
     title: 'Digital Art',
     content:
-      'NatCats is a pioneering digital art collection consisting of 8,064 unique pixelated cat artworks minted on the Bitcoin blockchain using the Ordinals and TAP protocols, launched in February 2024 as the first generative art project under DMT\'s UNAT framework. Each NatCat is autonomously generated from Bitcoin\'s raw block data, rendered as generative SVGs without human intervention, creating collectible profile picture (PFP)-style cats that vary in traits like color, pose, and features based on the blockchain\'s non-arbitrary inputs. As a fair-mint project, it allowed for open participation via inscriptions, with no pre-mines, and has achieved significant traction, including over 600 BTC in trading volume.\n\nOne of the key features enabled by the UNAT standard is the non-arbitrary expansion of the NatCats supply, triggered by the recurrence of a specific pattern defined by the DMT protocol. In NatCats’ case, this pattern is "3b" in the bits field. Throughout Bitcoin’s history, this pattern has only appeared during four difficulty adjustment periods—each spanning 2,016 blocks—resulting in the current total supply of NatCats.\n\nFuture generations of NatCats will be created only when this rare "3b" pattern naturally reappears, entirely independent of the original creator (EV). This mechanism permanently aligns NatCats with the ongoing production of new Bitcoin blocks, enabling the collection to grow autonomously. As a result, new and potentially rare traits may emerge over time—introduced not by human discretion, but by blockchain-native randomness. This ensures NatCats will continue evolving indefinitely, even long after the original creator is gone.'
+      'NatCats is a pioneering digital art collection consisting of 8,064 unique pixelated cat artworks minted on the Bitcoin blockchain using the Ordinals and TAP protocols, launched in February 2024 as the first generative art project under DMT\'s UNAT framework. Each NatCat is autonomously generated from Bitcoin\'s raw block data, rendered as generative SVGs without human intervention, creating collectible profile picture (PFP)-style cats that vary in traits like color, pose, and features based on the blockchain\'s non-arbitrary inputs. As a fair-mint project, it allowed for open participation via inscriptions, with no pre-mines, and has achieved significant traction, including over 600 BTC in trading volume.\n\nOne of the key features enabled by the UNAT standard is the non-arbitrary expansion of the NatCats supply, triggered by the recurrence of a specific pattern defined by the DMT protocol. In NatCats’ case, this pattern is "3b" in the bits field. Throughout Bitcoin’s history, this pattern has only appeared during four difficulty adjustment periods, each spanning 2,016 blocks, resulting in the current total supply of NatCats.\n\nFuture generations of NatCats will be created only when this rare "3b" pattern naturally reappears, entirely independent of the original creator (EV). This mechanism permanently aligns NatCats with the ongoing production of new Bitcoin blocks, enabling the collection to grow autonomously. As a result, new and potentially rare traits may emerge over time, introduced not by human discretion, but by blockchain-native randomness. This ensures NatCats will continue evolving indefinitely, even long after the original creator is gone.'
   },
   {
     title: 'Prediction Markets',
     content:
-      'By anchoring the virtual dimension to non-arbitrary patterns found in Bitcoin’s on-chain data, a new class of trustless, verifiable events can emerge—such as spawning a world boss, triggering dynamic weather systems, or unlocking rare in-game assets. These events act as provable triggers within virtual environments, enabling the creation of a powerful new prediction market. Since all outcomes are based on publicly accessible, immutable blockchain data, they inherit Bitcoin’s security guarantees—ensuring tamper-proof execution and complete independence from centralized control.\n\nThese events are not predictable in advance, because:\n- Block data is only known after mining.\n- Bitcoin’s mining process is probabilistic and external to any virtual platform.\n\nThis framework enables users to speculate on the occurrence or outcome of these blockchain-driven events. Since the triggers are provably random and outside the influence of any participant (including the event creators), the resulting markets are inherently fair and transparent. By aligning virtual outcomes with naturally emergent patterns in Bitcoin, DMT provides a robust foundation for decentralized forecasting, enabling long-term, self-sustaining ecosystems where meaningful digital events unfold autonomously and remain verifiable on-chain.'
+      'By anchoring the virtual dimension to non-arbitrary patterns found in Bitcoin’s on-chain data, a new class of trustless, verifiable events can emerge, such as spawning a world boss, triggering dynamic weather systems, or unlocking rare in-game assets. These events act as provable triggers within virtual environments, enabling the creation of a powerful new prediction market. Since all outcomes are based on publicly accessible, immutable blockchain data, they inherit Bitcoin’s security guarantees, ensuring tamper-proof execution and complete independence from centralized control.\n\nThese events are not predictable in advance, because:\n- Block data is only known after mining.\n- Bitcoin’s mining process is probabilistic and external to any virtual platform.\n\nThis framework enables users to speculate on the occurrence or outcome of these blockchain-driven events. Since the triggers are provably random and outside the influence of any participant (including the event creators), the resulting markets are inherently fair and transparent. By aligning virtual outcomes with naturally emergent patterns in Bitcoin, DMT provides a robust foundation for decentralized forecasting, enabling long-term, self-sustaining ecosystems where meaningful digital events unfold autonomously and remain verifiable on-chain.'
   },
   {
     title: 'DeFi',

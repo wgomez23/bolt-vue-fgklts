@@ -129,8 +129,11 @@ const activeContentBlocks = computed<ContentBlock[]>(() => {
         parts.push({ type: 'text', text: normalized.slice(lastIndex, start) })
       }
       const href = match[0]
-      const haiUrl = 'https://hai.stanford.edu/news/ai-agents-simulate-1052-individuals-personalities-with-impressive-accuracy'
-      const linkText = href === haiUrl ? 'Standford' : href
+      const replacements: Record<string, string> = {
+        'https://hai.stanford.edu/news/ai-agents-simulate-1052-individuals-personalities-with-impressive-accuracy': 'Stanford',
+        'https://arxiv.org/abs/2304.03442': 'arXiv'
+      }
+      const linkText = replacements[href] ?? href
       parts.push({ type: 'link', text: linkText, href })
       lastIndex = end
     }

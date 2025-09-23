@@ -34,7 +34,7 @@ const AOI = 95.2
 
 const option = ref<EChartsOption>({
   backgroundColor: 'transparent',
-  color: [SECONDARY, DANGER],
+  color: [SECONDARY, DANGER, BLUE],
   title: {
     text: `ESR\n${ESR}%`,
     left: 'center',
@@ -66,25 +66,6 @@ const option = ref<EChartsOption>({
   animationDuration: 2000,
   animationEasing: 'cubicOut',
   series: [
-    // Thin interactive outer ring using pie to support hover + legend color
-    {
-      name: 'Target > 51%',
-      type: 'pie',
-      radius: ['82%', '86%'],
-      center: ['50%', '44%'],
-      avoidLabelOverlap: true,
-      z: 3,
-      label: { show: false },
-      labelLine: { show: false },
-      tooltip: {
-        show: true,
-        formatter: (params: any) => (params?.name === 'Target > 51%' ? 'Target > 51%' : '')
-      },
-      data: [
-        { value: 51, name: 'Target > 51%', itemStyle: { color: BLUE } },
-        { value: 49, name: '', itemStyle: { color: 'rgba(0,0,0,0)' } }
-      ]
-    },
     {
       name: 'ESR vs AOI',
       type: 'pie',
@@ -96,6 +77,26 @@ const option = ref<EChartsOption>({
       data: [
         { value: ESR, name: 'ESR', itemStyle: { color: SECONDARY } },
         { value: AOI, name: 'AOI', itemStyle: { color: DANGER } }
+      ]
+    },
+    // Thin interactive outer ring using pie to support hover + legend color
+    {
+      name: 'Target > 51%',
+      type: 'pie',
+      radius: ['82%', '86%'],
+      center: ['50%', '44%'],
+      avoidLabelOverlap: true,
+      color: [BLUE, 'rgba(0,0,0,0)'],
+      z: 3,
+      label: { show: false },
+      labelLine: { show: false },
+      tooltip: {
+        show: true,
+        formatter: (params: any) => (params?.name === 'Target > 51%' ? 'Target > 51%' : '')
+      },
+      data: [
+        { value: 51, name: 'Target > 51%', itemStyle: { color: BLUE } },
+        { value: 49, name: '', itemStyle: { color: 'rgba(0,0,0,0)' } }
       ]
     }
   ]
