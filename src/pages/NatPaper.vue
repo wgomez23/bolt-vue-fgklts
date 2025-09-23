@@ -105,7 +105,7 @@
                   <span class="font-semibold tracking-wide">BSI</span>
                   <span class="text-gray-400">=</span>
                   <div class="inline-block align-middle leading-tight">
-                    <div class="text-center px-3">Miner Revenue × 365</div>
+                    <div class="text-center px-3">Miner Revenue (annualized)</div>
                     <div class="border-t border-gray-400 my-1"></div>
                     <div class="text-center px-3">Market Cap</div>
                   </div>
@@ -146,7 +146,7 @@
               For 2024: ESR ≈ 186 / 3,856 ≈ 0.048 (4.8%).
             </p>
             <p>
-              The <strong>Attack Opportunity Index (AOI)</strong>, defined as 1 - ESR ≈ 0.952 (95.2%), indicates that 95.2% of the surplus could theoretically be redirected to attack the network. To enhance security, Bitcoin’s energy use must exceed 50% of the surplus (>1,928 TWh), making attacks infeasible by dominating available resources. Optimizing the ESR involves channeling surplus electricity, strengthening decentralized finance while leveraging global energy abundance.
+              The <strong>Attack Opportunity Index (AOI)</strong>, defined as 1 - ESR ≈ 0.952 (95.2%), indicates that 95.2% of the surplus could theoretically be redirected to attack the network. To enhance security, Bitcoin’s energy use must exceed 50% of the surplus (>1,928 TWh), making attacks infeasible by dominating available resources. 
             </p>
             <!-- ESR vs AOI donut chart -->
             <div class="mt-4">
@@ -175,13 +175,13 @@
                     <td class="px-4 py-4 align-top font-medium">Global Consumption</td>
                     <td class="px-4 py-4 align-top">End-user electricity demand</td>
                     <td class="px-4 py-4 align-top">~27,000 TWh (2023)</td>
-                    <td class="px-4 py-4 align-top">Minimize growth to expand surplus</td>
+                    <td class="px-4 py-4 align-top text-gray-400">N/A (exogenous variable)</td>
                   </tr>
                   <tr class="odd:bg-white/0 even:bg-white/5/5">
                     <td class="px-4 py-4 align-top font-medium">Surplus Energy</td>
                     <td class="px-4 py-4 align-top">Generation minus consumption (incl. losses)</td>
                     <td class="px-4 py-4 align-top">~3,856 TWh</td>
-                    <td class="px-4 py-4 align-top">Maximize to support secure allocation</td>
+                    <td class="px-4 py-4 align-top text-gray-400">N/A (exogenous variable)</td>
                   </tr>
                   <tr class="odd:bg-white/0 even:bg-white/5/5">
                     <td class="px-4 py-4 align-top font-medium">Bitcoin Consumption</td>
