@@ -96,7 +96,8 @@ const option = ref<EChartsOption>({
     top: 24,
     textStyle: { color: AXIS_TEXT }
   },
-  grid: { left: 48, right: 56, top: 44, bottom: 36 },
+  // More vertical space plus tighter left/right to maximize plot width while preserving label visibility
+  grid: { left: 40, right: 44, top: 64, bottom: 40, containLabel: true },
   animation: true,
   animationDuration: 3000,
   animationEasing: 'cubicOut',
@@ -117,7 +118,10 @@ const option = ref<EChartsOption>({
       axisLine: { lineStyle: { color: GRID } },
       axisTick: { show: false },
       splitLine: { lineStyle: { color: GRID } },
-      axisLabel: { color: AXIS_TEXT }
+      axisLabel: { color: AXIS_TEXT },
+      nameLocation: 'middle',
+      nameGap: 30,
+      nameTextStyle: { color: '#FFFFFF' }
     },
     {
       type: 'value',
@@ -128,7 +132,10 @@ const option = ref<EChartsOption>({
       axisLine: { lineStyle: { color: GRID } },
       axisTick: { show: false },
       splitLine: { show: false },
-      axisLabel: { color: AXIS_TEXT }
+      axisLabel: { color: AXIS_TEXT },
+      nameLocation: 'middle',
+      nameGap: 30,
+      nameTextStyle: { color: '#FFFFFF' }
     }
   ],
   series: [

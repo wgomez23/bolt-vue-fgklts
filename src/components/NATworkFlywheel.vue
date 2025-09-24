@@ -1,7 +1,7 @@
 <template>
-  <div class="relative w-full h-72 md:h-96 overflow-visible" aria-label="NATwork flywheel animation">
+  <div ref="containerRef" class="relative w-full h-72 md:h-96 overflow-visible" aria-label="NATwork flywheel animation">
     <!-- Left: Bitcoin gear group -->
-    <div class="absolute left-[4%] top-[6%] w-40 h-40 md:w-48 md:h-48 z-20">
+    <div class="absolute left-[4%] top-[6%] z-20" :style="gear1Style">
       <!-- Rotating gear -->
       <img
         ref="gear1Ref"
@@ -20,7 +20,7 @@
     </div>
 
     <!-- Right: Dollar gear group -->
-    <div class="absolute right-[4%] top-[6%] w-40 h-40 md:w-48 md:h-48">
+    <div class="absolute right-[4%] top-[6%]" :style="gear2Style">
       <img
         ref="gear2Ref"
         class="w-full h-full object-contain drop-shadow"
@@ -42,7 +42,7 @@
     </div>
 
     <!-- NAT logo rotating (positioned to the right of the BTC gear) -->
-    <div class="absolute left-[20%] top-[45%] w-32 h-32 md:w-40 md:h-40 z-10">
+    <div class="absolute left-[20%] top-[45%] z-10" :style="natStyle">
       <img
         ref="natRef"
         class="w-full h-full object-contain"
@@ -101,7 +101,7 @@
 
 <script setup lang="ts">
 import { animate } from '@motionone/dom'
-import { onMounted, onBeforeUnmount, ref, nextTick } from 'vue'
+import { onMounted, onBeforeUnmount, ref, nextTick, computed } from 'vue'
 // Import assets so Vite resolves paths correctly in production
 import gear1Url from '../assets/gear1.png'
 import gear2Url from '../assets/gear2.png'
@@ -135,8 +135,37 @@ const arrow2LabelRef = ref<HTMLDivElement | null>(null)
 
 const running: any[] = []
 
+// Responsive sizing based on container width with sensible clamps
+const containerRef = ref<HTMLElement | null>(null)
+const containerWidth = ref<number>(1024)
+
+let ro: ResizeObserver | null = null
+
+// Helper to compute a clamped size from container width percentage
+function sizeClamp(minPx: number, pctOfWidth: number, maxPx: number): number {
+  const target = (containerWidth.value * pctOfWidth) / 100
+  return Math.max(minPx, Math.min(maxPx, Math.round(target)))
+}
+
+// Primary gears slightly larger than NAT logo; desktop containers make these scale to a reasonable size
+const gearSizePx = computed(() => sizeClamp(120, 26, 220)) // 16% of container, clamped 120–220px
+const natSizePx = computed(() => sizeClamp(96, 24, 180))   // 13% of container, clamped 96–180px
+
+const gear1Style = computed(() => ({ width: `${gearSizePx.value}px`, height: `${gearSizePx.value}px` }))
+const gear2Style = computed(() => ({ width: `${gearSizePx.value}px`, height: `${gearSizePx.value}px` }))
+const natStyle = computed(() => ({ width: `${natSizePx.value}px`, height: `${natSizePx.value}px` }))
+
 onMounted(async () => {
   await nextTick()
+  // Initialize container width and observe for size changes
+  if (containerRef.value) {
+    containerWidth.value = containerRef.value.clientWidth
+    ro = new ResizeObserver((entries) => {
+      const e = entries[0]
+      if (e && e.contentRect) containerWidth.value = e.contentRect.width
+    })
+    ro.observe(containerRef.value)
+  }
   // Ensure the browser has painted before starting animations
   requestAnimationFrame(() => {
   // Gears & NAT rotations
@@ -183,6 +212,8 @@ onMounted(async () => {
 
 onBeforeUnmount(() => {
   running.forEach((a) => a?.cancel?.())
+  if (containerRef.value && ro) ro.unobserve(containerRef.value)
+  ro = null
 })
 </script>
 

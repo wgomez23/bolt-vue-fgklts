@@ -26,8 +26,8 @@ use([CanvasRenderer, LineChart, GridComponent, TooltipComponent, LegendComponent
 // Brand palette
 const PRIMARY = '#F7931A'   // orange
 const SECONDARY = '#00FF94' // green
-const AXIS_TEXT = '#9CA3AF' // gray-400
-const GRID = 'rgba(255,255,255,0.08)'
+const AXIS_TEXT = '#F9FAFB' // gray-50 for maximum contrast on dark bg
+const GRID = 'rgba(255,255,255,0.18)'
 
 // X-axis categories (years)
 const years: string[] = [
@@ -55,31 +55,54 @@ const option = ref<EChartsOption>({
     top: 0,
     textStyle: { color: AXIS_TEXT }
   },
-  grid: { left: 50, right: 56, top: 28, bottom: 28 },
+  // Add generous padding to reduce cramped look (more vertical breathing room)
+  grid: { left: 56, right: 64, top: 56, bottom: 56, containLabel: true },
   animation: true,
   animationDuration: 2000,
   animationEasing: 'cubicOut',
   xAxis: {
     type: 'category',
     data: years,
-    axisLine: { lineStyle: { color: GRID } },
+    axisLine: { lineStyle: { color: GRID, width: 1 } },
     axisTick: { show: false },
-    axisLabel: { color: AXIS_TEXT }
+    axisLabel: {
+      color: AXIS_TEXT,
+      margin: 14,
+      fontSize: 14,
+      fontWeight: 600,
+      backgroundColor: 'rgba(0,0,0,0.35)',
+      padding: [2, 6],
+      borderRadius: 4,
+      textShadowColor: 'rgba(0,0,0,0.5)',
+      textShadowBlur: 4
+    }
   },
   yAxis: [
     {
       type: 'value', // Left axis: Bits (linear)
       min: 380000000,
       max: 490000000,
-      axisLine: { lineStyle: { color: GRID } },
+      axisLine: { lineStyle: { color: GRID, width: 1 } },
       axisTick: { show: false },
       splitLine: { lineStyle: { color: GRID } },
       axisLabel: {
         color: AXIS_TEXT,
-        formatter: (val: number) => `${(val / 1_000_000).toFixed(1)}M`
+        // Show values in millions; unit moved to axis name
+        formatter: (val: number) => `${(val / 1_000_000).toFixed(1)}`,
+        margin: 14,
+        fontSize: 14,
+        fontWeight: 600,
+        backgroundColor: 'rgba(0,0,0,0.35)',
+        padding: [2, 6],
+        borderRadius: 4,
+        textShadowColor: 'rgba(0,0,0,0.5)',
+        textShadowBlur: 4
       },
-      name: '$NAT - Bits Field (Decimal)',
-      nameTextStyle: { color: AXIS_TEXT }
+      // Include unit on axis name per best practices
+      name: '$NAT - Bits Field (Decimal) (M)',
+      nameLocation: 'middle',
+      nameGap: 68,
+      nameTextStyle: { color: '#FFFFFF', fontSize: 14, fontWeight: 700, padding: [6, 0, 6, 0], lineHeight: 18 }
     },
     {
       type: 'log', // Right axis: Hash Power (log)
@@ -94,10 +117,13 @@ const option = ref<EChartsOption>({
           if (val <= 0.001) return val.toExponential(1)
           if (val < 1000) return val.toFixed(1)
           return `${(val / 1000).toFixed(0)}k`
-        }
+        },
+        margin: 12,
+        fontSize: 13,
+        fontWeight: 600
       },
       name: 'Hash Power (EH/s)',
-      nameTextStyle: { color: AXIS_TEXT }
+      nameTextStyle: { color: '#FFFFFF', fontSize: 14, fontWeight: 700, padding: [6, 0, 6, 0], lineHeight: 18 }
     }
   ],
   series: [
