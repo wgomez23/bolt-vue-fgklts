@@ -23,7 +23,7 @@ const satsToBitcoin = (sats: number, dec = 8) => {
 }
 const stats = [
   {
-    icon: '⏱️',
+    icon: '👥',
     value: natStats.holders.toString(),
     label: 'Holders'
   },

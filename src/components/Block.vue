@@ -4,7 +4,7 @@
       <div class="relative bg-[#00FF94] h-[120px] w-[120px] flex flex-col px-[5px] py-[4.5px] mt-[2rem] justify-center gap-1 items-center">
         <div class="absolute skew-y-[50deg] origin-top transition-colors bg-[#1b583b]" style="height: 120px; width: calc(20px); top: calc(-12px); left: calc(-20px);"></div>
         <div class="absolute skew-x-[40deg] origin-top transition-colors bg-[#1b583b]" style="width: 120px; height: calc(24px); top: calc(-24px); left: calc(-20px);"></div>
-        <img src="/public//Nat_logo.png" class="w-[20px] h-[20px]" />
+        <img src="/Nat_logo.png" class="w-[20px] h-[20px]" />
         <p class="text-black font-medium text-sm text-center">{{formatNumber(block.bits)}} NATs</p>
         <p class="text-black  font-medium  text-sm">{{getTimeDifference}}</p>
       </div>

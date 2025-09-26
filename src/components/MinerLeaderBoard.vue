@@ -1,5 +1,5 @@
 <template>
-  <div class="overflow-x-auto bg-dark-card p-6 rounded-xl">
+  <div class="bg-dark-card p-6 rounded-xl relative z-[2000] pointer-events-auto">
     <h2
       class="text-5xl font-bold mb-8 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent text-center"
     >
@@ -7,19 +7,19 @@
     </h2>
 
     <!-- Market Cap Slider -->
-    <div class="mb-8 p-4 bg-dark-lighter rounded-lg">
+    <div class="mb-8 p-4 bg-dark-lighter rounded-lg relative z-[10000]">
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-2">
         <label class="text-gray-300">Theoretical $NAT Market Cap:</label>
         <span class="text-primary font-bold">${{ formatLargeNumber(marketCapValue) }}</span>
       </div>
-      <div class="relative">
+      <div class="relative pointer-events-auto z-[10000]">
         <input
           type="range"
           v-model="sliderValue"
           min="0"
           max="100"
           step="0.1"
-          class="slider-input w-full h-2 rounded-lg appearance-none cursor-pointer"
+          class="slider-input w-full h-2 rounded-lg appearance-none cursor-pointer pointer-events-auto relative z-[10000] touch-pan-y select-none"
           ref="slider"
           @input="handleSliderInput"
           :style="{
@@ -35,6 +35,17 @@
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mt-4 pt-4 border-t border-gray-700">
         <label class="text-gray-300">Theoretical USD Value of $NAT Per Block:</label>
         <span class="text-secondary font-bold">${{ calculateTheoreticalBlockValue() }}</span>
+      </div>
+      <!-- User Holdings Input -->
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mt-3">
+        <input
+          v-model.number="userNatInput"
+          type="number"
+          inputmode="decimal"
+          placeholder="Enter your $NAT balance."
+          class="w-full sm:w-72 px-3 py-2 rounded-md bg-dark border border-gray-700 text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary/40"
+        />
+        <span class="text-green-400 font-bold">${{ formattedUserHoldingsUSD }}</span>
       </div>
     </div>
 
@@ -53,6 +64,23 @@
         <table class="w-full text-left border border-gray-700">
           <thead>
             <tr class="border-b border-gray-700">
+              <th class="py-2 px-4 text-primary text-lg text-center whitespace-nowrap">
+                <div class="inline-flex items-center justify-center gap-2">
+                  <span>Adopted</span>
+                  <span class="relative group inline-flex items-center justify-center">
+                    <span
+                      class="w-4 h-4 rounded-full bg-gray-600 text-white text-[10px] leading-none flex items-center justify-center cursor-default select-none"
+                      aria-label="Info"
+                      role="img"
+                    >i</span>
+                    <div
+                      class="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-64 p-2 text-xs text-gray-200 bg-gray-900 border border-gray-700 rounded shadow-lg whitespace-normal hidden group-hover:block z-50"
+                    >
+                      Miners that have moved or integrated $NAT for their pools
+                    </div>
+                  </span>
+                </div>
+              </th>
               <th class="py-2 px-4 text-primary text-lg text-center whitespace-nowrap">Pool</th>
               <th class="py-2 px-4 text-primary text-lg text-center whitespace-nowrap">$NAT Reward</th>
               <th class="py-2 px-4 text-primary text-lg text-center whitespace-nowrap">$NAT Balance</th>
@@ -64,7 +92,7 @@
             <!-- Loading skeleton -->
             <template v-if="isLoading">
               <tr v-for="i in 10" :key="i" class="text-gray-300 animate-pulse">
-                <td v-for="j in 5" :key="j" class="py-2 px-4">
+                <td v-for="j in 6" :key="j" class="py-2 px-4">
                   <div class="h-4 bg-gray-700 rounded w-20"></div>
                 </td>
               </tr>
@@ -77,6 +105,14 @@
               v-for="(item, index) in list"
               :key="item.id"
             >
+              <td class="py-2 px-4 text-center whitespace-nowrap">
+                <input
+                  type="checkbox"
+                  class="h-5 w-5 accent-[#00FF94] cursor-pointer"
+                  v-model="adopted[item.slug || item.name]"
+                  :aria-label="`Mark ${item.name} as adopted`"
+                />
+              </td>
               <td class="py-2 px-4">
                 <div class="items-center gap-2 flex w-full justify-center py-2">
                   <p class="text-sm whitespace-nowrap">{{ item.name }}</p>
@@ -144,6 +180,19 @@ export default {
   },
   mounted() {
     this.initChart();
+    this.setupSliderInteractions();
+  },
+  beforeUnmount() {
+    // Cleanup slider listeners if they were set
+    const slider = this.$refs.slider;
+    const h = this._sliderHandlers;
+    if (slider && h) {
+      slider.removeEventListener('touchstart', h.onTouchStart);
+      slider.removeEventListener('touchmove', h.onTouchMove);
+      slider.removeEventListener('mousedown', h.onMouseDown);
+      window.removeEventListener('mousemove', h.onMouseMove);
+      window.removeEventListener('mouseup', h.onMouseUp);
+    }
   },
   data() {
     return {
@@ -158,6 +207,9 @@ export default {
       totalSupply: 386057444,
       currentBlockBits: 386038124,
       lastTrillionConfetti: 0, // To prevent multiple confetti bursts
+      userNatInput: null,
+      adopted: {},
+      _sliderHandlers: null,
     };
   },
   computed: {
@@ -166,6 +218,16 @@ export default {
       const maxValue = 1e12; // $1T
       const exponent = this.sliderValue / 100 * (Math.log10(maxValue) - Math.log10(minValue)) + Math.log10(minValue);
       return Math.floor(Math.pow(10, exponent));
+    },
+    userHoldingsUSD() {
+      if (!this.userNatInput || !this.marketCapValue || !this.totalSupply) return 0;
+      return ((Number(this.userNatInput) / this.totalSupply) * this.marketCapValue) / 1000000;
+    },
+    formattedUserHoldingsUSD() {
+      return new Intl.NumberFormat('en-US', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }).format(this.userHoldingsUSD);
     }
   },
   methods: {
@@ -175,6 +237,52 @@ export default {
         this.lastTrillionConfetti = Date.now();
         this.triggerConfetti();
       }
+    },
+    setupSliderInteractions() {
+      const slider = this.$refs.slider;
+      if (!slider) return;
+
+      let isDown = false;
+      const updateFromClientX = (clientX) => {
+        const rect = slider.getBoundingClientRect();
+        let pct = (clientX - rect.left) / rect.width;
+        pct = Math.max(0, Math.min(1, pct));
+        this.sliderValue = pct * 100;
+        this.handleSliderInput();
+      };
+
+      const onTouchStart = (e) => {
+        if (e.cancelable) e.preventDefault();
+        const t = e.touches && e.touches[0];
+        if (!t) return;
+        updateFromClientX(t.clientX);
+      };
+      const onTouchMove = (e) => {
+        if (e.cancelable) e.preventDefault();
+        const t = e.touches && e.touches[0];
+        if (!t) return;
+        updateFromClientX(t.clientX);
+      };
+      const onMouseDown = (e) => {
+        isDown = true;
+        updateFromClientX(e.clientX);
+      };
+      const onMouseMove = (e) => {
+        if (!isDown) return;
+        updateFromClientX(e.clientX);
+      };
+      const onMouseUp = () => {
+        isDown = false;
+      };
+
+      slider.addEventListener('touchstart', onTouchStart, { passive: false });
+      slider.addEventListener('touchmove', onTouchMove, { passive: false });
+      slider.addEventListener('mousedown', onMouseDown);
+      window.addEventListener('mousemove', onMouseMove);
+      window.addEventListener('mouseup', onMouseUp);
+
+      // Save handlers for cleanup
+      this._sliderHandlers = { onTouchStart, onTouchMove, onMouseDown, onMouseMove, onMouseUp };
     },
     triggerConfetti() {
       const slider = this.$refs.slider;
@@ -218,6 +326,15 @@ export default {
         if (success) {
           this.list = data?.pools || [];
           this.total = data?.total || 0;
+          // Initialize adopted checkboxes without overriding user changes.
+          const defaults = new Set(['antpool', 'spiderpool']);
+          this.list.forEach((it) => {
+            const key = it.slug || it.name;
+            if (!(key in this.adopted)) {
+              const normName = String(it.name || '').toLowerCase();
+              this.adopted[key] = defaults.has(normName);
+            }
+          });
         }
       } catch (error) {
         if (error.name === "AbortError") {
@@ -282,6 +399,27 @@ export default {
   cursor: pointer;
   height: 8px;
   border-radius: 4px;
+  /* Allow vertical page scroll while enabling horizontal slider drags */
+  touch-action: pan-y;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Ensure the track is clickable across its full height (WebKit) */
+.slider-input::-webkit-slider-runnable-track {
+  height: 8px;
+  background: transparent; /* we draw background via inline gradient */
+  border: none;
+  border-radius: 4px;
+  pointer-events: auto;
+}
+
+/* Ensure the track is clickable across its full height (Firefox) */
+.slider-input::-moz-range-track {
+  height: 8px;
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  pointer-events: auto;
 }
 
 /* Thumb styling */
@@ -295,6 +433,7 @@ export default {
   cursor: pointer;
   position: relative;
   z-index: 2;
+  pointer-events: auto;
 }
 
 .slider-input::-moz-range-thumb {

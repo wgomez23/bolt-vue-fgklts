@@ -92,5 +92,13 @@ onMounted(() => {
          :alt="`${name} logo`" 
          class="w-24 h-24 mb-4 object-contain rounded-lg" />
     <h3 class="text-xl font-bold">{{ name }}</h3>
+    <a v-if="name === 'Uniswap'" 
+       href="https://bridge.taparooswap.com/" 
+       target="_blank" 
+       rel="noopener noreferrer"
+       class="mt-1 text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors"
+       @click.stop>
+      Bridge
+    </a>
   </a>
 </template>
