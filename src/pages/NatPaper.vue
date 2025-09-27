@@ -719,6 +719,18 @@
                   </ul>
                 </div>
               </article>
+
+              <article>
+                <h3 class="text-xl font-semibold text-white">Principle 4: Thermodynamic Alignment with Non-Arbitrary Commodities</h3>
+                <div class="mt-2 text-gray-300">
+                  <ul class="list-disc pl-5 space-y-2">
+                    <li>Real-world commodities (e.g., gold, oil) derive intrinsic value from energy flows between high and low entropy states, producing goods that serve human-centric economic loops. $NAT mirrors this through Bitcoin's role as an intermediary of energy exchange between the physical and digital worlds.</li>
+                    <li>Bitcoin mining converts physical energy (electricity) into digital security (hashpower), creating a non-arbitrary foundation for value. $NAT, as a Bitcoin-native asset, inherits this thermodynamic grounding, quantifying block data (e.g., BITS) as a digital commodity with intrinsic utility.</li>
+                    <li>Just as energy-intensive processes (e.g., mining gold) produce scarce, valuable commodities for human use, $NAT's issuance via Bitcoin's energy-intensive proof-of-work creates a digital asset tied to real-world energy costs, ensuring intrinsic value.</li>
+                    <li><strong>Defense:</strong> This alignment with thermodynamic principles enhances $NAT's legitimacy. By leveraging Bitcoin's energy-backed security, $NAT becomes a digital equivalent of a physical commodity, supporting economic loops in digital ecosystems. Its value potential scales with Bitcoin's energy-driven growth, reinforcing its role in a non-arbitrary digital economy.</li>
+                  </ul>
+                </div>
+              </article>
             </div>
           </div>
         </div>
