@@ -108,9 +108,10 @@
               <td class="py-2 px-4 text-center whitespace-nowrap">
                 <input
                   type="checkbox"
-                  class="h-5 w-5 accent-[#00FF94] cursor-pointer"
-                  v-model="adopted[item.slug || item.name]"
-                  :aria-label="`Mark ${item.name} as adopted`"
+                  class="h-5 w-5 accent-[#00FF94] cursor-default pointer-events-none"
+                  :checked="isAdopted(item)"
+                  :aria-label="`${item.name} adoption indicator`"
+                  tabindex="-1"
                 />
               </td>
               <td class="py-2 px-4">
@@ -208,7 +209,6 @@ export default {
       currentBlockBits: 386038124,
       lastTrillionConfetti: 0, // To prevent multiple confetti bursts
       userNatInput: null,
-      adopted: {},
       _sliderHandlers: null,
     };
   },
@@ -231,6 +231,10 @@ export default {
     }
   },
   methods: {
+    isAdopted(item) {
+      const key = String(item?.slug || item?.name || '').toLowerCase();
+      return key === 'antpool' || key === 'spiderpool';
+    },
     handleSliderInput() {
       // Check if we're at $1T (allowing for some small deviation due to floating point)
       if (this.marketCapValue >= 0.999e12 && Date.now() - this.lastTrillionConfetti > 1000) {
@@ -326,15 +330,6 @@ export default {
         if (success) {
           this.list = data?.pools || [];
           this.total = data?.total || 0;
-          // Initialize adopted checkboxes without overriding user changes.
-          const defaults = new Set(['antpool', 'spiderpool']);
-          this.list.forEach((it) => {
-            const key = it.slug || it.name;
-            if (!(key in this.adopted)) {
-              const normName = String(it.name || '').toLowerCase();
-              this.adopted[key] = defaults.has(normName);
-            }
-          });
         }
       } catch (error) {
         if (error.name === "AbortError") {

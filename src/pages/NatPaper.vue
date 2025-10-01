@@ -753,7 +753,7 @@
                 <ul class="mt-2 text-gray-300 list-disc pl-5 space-y-2">
                   <li><strong>Date:</strong> November 20, 2023</li>
                   <li><strong>Method:</strong> Anyone could mint $NAT by inscribing JSON data into a Bitcoin transaction, which claimed a Bitcoin block.</li>
-                  <li><strong>Starting point:</strong> Block 817,706, which meant all past blocks up to that point (817,706 blocks) plus all new blocks (created every ~10 minutes) were available to claim.</li>
+                  <li><strong>Starting point:</strong> Block 817,709, which meant all past blocks up to that point (817,709 blocks) plus all new blocks (created every ~10 minutes) were available to claim.</li>
                   <li><strong>Participation:</strong> Over 20,000 people joined, minting all available Bitcoin blocks in just 7 days, paying over $5M in Bitcoin network fees.</li>
                 </ul>
                 <div class="mt-3">

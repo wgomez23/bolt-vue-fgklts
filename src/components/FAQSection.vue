@@ -26,6 +26,10 @@ const faqs = [
   {
     question: "Can $NAT become as valuable as Bitcoin one day?",
     answer: "Bitcoin remains the dominant force in the digital commodity space and is likely to retain its position as the most valuable asset ever created. However, $NAT stands out as the first commodity derived from Bitcoin's immutable data substrate, which grants it unique value comparable to real-world naturally occurring commodities like rare earth metals and oil. With Bitcoin's established reputation as \"digital gold\" driving it to a market capitalization of around $2 trillion, it's reasonable to expect that $NAT, if viewed as \"digital silver,\" could follow a similar 10:1 value ratio. This would position $NAT at an estimated fair value market cap of around $200 billion today."
+  },
+  {
+    question: "Who will buy $NAT",
+    answer: "Those who buy $NAT are the passionate defenders of financial freedom, the same people who rallied behind Bitcoin to escape fiat's endless money printing and hidden inflation taxes that rob everyday savers while benefiting the powerful. They spot the risk in Bitcoin's halvings: assuming prices will double forever to keep miners rewarded is unrealistic, potentially leading to mining centralization and a single entity controlling or censoring transactions. $NAT buyers step up to prevent this by investing in a token that gives miners a lasting extra subsidy, linked directly to Bitcoin's 'bits' field without touching its 21 million cap, creating stronger network security. They're Bitcoin purists, Ordinals creators, and savvy miners (like AntPool and Spiderpool) who view $NAT as a vital shield for decentralization, driven by the same revolutionary spirit of empowerment and resistance that started it all."
   }
 ]
 </script>
