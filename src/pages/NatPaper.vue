@@ -113,18 +113,20 @@
               </div>
             </div>
             <p>
-              <h4 class="text-xl font-semibold text-white">Energy Security Ratio for Proof-of-Work Systems (ESR)</h4>
+            </p>
+            <h4 class="text-xl font-semibold text-white">Energy Security Ratio for Proof-of-Work Systems (ESR)</h4>
+            <p>
               Bitcoin’s proof-of-work consensus relies on significant energy consumption to secure its network against 51% attacks, where an adversary could control the majority of the hash rate. To assess this vulnerability, we use the Energy Security Ratio (ESR), defined as Bitcoin’s energy consumption divided by the global electricity surplus. This surplus represents the energy pool available for potential attacks, assuming equivalent mining efficiency.
             </p>
             <p>
               Using 2024 data as a benchmark
-              <ul class="mt-2 text-gray-300 list-disc pl-6 space-y-2">
-                    <li><strong>30,856 TWh</strong>: Global electricity generation</li>
-                    <li><strong>27,000 TWh</strong>: 2023 Global electricity consumption</li>
-                    <li><strong>3,856 TWh</strong>: Global electricity surplus (though adjusted estimates suggest 1,187 TWh when aligning year-over-year figures for consistency)</li>
-                    <li><strong>186 TWh</strong>: Bitcoin's annualized energy footprint</li>
-                  </ul>
             </p>
+            <ul class="mt-2 text-gray-300 list-disc pl-6 space-y-2">
+              <li><strong>30,856 TWh</strong>: Global electricity generation</li>
+              <li><strong>27,000 TWh</strong>: 2023 Global electricity consumption</li>
+              <li><strong>3,856 TWh</strong>: Global electricity surplus (though adjusted estimates suggest 1,187 TWh when aligning year-over-year figures for consistency)</li>
+              <li><strong>186 TWh</strong>: Bitcoin's annualized energy footprint</li>
+            </ul>
             <p>
               The ESR is thus calculated as:
             </p>
