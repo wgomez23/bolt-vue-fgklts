@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
+import NonKycLogo from '../assets/nonkyclogoicon.png';
+import BitLogo from '../assets/bit.png';
 
 const props = defineProps<{
   name: string;
@@ -25,6 +27,10 @@ const getLogoUrl = (name: string) => {
       return 'https://mscribe-webapp.s3.us-east-2.amazonaws.com/hypermall.png';
     case 'Uniswap':
       return 'https://mscribe-webapp.s3.us-east-2.amazonaws.com/uniswap.png';
+    case 'NonKyc':
+      return NonKycLogo;
+    case 'Bit.com':
+      return BitLogo;
     default:
       return null;
   }
@@ -44,6 +50,10 @@ const getExchangeUrl = (name: string) => {
       return 'https://www.hypermall.io';
     case 'Uniswap':
       return 'https://app.uniswap.org/explore/pools/ethereum/0xa1eeec225bf382384e92e00f2c5224a23634c29c3e1d86ea7f017b73e55668f9';
+    case 'NonKyc':
+      return 'https://nonkyc.io/market/NAT_USDT';
+    case 'Bit.com':
+      return 'https://x.com/Bitcom_Asia/status/1972960384677228851';
     default:
       return '#';
   }
@@ -92,6 +102,7 @@ onMounted(() => {
          :alt="`${name} logo`" 
          class="w-24 h-24 mb-4 object-contain rounded-lg" />
     <h3 class="text-xl font-bold">{{ name }}</h3>
+    <p v-if="name === 'Bit.com'" class="mt-1 text-gray-400 text-sm">Coming soon</p>
     <a v-if="name === 'Uniswap'" 
        href="https://bridge.taparooswap.com/" 
        target="_blank" 

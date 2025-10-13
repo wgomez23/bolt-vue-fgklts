@@ -8,7 +8,7 @@
       <!-- Animated indicator behind the active tab -->
       <Motion
         tag="div"
-        class="absolute top-1.5 bottom-1.5 left-0 rounded-full bg-primary/15 border border-primary/30 pointer-events-none"
+        class="absolute top-1.5 bottom-1.5 left-0 rounded-full bg-orange-500/15 border border-orange-400/40 pointer-events-none"
         :animate="{ x: indicatorX, width: indicatorW }"
         :transition="{ duration: 0.35, easing: cubicBezier(0.22, 1, 0.36, 1) }"
         :style="{ zIndex: 0 }"
@@ -25,7 +25,7 @@
         @keydown.right.prevent="focusNext()"
         @keydown.left.prevent="focusPrev()"
         class="relative z-10 px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded-full text-xs sm:text-sm md:text-base font-medium transition-colors select-none whitespace-nowrap inline-flex items-center justify-center text-center snap-start"
-        :class="activeIndex === i ? 'text-white' : 'text-gray-300 hover:text-white'"
+        :class="activeIndex === i ? 'text-orange-400' : 'text-gray-300 hover:text-white'"
       >
         {{ t.title }}
       </button>
