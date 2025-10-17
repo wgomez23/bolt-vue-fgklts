@@ -53,7 +53,7 @@ const getExchangeUrl = (name: string) => {
     case 'NonKyc':
       return 'https://nonkyc.io/market/NAT_USDT';
     case 'Bit.com':
-      return 'https://x.com/Bitcom_Asia/status/1972960384677228851';
+      return 'https://www.bit.com/spot?pair=NAT-USDT';
     default:
       return '#';
   }
@@ -88,28 +88,50 @@ onMounted(() => {
 </script>
 
 <template>
-  <a ref="cardRef"
-     :href="exchangeUrl" 
-     target="_blank" 
-     rel="noopener noreferrer" 
+  <!-- Uniswap: do NOT make the whole card clickable; show inline links instead -->
+  <div v-if="name === 'Uniswap'"
+       ref="cardRef"
+       class="block bg-dark-card p-6 rounded-xl hover:bg-dark-lighter transition-all duration-700 ease-out flex flex-col items-center transform"
+       :class="{
+         'opacity-0 translate-y-16 scale-95': !isVisible,
+         'opacity-100 translate-y-0 scale-100': isVisible
+       }">
+    <img v-if="displayLogo"
+         :src="displayLogo"
+         :alt="`${name} logo`"
+         class="w-24 h-24 mb-4 object-contain rounded-lg" />
+    <h3 class="text-xl font-bold">{{ name }}</h3>
+    <div class="mt-2 flex items-center gap-3">
+      <a href="https://bridge.taparooswap.com/"
+         target="_blank"
+         rel="noopener noreferrer"
+         class="text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors">Bridge</a>
+      <a href="https://app.uniswap.org/explore/pools/ethereum/0xa1eeec225bf382384e92e00f2c5224a23634c29c3e1d86ea7f017b73e55668f9"
+         target="_blank"
+         rel="noopener noreferrer"
+         class="text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors">Pool 1</a>
+      <a href="https://app.uniswap.org/explore/pools/ethereum/0xc2333e81bcd1226bc04d65acaf3df7f23e1f588195b11fbe7ef8f9e8e7b716ba"
+         target="_blank"
+         rel="noopener noreferrer"
+         class="text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors">Pool 2</a>
+    </div>
+  </div>
+
+  <!-- Other exchanges: keep the whole card clickable -->
+  <a v-else
+     ref="cardRef"
+     :href="exchangeUrl"
+     target="_blank"
+     rel="noopener noreferrer"
      class="block bg-dark-card p-6 rounded-xl hover:bg-dark-lighter transition-all duration-700 ease-out cursor-pointer flex flex-col items-center transform"
      :class="{
        'opacity-0 translate-y-16 scale-95': !isVisible,
        'opacity-100 translate-y-0 scale-100': isVisible
      }">
-    <img v-if="displayLogo" 
-         :src="displayLogo" 
-         :alt="`${name} logo`" 
+    <img v-if="displayLogo"
+         :src="displayLogo"
+         :alt="`${name} logo`"
          class="w-24 h-24 mb-4 object-contain rounded-lg" />
     <h3 class="text-xl font-bold">{{ name }}</h3>
-    <p v-if="name === 'Bit.com'" class="mt-1 text-gray-400 text-sm">Coming soon</p>
-    <a v-if="name === 'Uniswap'" 
-       href="https://bridge.taparooswap.com/" 
-       target="_blank" 
-       rel="noopener noreferrer"
-       class="mt-1 text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors"
-       @click.stop>
-      Bridge
-    </a>
   </a>
 </template>
