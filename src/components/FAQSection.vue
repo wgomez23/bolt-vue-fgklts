@@ -4,6 +4,10 @@ import SectionTitle from './SectionTitle.vue'
 
 const faqs = [
   {
+    question: "What is $NAT?",
+    answer: "$NAT is a Bitcoin-native token derived directly from Bitcoin's block data, making it inseparable from the network itself. Launched through a fair mint with no pre-mines or insider allocations, it aligns with Bitcoin's ethos of openness and decentralization. Today, $NAT is earned by Bitcoin miners as a second subsidy alongside block rewards, creating an additional incentive layer designed to strengthen Bitcoin's long-term sustainability and security budget. By embedding value creation into the chain using Digital Matter Theory, $NAT reframes the question: how much is Bitcoin's security worth?"
+  },
+  {
     question: "What makes $NAT different from other tokens?",
     answer: "$NAT differentiates itself by being a Bitcoin-native token that rewards miners based on Bitcoin's own difficulty metrics, utilizing the novel Digital Matter Theory to give value to the computational effort behind Bitcoin's security. This token model has the potential to provide a sustainable revenue stream for miners in the long term, helping to address challenges that will arise as Bitcoin's block rewards diminish."
   },

@@ -677,13 +677,14 @@
               <article>
                 <h3 class="text-xl font-semibold text-white">Principle 1: Belief Creates Value (Market-Driven Subsidy)</h3>
                 <p class="mt-2 text-gray-300">
-                  <ul class="list-disc pl-5 space-y-2 text-gray-300">
-                    <li>Tokens like BTC gain value through collective belief in their utility (e.g., store of value, medium of exchange).</li>
-                    <li>For $NAT: If people believe it solves Bitcoin's subsidy problem, they buy/hold it. This increases demand, raising price and market cap.</li>
-                    <li>Result: Each $NAT mined becomes worth more in dollars, effectively boosting miners' total rewards per block (BTC subsidy + fees + $NAT value).</li>
-                    <li>Defense: This is not circular; it's bootstrapped like BTC itself. Early BTC had no value until belief in its scarcity and decentralization grew adoption. $NAT leverages Bitcoin's existing network effects, its tie to blocks ensures perpetual issuance tied to real activity.</li>
-                  </ul>
+                  Belief and adoption dynamics underpin $NAT's ability to reinforce Bitcoin's security budget:
                 </p>
+                <ul class="list-disc pl-5 mt-2 space-y-2 text-gray-300">
+                  <li>Tokens like BTC gain value through collective belief in their utility (e.g., store of value, medium of exchange).</li>
+                  <li>For $NAT: If people believe it solves Bitcoin's subsidy problem, they buy/hold it. This increases demand, raising price and market cap.</li>
+                  <li>Result: Each $NAT mined becomes worth more in dollars, effectively boosting miners' total rewards per block (BTC subsidy + fees + $NAT value).</li>
+                  <li>Defense: This is not circular; it's bootstrapped like BTC itself. Early BTC had no value until belief in its scarcity and decentralization grew adoption. $NAT leverages Bitcoin's existing network effects, its tie to blocks ensures perpetual issuance tied to real activity.</li>
+                </ul>
               </article>
 
               <article>
@@ -773,13 +774,14 @@
               <article>
                 <h3 class="text-xl font-semibold text-white">Post Blockout Distribution</h3>
                 <p class="mt-2 text-gray-300">
-                  <ul class="list-disc pl-5 space-y-2 text-gray-300">
-                    <li>The FCFS minting method continued unchanged until block 885,588.</li>
-                    <li>After that, the system switched to a miner-redirect model: instead of open minting, Bitcoin miners automatically receive newly generated $NAT with each block.</li>
-                    <li>Result: Each $NAT mined becomes worth more in dollars, effectively boosting miners' total rewards per block (BTC subsidy + fees + $NAT value).</li>
-                    <li>The system is further backed by TRAC Network validators, ensuring decentralized enforcement.</li>
-                  </ul>
+                  Post blockout, $NAT distribution evolved to reinforce network security and miner incentives:
                 </p>
+                <ul class="list-disc pl-5 mt-2 space-y-2 text-gray-300">
+                  <li>The FCFS minting method continued unchanged until block 885,588.</li>
+                  <li>After that, the system switched to a miner-redirect model: instead of open minting, Bitcoin miners automatically receive newly generated $NAT with each block.</li>
+                  <li>Result: Each $NAT mined becomes worth more in dollars, effectively boosting miners' total rewards per block (BTC subsidy + fees + $NAT value).</li>
+                  <li>The system is further backed by TRAC Network validators, ensuring decentralized enforcement.</li>
+                </ul>
               </article>
 
             </div>
@@ -910,7 +912,7 @@
               <article>
                 <h3 class="text-xl font-semibold text-white">Who Would Find This Useful?</h3>
                 <p class="mt-2 text-gray-300">
-                  Developers and creators who leverage non-arbitrary token creation, gain the most value when their designs require immutable, physics-like rules to govern feedback loops, as DMT's thermodynamically secured properties imbue digital assets with intrinsic scarcity and trust, ensuring robust, tamper-resistant dynamics that more closely align with real-world expectations.
+                  Developers and creators who leverage non-arbitrary token creation gain the most value when their designs require immutable, physics-like rules to govern feedback loops, as DMT's thermodynamically secured properties imbue digital assets with intrinsic scarcity and trust, ensuring robust, tamper-resistant dynamics that more closely align with real-world expectations.
                 </p>
                 <br></br>
               </article>

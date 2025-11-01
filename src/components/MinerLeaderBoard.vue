@@ -233,7 +233,7 @@ export default {
   methods: {
     isAdopted(item) {
       const key = String(item?.slug || item?.name || '').toLowerCase();
-      return key === 'antpool' || key === 'spiderpool';
+      return key === 'antpool' || key === 'spiderpool' || key === 'f2pool';
     },
     handleSliderInput() {
       // Check if we're at $1T (allowing for some small deviation due to floating point)
