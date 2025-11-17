@@ -31,6 +31,8 @@ const getLogoUrl = (name: string) => {
       return NonKycLogo;
     case 'Bit.com':
       return BitLogo;
+    case 'Raydium':
+      return '/raydium.png';
     default:
       return null;
   }
@@ -54,6 +56,8 @@ const getExchangeUrl = (name: string) => {
       return 'https://nonkyc.io/market/NAT_USDT';
     case 'Bit.com':
       return 'https://www.bit.com/spot?pair=NAT-USDT';
+    case 'Raydium':
+      return 'https://raydium.io/swap/?inputMint=Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB&outputMint=FbKRaqBzupLry3V7QujpNghwrHgxutB4MY11M8aeyVa1&referrer=GxqntmUzXYHddbcPeagPmSnH7NpSXw59wmeAiukcNC38';
     default:
       return '#';
   }
@@ -91,17 +95,19 @@ onMounted(() => {
   <!-- Uniswap: do NOT make the whole card clickable; show inline links instead -->
   <div v-if="name === 'Uniswap'"
        ref="cardRef"
-       class="block bg-dark-card p-6 rounded-xl hover:bg-dark-lighter transition-all duration-700 ease-out flex flex-col items-center transform"
+       class="block bg-dark-card p-6 rounded-xl hover:bg-dark-lighter transition-all duration-700 ease-out flex flex-col items-center justify-between h-64 transform"
        :class="{
          'opacity-0 translate-y-16 scale-95': !isVisible,
          'opacity-100 translate-y-0 scale-100': isVisible
        }">
-    <img v-if="displayLogo"
-         :src="displayLogo"
-         :alt="`${name} logo`"
-         class="w-24 h-24 mb-4 object-contain rounded-lg" />
+    <div class="flex-1 flex items-center justify-center w-full mb-4">
+      <img v-if="displayLogo"
+           :src="displayLogo"
+           :alt="`${name} logo`"
+           class="w-24 h-24 object-contain rounded-lg" />
+    </div>
     <h3 class="text-xl font-bold">{{ name }}</h3>
-    <div class="mt-2 flex items-center gap-3">
+    <div class="mt-2 flex flex-col items-center gap-2 text-center sm:flex-row sm:flex-wrap sm:justify-center sm:gap-3">
       <a href="https://bridge.taparooswap.com/"
          target="_blank"
          rel="noopener noreferrer"
@@ -123,15 +129,17 @@ onMounted(() => {
      :href="exchangeUrl"
      target="_blank"
      rel="noopener noreferrer"
-     class="block bg-dark-card p-6 rounded-xl hover:bg-dark-lighter transition-all duration-700 ease-out cursor-pointer flex flex-col items-center transform"
+     class="block bg-dark-card p-6 rounded-xl hover:bg-dark-lighter transition-all duration-700 ease-out cursor-pointer flex flex-col items-center justify-between h-64 transform"
      :class="{
        'opacity-0 translate-y-16 scale-95': !isVisible,
        'opacity-100 translate-y-0 scale-100': isVisible
      }">
-    <img v-if="displayLogo"
-         :src="displayLogo"
-         :alt="`${name} logo`"
-         class="w-24 h-24 mb-4 object-contain rounded-lg" />
+    <div class="flex-1 flex items-center justify-center w-full mb-4">
+      <img v-if="displayLogo"
+           :src="displayLogo"
+           :alt="`${name} logo`"
+           class="w-24 h-24 object-contain rounded-lg" />
+    </div>
     <h3 class="text-xl font-bold">{{ name }}</h3>
   </a>
 </template>
