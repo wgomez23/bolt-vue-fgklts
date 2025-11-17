@@ -82,7 +82,7 @@
     <AnimatedSection :delay="800">
       <section id="whereToBuy">
         <SectionTitle>Where to Buy</SectionTitle>
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           <ExchangeCard
             v-for="(exchange, index) in exchanges"
             :key="exchange.name"
@@ -122,7 +122,8 @@ const exchanges = [
   { name: 'SuperEx', logo: null },
   { name: 'Uniswap', logo: null },
   { name: 'NonKyc', logo: null },
-  { name: 'Bit.com', logo: null }
+  { name: 'Bit.com', logo: null },
+  { name: 'Raydium', logo: null }
 ];
 const API_URL = 'https://mscribe.io/api/tokens/all';
 const token = ref<any | null>(null);
