@@ -342,8 +342,8 @@
       </div>
     </section>
 
-    <!-- Case Study -->
-    <section id="" class="border-b border-dark-lighter/50">
+    <!-- Case Study (temporarily hidden but kept for later use) -->
+    <section id="" class="hidden border-b border-dark-lighter/50">
       <div class="mx-auto max-w-6xl px-4 py-16 md:py-20 text-center">
         <h2 class="text-3xl md:text-4xl font-bold">Case Study - 51% Attack on Monero</h2>
         <div class="prose prose-invert mt-6 max-w-3xl mx-auto">
