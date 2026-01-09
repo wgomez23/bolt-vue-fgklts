@@ -224,35 +224,7 @@ async function generatePDF() {
         bottom: '25mm',
         left: '15mm'
       },
-      displayHeaderFooter: true,
-      headerTemplate: `
-        <style>
-          .header { 
-            width: 100%; 
-            font-size: 9px; 
-            font-family: Arial, sans-serif; 
-            color: #666; 
-            text-align: center;
-            margin: 0 auto;
-            -webkit-print-color-adjust: exact;
-          }
-        </style>
-        <div class="header">NATpaper - natgmi.com</div>
-      `,
-      footerTemplate: `
-        <style>
-          .footer { 
-            width: 100%; 
-            font-size: 9px; 
-            font-family: Arial, sans-serif; 
-            color: #666; 
-            text-align: center;
-            margin: 0 auto;
-            -webkit-print-color-adjust: exact;
-          }
-        </style>
-        <div class="footer">Page <span class="pageNumber"></span> of <span class="totalPages"></span></div>
-      `
+      displayHeaderFooter: false
     })
 
     console.log(`✓ PDF generated successfully: ${OUTPUT_PATH}`)
