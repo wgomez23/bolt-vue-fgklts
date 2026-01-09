@@ -4,10 +4,15 @@
  * PDF Generation Script for NATpaper
  * Uses Puppeteer to render the print-optimized page and generate a PDF
  * 
- * Usage: node scripts/generate-pdf.js [--dev]
+ * This script is designed to work in Netlify's CI environment:
+ * - Uses 'serve' package instead of 'vite preview' for reliability
+ * - Does NOT run build (assumes build already completed)
+ * - Outputs PDF to dist/ folder for deployment
+ * - Uses Netlify-compatible Puppeteer launch arguments
  * 
- * Options:
- *   --dev    Use local dev server (http://localhost:5173) instead of building first
+ * Usage: 
+ *   npm run build && npm run generate-pdf   (production - serves from dist/)
+ *   npm run generate-pdf:dev                (development - uses running dev server)
  */
 
 import puppeteer from 'puppeteer'
@@ -21,85 +26,121 @@ const __dirname = dirname(__filename)
 const projectRoot = join(__dirname, '..')
 
 const isDev = process.argv.includes('--dev')
-const BASE_URL = isDev ? 'http://localhost:5173' : 'http://localhost:4173'
-const OUTPUT_PATH = join(projectRoot, 'public', 'natpaper.pdf')
+const PORT = isDev ? 5173 : 4173
+const BASE_URL = `http://localhost:${PORT}`
 
-async function waitForServer(url, maxAttempts = 30) {
+// In production, output to dist/ so it gets deployed
+// In dev mode, output to public/ for testing
+const OUTPUT_PATH = isDev 
+  ? join(projectRoot, 'public', 'natpaper.pdf')
+  : join(projectRoot, 'dist', 'natpaper.pdf')
+
+// Longer timeout for Netlify's slower environment
+const SERVER_TIMEOUT_SECONDS = 60
+const PAGE_LOAD_TIMEOUT = 120000
+const PDF_READY_TIMEOUT = 60000
+
+async function waitForServer(url, maxAttempts = SERVER_TIMEOUT_SECONDS) {
+  console.log(`Waiting for server at ${url} (max ${maxAttempts} seconds)...`)
   for (let i = 0; i < maxAttempts; i++) {
     try {
       const response = await fetch(url)
-      if (response.ok) return true
-    } catch {
-      // Server not ready yet
+      if (response.ok) {
+        console.log(`Server responded after ${i + 1} seconds`)
+        return true
+      }
+    } catch (err) {
+      // Server not ready yet - this is expected
     }
     await new Promise(resolve => setTimeout(resolve, 1000))
+    if ((i + 1) % 10 === 0) {
+      console.log(`Still waiting... ${i + 1}/${maxAttempts} seconds`)
+    }
   }
-  throw new Error(`Server at ${url} did not become available`)
+  throw new Error(`Server at ${url} did not become available after ${maxAttempts} seconds`)
 }
 
-async function startPreviewServer() {
-  console.log('Starting preview server...')
-  const server = spawn('npm', ['run', 'preview'], {
+function startServer() {
+  console.log('Starting static file server with serve package...')
+  console.log(`Serving from: ${join(projectRoot, 'dist')}`)
+  console.log(`Port: ${PORT}`)
+  
+  // Use serve package with SPA mode (-s flag) for client-side routing
+  const serverProcess = spawn('npx', ['serve', 'dist', '-l', String(PORT), '-s'], {
     cwd: projectRoot,
     stdio: ['ignore', 'pipe', 'pipe'],
-    shell: true
+    detached: false
   })
 
-  server.stdout.on('data', (data) => {
+  serverProcess.stdout.on('data', (data) => {
     const output = data.toString()
-    if (output.includes('Local:')) {
-      console.log('Preview server started')
+    console.log(`[serve] ${output.trim()}`)
+  })
+
+  serverProcess.stderr.on('data', (data) => {
+    const output = data.toString()
+    // serve outputs info to stderr, not all are errors
+    if (output.includes('ERROR') || output.includes('error')) {
+      console.error(`[serve error] ${output.trim()}`)
+    } else {
+      console.log(`[serve] ${output.trim()}`)
     }
   })
 
-  server.stderr.on('data', (data) => {
-    console.error(`Server error: ${data}`)
+  serverProcess.on('error', (err) => {
+    console.error('Failed to start server:', err)
   })
 
-  return server
+  return serverProcess
 }
 
 async function generatePDF() {
-  let server = null
+  let serverProcess = null
   let browser = null
 
   try {
-    // Ensure public directory exists
-    const publicDir = join(projectRoot, 'public')
-    if (!existsSync(publicDir)) {
-      mkdirSync(publicDir, { recursive: true })
+    // Verify dist directory exists (build should have already run)
+    if (!isDev) {
+      const distDir = join(projectRoot, 'dist')
+      if (!existsSync(distDir)) {
+        throw new Error(`dist/ directory not found. Run 'npm run build' first.`)
+      }
+      console.log('dist/ directory found, proceeding with PDF generation...')
     }
 
     // Start server if not in dev mode
     if (!isDev) {
-      console.log('Building project...')
-      const build = spawn('npm', ['run', 'build'], {
-        cwd: projectRoot,
-        stdio: 'inherit',
-        shell: true
-      })
-
-      await new Promise((resolve, reject) => {
-        build.on('close', (code) => {
-          if (code === 0) resolve()
-          else reject(new Error(`Build failed with code ${code}`))
-        })
-      })
-
-      server = await startPreviewServer()
+      serverProcess = startServer()
+      // Give the server a moment to initialize
+      await new Promise(resolve => setTimeout(resolve, 2000))
     }
 
     // Wait for server to be ready
-    console.log(`Waiting for server at ${BASE_URL}...`)
     await waitForServer(BASE_URL)
     console.log('Server is ready')
 
-    // Launch Puppeteer
+    // Launch Puppeteer with Netlify-compatible arguments
     console.log('Launching browser...')
-    browser = await puppeteer.launch({
-      headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
-    })
+    const launchOptions = {
+      headless: 'new',
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-gpu',
+        '--disable-software-rasterizer',
+        '--single-process'
+      ]
+    }
+
+    // Use Netlify's Chromium if available
+    if (process.env.PUPPETEER_EXECUTABLE_PATH) {
+      launchOptions.executablePath = process.env.PUPPETEER_EXECUTABLE_PATH
+      console.log(`Using Chromium at: ${process.env.PUPPETEER_EXECUTABLE_PATH}`)
+    }
+
+    browser = await puppeteer.launch(launchOptions)
+    console.log('Browser launched successfully')
 
     const page = await browser.newPage()
 
@@ -113,16 +154,18 @@ async function generatePDF() {
     // Navigate to print page
     const printUrl = `${BASE_URL}/natpaper-print`
     console.log(`Navigating to ${printUrl}...`)
+    
     await page.goto(printUrl, {
       waitUntil: 'networkidle0',
-      timeout: 60000
+      timeout: PAGE_LOAD_TIMEOUT
     })
+    console.log('Page loaded')
 
     // Wait for pdfReady signal
-    console.log('Waiting for page to signal ready...')
+    console.log('Waiting for page to signal ready (window.pdfReady)...')
     await page.waitForFunction(
-      () => (window).pdfReady === true,
-      { timeout: 30000 }
+      () => window.pdfReady === true,
+      { timeout: PDF_READY_TIMEOUT }
     )
     console.log('Page is ready for PDF generation')
 
@@ -135,16 +178,33 @@ async function generatePDF() {
       
       for (let y = 0; y < scrollHeight; y += viewportHeight) {
         window.scrollTo(0, y)
-        await delay(100)
+        await delay(150)
       }
       
       // Scroll back to top
       window.scrollTo(0, 0)
       await delay(500)
     })
+    console.log('Scrolling complete')
+
+    // Wait for any images to load
+    console.log('Waiting for images to load...')
+    await page.evaluate(async () => {
+      const images = Array.from(document.images)
+      await Promise.all(images.map(img => {
+        if (img.complete) return Promise.resolve()
+        return new Promise((resolve) => {
+          img.onload = resolve
+          img.onerror = resolve
+          // Timeout after 5 seconds per image
+          setTimeout(resolve, 5000)
+        })
+      }))
+    })
+    console.log('Images loaded')
 
     // Generate PDF
-    console.log('Generating PDF...')
+    console.log(`Generating PDF to: ${OUTPUT_PATH}`)
     await page.pdf({
       path: OUTPUT_PATH,
       format: 'A4',
@@ -168,18 +228,28 @@ async function generatePDF() {
       `
     })
 
-    console.log(`PDF generated successfully: ${OUTPUT_PATH}`)
+    console.log(`✓ PDF generated successfully: ${OUTPUT_PATH}`)
 
   } catch (error) {
-    console.error('Error generating PDF:', error)
+    console.error('========================================')
+    console.error('ERROR generating PDF:')
+    console.error(error.message)
+    console.error('Stack trace:', error.stack)
+    console.error('========================================')
     process.exit(1)
   } finally {
+    // Clean up resources
     if (browser) {
+      console.log('Closing browser...')
       await browser.close()
     }
-    if (server) {
-      server.kill()
+    if (serverProcess) {
+      console.log('Stopping server...')
+      serverProcess.kill('SIGTERM')
+      // Give it a moment to clean up
+      await new Promise(resolve => setTimeout(resolve, 500))
     }
+    console.log('Cleanup complete')
   }
 }
 
