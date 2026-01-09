@@ -226,12 +226,12 @@ async function generatePDF() {
       },
       displayHeaderFooter: true,
       headerTemplate: `
-        <div style="width: 100%; font-size: 10px; padding: 0 15mm; color: #666; text-align: center;">
+        <div style="width: 100%; font-size: 9px; font-family: Arial, sans-serif; color: #666; text-align: center; padding-top: 5mm;">
           NATpaper - natgmi.com
         </div>
       `,
       footerTemplate: `
-        <div style="width: 100%; font-size: 10px; padding: 0 15mm; color: #666; text-align: center;">
+        <div style="width: 100%; font-size: 9px; font-family: Arial, sans-serif; color: #666; text-align: center; padding-bottom: 5mm;">
           Page <span class="pageNumber"></span> of <span class="totalPages"></span>
         </div>
       `
