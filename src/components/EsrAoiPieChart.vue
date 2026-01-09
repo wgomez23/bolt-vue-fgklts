@@ -1,12 +1,9 @@
 <template>
-  <div ref="container" class="space-y-3">
-    <Motion v-if="visible" :initial="{ opacity: 0, y: 16 }" :animate="{ opacity: 1, y: 0 }" :transition="{ duration: 0.8, easing: 'ease-out' }">
-      <div class="w-full h-[300px] md:h-[360px]">
+  <div ref="container" class="w-full h-full">
+    <Motion v-if="visible" :initial="{ opacity: 0, y: 16 }" :animate="{ opacity: 1, y: 0 }" :transition="{ duration: 0.8, easing: 'ease-out' }" class="w-full h-full">
+      <div class="w-full h-full">
         <v-chart :option="option" autoresize class="w-full h-full" />
       </div>
-      <p class="text-center text-gray-400 text-sm italic">
-        Energy Security Ratio (ESR) vs Attack Opportunity Index (AOI)
-      </p>
     </Motion>
   </div>
 </template>
@@ -23,10 +20,12 @@ import type { EChartsOption } from 'echarts'
 
 use([CanvasRenderer, PieChart, TooltipComponent, LegendComponent, TitleComponent])
 
+const props = withDefaults(defineProps<{ printMode?: boolean }>(), { printMode: false })
+
 // Brand palette
 const SECONDARY = '#00FF94' // green (use for ESR)
 const DANGER = '#EF4444'    // red-500 (use for AOI)
-const AXIS_TEXT = '#9CA3AF' // gray-400
+const getAxisText = () => props.printMode ? '#374151' : '#9CA3AF'
 const BLUE = '#3B82F6'      // blue-500 (use for Target ring)
 
 const ESR = 4.8
@@ -38,32 +37,37 @@ const option = ref<EChartsOption>({
   title: {
     text: `ESR\n${ESR}%`,
     left: 'center',
-    top: 'center',
-    subtext: 'Target ESR > 51%',
-    subtextStyle: {
-      color: AXIS_TEXT,
-      fontSize: 12,
-      fontWeight: 'normal',
-      lineHeight: 16,
-      align: 'center'
-    },
+    top: '38%',
     textStyle: {
-      color: AXIS_TEXT,
+      color: getAxisText(),
       fontSize: 14,
       fontWeight: 'bold',
       lineHeight: 20,
       align: 'center'
     }
   },
+  graphic: [
+    {
+      type: 'text',
+      left: 10,
+      top: 10,
+      style: {
+        text: 'Target ESR > 51%',
+        fill: getAxisText(),
+        fontSize: 11,
+        fontWeight: 'normal'
+      }
+    }
+  ],
   tooltip: { trigger: 'item', formatter: '{b}: {c}%' },
   legend: {
     bottom: 0,
-    textStyle: { color: AXIS_TEXT },
+    textStyle: { color: getAxisText() },
     selectedMode: false,
     data: ['ESR', 'AOI', 'Target > 51%']
   },
-  animation: true,
-  animationDuration: 2000,
+  animation: !props.printMode,
+  animationDuration: props.printMode ? 0 : 2000,
   animationEasing: 'cubicOut',
   series: [
     {
@@ -108,6 +112,11 @@ const visible = ref(false)
 let observer: IntersectionObserver | null = null
 
 onMounted(() => {
+  // In print mode, show immediately without waiting for intersection
+  if (props.printMode) {
+    visible.value = true
+    return
+  }
   if (visible.value) return
   if (typeof window === 'undefined' || !('IntersectionObserver' in window)) {
     visible.value = true

@@ -9,9 +9,12 @@
         <p class="mt-6 text-lg md:text-xl leading-relaxed text-gray-300">
           Bitcoin's store-of-value narrative is the very thing undermining its security budget. Why Bitcoin is NAT prepared.
         </p>
-        <div class="mt-8 text-gray-400 text-sm flex items-center gap-3">
-          <span>Learn more</span>
-          <span aria-hidden>↓</span>
+        <div class="mt-8 flex items-center justify-between">
+          <div class="text-gray-400 text-sm flex items-center gap-3">
+            <span>Learn more</span>
+            <span aria-hidden>↓</span>
+          </div>
+          <PdfDownloadButton label="Download PDF" class="text-sm" />
         </div>
 
         <!-- Inline TOC (responsive) -->
@@ -1189,6 +1192,7 @@ import RadialOrbitCycle from '../components/RadialOrbitCycle.vue'
 import BtcNatPulse from '../components/BtcNatPulse.vue'
 import BitsVsHashrateChart from '../components/BitsVsHashrateChart.vue'
 import EsrAoiPieChart from '../components/EsrAoiPieChart.vue'
+import PdfDownloadButton from '../components/PdfDownloadButton.vue'
 
 // Live data: Market Cap (reuse Home.vue logic)
 // Image Lightbox state/handlers
