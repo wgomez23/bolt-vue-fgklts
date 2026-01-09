@@ -16,10 +16,12 @@ import type { EChartsOption } from 'echarts'
 
 use([CanvasRenderer, LineChart, GridComponent, TooltipComponent, LegendComponent, TitleComponent])
 
-// Site brand colors (from tailwind.config.js)
+const props = withDefaults(defineProps<{ printMode?: boolean }>(), { printMode: false })
+
+// Site brand colors
 const PRIMARY = '#F7931A'   // orange
-const AXIS_TEXT = '#9CA3AF'  // gray-400
-const GRID = 'rgba(255,255,255,0.08)'
+const getAxisText = () => props.printMode ? '#374151' : '#9CA3AF'
+const getGrid = () => props.printMode ? 'rgba(0,0,0,0.15)' : 'rgba(255,255,255,0.08)'
 
 // Approximate monthly/annual downtrend of Miner Revenue / Market Cap (% of mcap)
 // Data is illustrative to match the look & feel of the reference chart.
@@ -52,32 +54,34 @@ const option = ref<EChartsOption>({
     text: 'BSI = Miner Revenue (annualized) / Market Cap',
     left: 8,
     top: 0,
-    textStyle: { color: AXIS_TEXT, fontSize: 12, fontWeight: 'bold' }
+    textStyle: { color: getAxisText(), fontSize: 12, fontWeight: 'bold' }
   },
   tooltip: {
     trigger: 'axis'
   },
   legend: { show: false },
-  grid: { left: 44, right: 12, top: 28, bottom: 24 },
-  animation: true,
-  animationDuration: 3000,
+  grid: { left: 50, right: 50, top: 32, bottom: 40, containLabel: true },
+  animation: !props.printMode,
+  animationDuration: props.printMode ? 0 : 3000,
   animationEasing: 'cubicOut',
   xAxis: {
     type: 'time',
-    axisLine: { lineStyle: { color: GRID } },
+    min: new Date('2010-01-01').getTime(),
+    max: new Date('2026-01-01').getTime(),
+    axisLine: { lineStyle: { color: getGrid() } },
     axisTick: { show: false },
-    axisLabel: { color: AXIS_TEXT }
+    axisLabel: { color: getAxisText() }
   },
   yAxis: {
     type: 'log',
     logBase: 10,
     min: 0.05,
     max: 64,
-    axisLine: { lineStyle: { color: GRID } },
+    axisLine: { lineStyle: { color: getGrid() } },
     axisTick: { show: false },
-    splitLine: { lineStyle: { color: GRID } },
+    splitLine: { lineStyle: { color: getGrid() } },
     axisLabel: {
-      color: AXIS_TEXT,
+      color: getAxisText(),
       formatter: (val: number) => `${val}`
     }
   },
@@ -105,6 +109,11 @@ const visible = ref(false)
 let observer: IntersectionObserver | null = null
 
 onMounted(() => {
+  // In print mode, show immediately without waiting for intersection
+  if (props.printMode) {
+    visible.value = true
+    return
+  }
   if (visible.value) return
   if (typeof window === 'undefined' || !('IntersectionObserver' in window)) {
     // Fallback: show immediately

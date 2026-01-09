@@ -1,12 +1,19 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../pages/Home.vue'
 import NatPaper from '../pages/NatPaper.vue'
+import NatPaperPrint from '../pages/NatPaperPrint.vue'
 
 const router = createRouter({
   history: createWebHistory(),
   routes: [
     { path: '/', name: 'home', component: Home },
     { path: '/natpaper', name: 'natpaper', component: NatPaper },
+    { 
+      path: '/natpaper-print', 
+      name: 'natpaper-print', 
+      component: NatPaperPrint,
+      meta: { noIndex: true, hideNav: true }
+    },
   ],
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) return savedPosition

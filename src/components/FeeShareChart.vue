@@ -15,10 +15,13 @@ import type { EChartsOption } from 'echarts'
 
 use([CanvasRenderer, LineChart, GridComponent, TooltipComponent, LegendComponent, TitleComponent, MarkLineComponent])
 
+const props = withDefaults(defineProps<{ printMode?: boolean }>(), { printMode: false })
+
 // Brand palette
 const SECONDARY = '#00FF94' // green
-const AXIS_TEXT = '#9CA3AF' // gray-400
-const GRID = 'rgba(255,255,255,0.08)'
+const getAxisText = () => props.printMode ? '#374151' : '#9CA3AF'
+const getGrid = () => props.printMode ? 'rgba(0,0,0,0.15)' : 'rgba(255,255,255,0.08)'
+const getMarkLine = () => props.printMode ? 'rgba(0,0,0,0.35)' : 'rgba(255,255,255,0.35)'
 
 // Static, illustrative dataset of transaction fees share of miner revenue (% of total)
 // Format: [ISO date, percent]
@@ -43,28 +46,30 @@ const option = ref<EChartsOption>({
     text: 'Transaction fees share of miner revenue (%)',
     left: 8,
     top: 0,
-    textStyle: { color: AXIS_TEXT, fontSize: 12, fontWeight: 'bold' }
+    textStyle: { color: getAxisText(), fontSize: 12, fontWeight: 'bold' }
   },
   tooltip: { trigger: 'axis' },
   legend: { show: false },
-  grid: { left: 44, right: 12, top: 28, bottom: 24 },
-  animation: true,
-  animationDuration: 3000,
+  grid: { left: 50, right: 50, top: 32, bottom: 40, containLabel: true },
+  animation: !props.printMode,
+  animationDuration: props.printMode ? 0 : 3000,
   animationEasing: 'cubicOut',
   xAxis: {
     type: 'time',
-    axisLine: { lineStyle: { color: GRID } },
+    min: new Date('2016-01-01').getTime(),
+    max: new Date('2026-01-01').getTime(),
+    axisLine: { lineStyle: { color: getGrid() } },
     axisTick: { show: false },
-    axisLabel: { color: AXIS_TEXT }
+    axisLabel: { color: getAxisText() }
   },
   yAxis: {
     type: 'value',
     min: 0,
     max: 10,
-    axisLine: { lineStyle: { color: GRID } },
+    axisLine: { lineStyle: { color: getGrid() } },
     axisTick: { show: false },
-    splitLine: { lineStyle: { color: GRID } },
-    axisLabel: { color: AXIS_TEXT }
+    splitLine: { lineStyle: { color: getGrid() } },
+    axisLabel: { color: getAxisText() }
   },
   series: [
     {
@@ -78,8 +83,8 @@ const option = ref<EChartsOption>({
       markLine: {
         silent: true,
         data: [{ yAxis: 5, name: '5% threshold' }],
-        lineStyle: { type: 'dashed', color: 'rgba(255,255,255,0.35)' },
-        label: { color: AXIS_TEXT }
+        lineStyle: { type: 'dashed', color: getMarkLine() },
+        label: { color: getAxisText() }
       }
     }
   ]
@@ -91,6 +96,11 @@ const visible = ref(false)
 let observer: IntersectionObserver | null = null
 
 onMounted(() => {
+  // In print mode, show immediately without waiting for intersection
+  if (props.printMode) {
+    visible.value = true
+    return
+  }
   if (visible.value) return
   if (typeof window === 'undefined' || !('IntersectionObserver' in window)) {
     visible.value = true

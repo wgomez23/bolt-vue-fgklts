@@ -1,12 +1,9 @@
 <template>
-  <div ref="container" class="space-y-3">
-    <Motion v-if="visible" :initial="{ opacity: 0, y: 16 }" :animate="{ opacity: 1, y: 0 }" :transition="{ duration: 0.8, easing: 'ease-out' }">
-      <div class="w-full h-[400px]">
+  <div ref="container" class="w-full h-full">
+    <Motion v-if="visible" :initial="{ opacity: 0, y: 16 }" :animate="{ opacity: 1, y: 0 }" :transition="{ duration: 0.8, easing: 'ease-out' }" class="w-full h-full">
+      <div class="w-full h-full">
         <v-chart :option="option" autoresize class="w-full h-full" />
       </div>
-      <p class="text-center text-gray-400 text-sm italic">
-        The inverse relationship between hash rate and the decimal value of the "bits" field remains clear. Chart in logarithmic scale.
-      </p>
     </Motion>
   </div>
 </template>
@@ -23,11 +20,14 @@ import type { EChartsOption } from 'echarts'
 
 use([CanvasRenderer, LineChart, GridComponent, TooltipComponent, LegendComponent, TitleComponent])
 
+const props = withDefaults(defineProps<{ printMode?: boolean }>(), { printMode: false })
+
 // Brand palette
 const PRIMARY = '#F7931A'   // orange
 const SECONDARY = '#00FF94' // green
-const AXIS_TEXT = '#F9FAFB' // gray-50 for maximum contrast on dark bg
-const GRID = 'rgba(255,255,255,0.18)'
+const getAxisText = () => props.printMode ? '#374151' : '#F9FAFB'
+const getGrid = () => props.printMode ? 'rgba(0,0,0,0.15)' : 'rgba(255,255,255,0.18)'
+const getLabelBg = () => props.printMode ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.35)'
 
 // X-axis categories (years)
 const years: string[] = [
@@ -53,28 +53,28 @@ const option = ref<EChartsOption>({
   legend: {
     data: ['Hash Power (EH/s)', '$NAT - Bits Field (Decimal)'],
     top: 0,
-    textStyle: { color: AXIS_TEXT }
+    textStyle: { color: getAxisText() }
   },
   // Add generous padding to reduce cramped look (more vertical breathing room)
   grid: { left: 56, right: 64, top: 56, bottom: 56, containLabel: true },
-  animation: true,
-  animationDuration: 2000,
+  animation: !props.printMode,
+  animationDuration: props.printMode ? 0 : 2000,
   animationEasing: 'cubicOut',
   xAxis: {
     type: 'category',
     data: years,
-    axisLine: { lineStyle: { color: GRID, width: 1 } },
+    axisLine: { lineStyle: { color: getGrid(), width: 1 } },
     axisTick: { show: false },
     axisLabel: {
-      color: AXIS_TEXT,
+      color: getAxisText(),
       margin: 14,
       fontSize: 14,
       fontWeight: 600,
-      backgroundColor: 'rgba(0,0,0,0.35)',
+      backgroundColor: getLabelBg(),
       padding: [2, 6],
       borderRadius: 4,
-      textShadowColor: 'rgba(0,0,0,0.5)',
-      textShadowBlur: 4
+      textShadowColor: props.printMode ? 'transparent' : 'rgba(0,0,0,0.5)',
+      textShadowBlur: props.printMode ? 0 : 4
     }
   },
   yAxis: [
@@ -82,37 +82,37 @@ const option = ref<EChartsOption>({
       type: 'value', // Left axis: Bits (linear)
       min: 380000000,
       max: 490000000,
-      axisLine: { lineStyle: { color: GRID, width: 1 } },
+      axisLine: { lineStyle: { color: getGrid(), width: 1 } },
       axisTick: { show: false },
-      splitLine: { lineStyle: { color: GRID } },
+      splitLine: { lineStyle: { color: getGrid() } },
       axisLabel: {
-        color: AXIS_TEXT,
+        color: getAxisText(),
         // Show values in millions; unit moved to axis name
         formatter: (val: number) => `${(val / 1_000_000).toFixed(1)}`,
         margin: 14,
         fontSize: 14,
         fontWeight: 600,
-        backgroundColor: 'rgba(0,0,0,0.35)',
+        backgroundColor: getLabelBg(),
         padding: [2, 6],
         borderRadius: 4,
-        textShadowColor: 'rgba(0,0,0,0.5)',
-        textShadowBlur: 4
+        textShadowColor: props.printMode ? 'transparent' : 'rgba(0,0,0,0.5)',
+        textShadowBlur: props.printMode ? 0 : 4
       },
       // Include unit on axis name per best practices
       name: '$NAT - Bits Field (Decimal) (M)',
       nameLocation: 'middle',
       nameGap: 68,
-      nameTextStyle: { color: '#FFFFFF', fontSize: 14, fontWeight: 700, padding: [6, 0, 6, 0], lineHeight: 18 }
+      nameTextStyle: { color: getAxisText(), fontSize: 14, fontWeight: 700, padding: [6, 0, 6, 0], lineHeight: 18 }
     },
     {
       type: 'log', // Right axis: Hash Power (log)
       logBase: 10,
       min: 0.000001,
-      axisLine: { lineStyle: { color: GRID } },
+      axisLine: { lineStyle: { color: getGrid() } },
       axisTick: { show: false },
       splitLine: { show: false },
       axisLabel: {
-        color: AXIS_TEXT,
+        color: getAxisText(),
         formatter: (val: number) => {
           if (val <= 0.001) return val.toExponential(1)
           if (val < 1000) return val.toFixed(1)
@@ -123,7 +123,7 @@ const option = ref<EChartsOption>({
         fontWeight: 600
       },
       name: 'Hash Power (EH/s)',
-      nameTextStyle: { color: '#FFFFFF', fontSize: 14, fontWeight: 700, padding: [6, 0, 6, 0], lineHeight: 18 }
+      nameTextStyle: { color: getAxisText(), fontSize: 14, fontWeight: 700, padding: [6, 0, 6, 0], lineHeight: 18 }
     }
   ],
   series: [
@@ -156,6 +156,11 @@ const visible = ref(false)
 let observer: IntersectionObserver | null = null
 
 onMounted(() => {
+  // In print mode, show immediately without waiting for intersection
+  if (props.printMode) {
+    visible.value = true
+    return
+  }
   if (visible.value) return
   if (typeof window === 'undefined' || !('IntersectionObserver' in window)) {
     visible.value = true

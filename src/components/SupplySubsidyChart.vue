@@ -1,5 +1,5 @@
 <template>
-  <div ref="container" class="w-full h-56 md:h-72">
+  <div ref="container" class="w-full h-full">
     <v-chart v-if="visible" :option="option" autoresize class="w-full h-full" />
   </div>
 </template>
@@ -15,11 +15,14 @@ import type { EChartsOption } from 'echarts'
 
 use([CanvasRenderer, LineChart, GridComponent, LegendComponent, TooltipComponent, TitleComponent])
 
-// Site brand colors (from tailwind.config.js)
+const props = withDefaults(defineProps<{ printMode?: boolean }>(), { printMode: false })
+
+// Site brand colors
 const PRIMARY = '#F7931A'   // orange
 const SECONDARY = '#00FF94' // green
-const GRID = 'rgba(255,255,255,0.08)'
-const AXIS_TEXT = '#9CA3AF'  // gray-400
+const getGrid = () => props.printMode ? 'rgba(0,0,0,0.15)' : 'rgba(255,255,255,0.08)'
+const getAxisText = () => props.printMode ? '#374151' : '#9CA3AF'
+const getNameText = () => props.printMode ? '#374151' : '#FFFFFF'
 
 const years = [
   2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020,
@@ -88,26 +91,26 @@ const option = ref<EChartsOption>({
     text: 'BTC supply and block subsidy',
     left: 8,
     top: 2,
-    textStyle: { color: AXIS_TEXT, fontSize: 12, fontWeight: 'bold' }
+    textStyle: { color: getAxisText(), fontSize: 12, fontWeight: 'bold' }
   },
   tooltip: { trigger: 'axis' },
   legend: {
     data: ['BTC Supply', 'BTC Subsidy'],
     top: 24,
-    textStyle: { color: AXIS_TEXT }
+    textStyle: { color: getAxisText() }
   },
   // More vertical space plus tighter left/right to maximize plot width while preserving label visibility
   grid: { left: 40, right: 44, top: 64, bottom: 40, containLabel: true },
-  animation: true,
-  animationDuration: 3000,
+  animation: !props.printMode,
+  animationDuration: props.printMode ? 0 : 3000,
   animationEasing: 'cubicOut',
   xAxis: {
     type: 'category',
     data: years,
     boundaryGap: false,
-    axisLine: { lineStyle: { color: GRID } },
+    axisLine: { lineStyle: { color: getGrid() } },
     axisTick: { show: false },
-    axisLabel: { color: AXIS_TEXT }
+    axisLabel: { color: getAxisText() }
   },
   yAxis: [
     {
@@ -115,13 +118,13 @@ const option = ref<EChartsOption>({
       name: 'BTC supply (M)',
       min: 0,
       max: 22,
-      axisLine: { lineStyle: { color: GRID } },
+      axisLine: { lineStyle: { color: getGrid() } },
       axisTick: { show: false },
-      splitLine: { lineStyle: { color: GRID } },
-      axisLabel: { color: AXIS_TEXT },
+      splitLine: { lineStyle: { color: getGrid() } },
+      axisLabel: { color: getAxisText() },
       nameLocation: 'middle',
       nameGap: 30,
-      nameTextStyle: { color: '#FFFFFF' }
+      nameTextStyle: { color: getNameText() }
     },
     {
       type: 'value',
@@ -129,13 +132,13 @@ const option = ref<EChartsOption>({
       min: 0,
       max: 50,
       position: 'right',
-      axisLine: { lineStyle: { color: GRID } },
+      axisLine: { lineStyle: { color: getGrid() } },
       axisTick: { show: false },
       splitLine: { show: false },
-      axisLabel: { color: AXIS_TEXT },
+      axisLabel: { color: getAxisText() },
       nameLocation: 'middle',
       nameGap: 30,
-      nameTextStyle: { color: '#FFFFFF' }
+      nameTextStyle: { color: getNameText() }
     }
   ],
   series: [
@@ -166,6 +169,11 @@ const visible = ref(false)
 let observer: IntersectionObserver | null = null
 
 onMounted(() => {
+  // In print mode, show immediately without waiting for intersection
+  if (props.printMode) {
+    visible.value = true
+    return
+  }
   if (visible.value) return
   if (typeof window === 'undefined' || !('IntersectionObserver' in window)) {
     visible.value = true
