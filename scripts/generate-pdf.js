@@ -219,21 +219,39 @@ async function generatePDF() {
       format: 'A4',
       printBackground: true,
       margin: {
-        top: '20mm',
+        top: '25mm',
         right: '15mm',
-        bottom: '20mm',
+        bottom: '25mm',
         left: '15mm'
       },
       displayHeaderFooter: true,
       headerTemplate: `
-        <div style="width: 100%; font-size: 9px; font-family: Arial, sans-serif; color: #666; text-align: center; padding-top: 5mm;">
-          NATpaper - natgmi.com
-        </div>
+        <style>
+          .header { 
+            width: 100%; 
+            font-size: 9px; 
+            font-family: Arial, sans-serif; 
+            color: #666; 
+            text-align: center;
+            margin: 0 auto;
+            -webkit-print-color-adjust: exact;
+          }
+        </style>
+        <div class="header">NATpaper - natgmi.com</div>
       `,
       footerTemplate: `
-        <div style="width: 100%; font-size: 9px; font-family: Arial, sans-serif; color: #666; text-align: center; padding-bottom: 5mm;">
-          Page <span class="pageNumber"></span> of <span class="totalPages"></span>
-        </div>
+        <style>
+          .footer { 
+            width: 100%; 
+            font-size: 9px; 
+            font-family: Arial, sans-serif; 
+            color: #666; 
+            text-align: center;
+            margin: 0 auto;
+            -webkit-print-color-adjust: exact;
+          }
+        </style>
+        <div class="footer">Page <span class="pageNumber"></span> of <span class="totalPages"></span></div>
       `
     })
 
