@@ -6,10 +6,6 @@
   PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = "true"
   PUPPETEER_EXECUTABLE_PATH = "/usr/bin/chromium-browser"
 
-# Use Netlify's Chromium plugin for Puppeteer
-[[plugins]]
-  package = "@netlify/plugin-chromium"
-
 # Generate PDF only on production deploys (faster previews)
 [context.production]
   command = "npm run build && npm run generate-pdf"

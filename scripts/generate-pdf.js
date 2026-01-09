@@ -16,10 +16,11 @@
  */
 
 import puppeteer from 'puppeteer'
+import chromium from '@sparticuz/chromium'
 import { spawn } from 'child_process'
 import { fileURLToPath } from 'url'
 import { dirname, join } from 'path'
-import { existsSync, mkdirSync } from 'fs'
+import { existsSync } from 'fs'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -121,22 +122,30 @@ async function generatePDF() {
 
     // Launch Puppeteer with Netlify-compatible arguments
     console.log('Launching browser...')
+    
+    // Detect if running in CI/serverless environment
+    const isCI = process.env.CI || process.env.NETLIFY
+    
     const launchOptions = {
       headless: 'new',
-      args: [
+      args: isCI ? chromium.args : [
         '--no-sandbox',
         '--disable-setuid-sandbox',
         '--disable-dev-shm-usage',
         '--disable-gpu',
-        '--disable-software-rasterizer',
-        '--single-process'
+        '--disable-software-rasterizer'
       ]
     }
 
-    // Use Netlify's Chromium if available
-    if (process.env.PUPPETEER_EXECUTABLE_PATH) {
+    // Use @sparticuz/chromium in CI environment, otherwise use local Puppeteer
+    if (isCI) {
+      launchOptions.executablePath = await chromium.executablePath()
+      console.log(`Using @sparticuz/chromium at: ${launchOptions.executablePath}`)
+    } else if (process.env.PUPPETEER_EXECUTABLE_PATH) {
       launchOptions.executablePath = process.env.PUPPETEER_EXECUTABLE_PATH
       console.log(`Using Chromium at: ${process.env.PUPPETEER_EXECUTABLE_PATH}`)
+    } else {
+      console.log('Using local Puppeteer Chromium')
     }
 
     browser = await puppeteer.launch(launchOptions)

@@ -25,6 +25,7 @@
     "vue-router": "^4.5.1"
   },
   "devDependencies": {
+    "@sparticuz/chromium": "^143.0.4",
     "@vitejs/plugin-vue": "^4.5.2",
     "autoprefixer": "^10.4.17",
     "postcss": "^8.4.35",
