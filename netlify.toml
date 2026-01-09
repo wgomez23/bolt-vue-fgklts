@@ -6,15 +6,15 @@
   PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = "true"
   PUPPETEER_EXECUTABLE_PATH = "/usr/bin/chromium-browser"
 
-# Generate PDF only on production deploys (faster previews)
+# Generate PDF on all deploys including previews
 [context.production]
   command = "npm run build && npm run generate-pdf"
 
 [context.deploy-preview]
-  command = "npm run build"
+  command = "npm run build && npm run generate-pdf"
 
 [context.branch-deploy]
-  command = "npm run build"
+  command = "npm run build && npm run generate-pdf"
 
 [[redirects]]
   from = "/*"
