@@ -1,5 +1,11 @@
 #!/usr/bin/env node
 
+// Force exit after 3 minutes no matter what (safety net for CI)
+setTimeout(() => {
+  console.error('⏰ Build timeout reached (3 minutes), forcing exit')
+  process.exit(1)
+}, 180000)
+
 /**
  * PDF Generation Script for NATpaper
  * Uses Puppeteer to render the print-optimized page and generate a PDF
@@ -240,15 +246,28 @@ async function generatePDF() {
     // Clean up resources
     if (browser) {
       console.log('Closing browser...')
-      await browser.close()
+      try {
+        await browser.close()
+      } catch (e) {
+        console.log('Browser already closed')
+      }
     }
     if (serverProcess) {
       console.log('Stopping server...')
-      serverProcess.kill('SIGTERM')
-      // Give it a moment to clean up
-      await new Promise(resolve => setTimeout(resolve, 500))
+      try {
+        serverProcess.kill('SIGKILL') // Force kill
+        // Also try killing process group
+        try {
+          process.kill(-serverProcess.pid, 'SIGKILL')
+        } catch (e) {
+          // Ignore - process may already be dead
+        }
+      } catch (e) {
+        console.log('Server already stopped')
+      }
     }
-    console.log('Cleanup complete')
+    console.log('Cleanup complete, exiting...')
+    process.exit(0) // Force exit to prevent hanging
   }
 }
 
