@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import NonKycLogo from '../assets/nonkyclogoicon.png';
+import OneInchLogo from '../assets/1inch.jpg';
 
 const props = defineProps<{
   name: string;
@@ -26,6 +27,8 @@ const getLogoUrl = (name: string) => {
       return 'https://mscribe-webapp.s3.us-east-2.amazonaws.com/uniswap.png';
     case 'NonKyc':
       return NonKycLogo;
+    case '1inch':
+      return OneInchLogo;
     case 'Raydium':
       return '/raydium.png';
     default:
@@ -47,6 +50,8 @@ const getExchangeUrl = (name: string) => {
       return 'https://app.uniswap.org/explore/pools/ethereum/0xa1eeec225bf382384e92e00f2c5224a23634c29c3e1d86ea7f017b73e55668f9';
     case 'NonKyc':
       return 'https://nonkyc.io/market/NAT_USDT';
+    case '1inch':
+      return 'https://1inch.com/swap?src=1:0x249130f5e2dd4cf278180c0df8273f3592ad1247&dst=1:USDT';
     case 'Raydium':
       return 'https://raydium.io/swap/?inputMint=Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB&outputMint=FbKRaqBzupLry3V7QujpNghwrHgxutB4MY11M8aeyVa1&referrer=GxqntmUzXYHddbcPeagPmSnH7NpSXw59wmeAiukcNC38';
     default:

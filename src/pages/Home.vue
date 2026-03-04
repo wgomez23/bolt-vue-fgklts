@@ -119,6 +119,7 @@ const exchanges = [
   { name: 'OrdinalsWallet', logo: null },
   { name: 'TaparooSwap', logo: null },
   { name: 'Uniswap', logo: null },
+  { name: '1inch', logo: null },
   { name: 'NonKyc', logo: null },
   { name: 'SuperEx', logo: null },
   { name: 'Raydium', logo: null }
