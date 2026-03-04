@@ -118,11 +118,9 @@ const exchanges = [
   { name: 'Hypermall', logo: null },
   { name: 'OrdinalsWallet', logo: null },
   { name: 'TaparooSwap', logo: null },
-  { name: 'SatX', logo: null },
-  { name: 'SuperEx', logo: null },
   { name: 'Uniswap', logo: null },
   { name: 'NonKyc', logo: null },
-  { name: 'Bit.com', logo: null },
+  { name: 'SuperEx', logo: null },
   { name: 'Raydium', logo: null }
 ];
 const API_URL = 'https://mscribe.io/api/tokens/all';

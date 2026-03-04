@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import NonKycLogo from '../assets/nonkyclogoicon.png';
-import BitLogo from '../assets/bit.png';
 
 const props = defineProps<{
   name: string;
@@ -21,16 +20,12 @@ const getLogoUrl = (name: string) => {
       return 'https://mscribe-webapp.s3.us-east-2.amazonaws.com/superex.png';
     case 'OrdinalsWallet':
       return 'https://ordinalswallet.com/logo-icon.svg';
-    case 'SatX':
-      return 'https://mscribe-webapp.s3.us-east-2.amazonaws.com/satx_dark.png';
     case 'Hypermall':
       return 'https://mscribe-webapp.s3.us-east-2.amazonaws.com/hypermall.png';
     case 'Uniswap':
       return 'https://mscribe-webapp.s3.us-east-2.amazonaws.com/uniswap.png';
     case 'NonKyc':
       return NonKycLogo;
-    case 'Bit.com':
-      return BitLogo;
     case 'Raydium':
       return '/raydium.png';
     default:
@@ -46,16 +41,12 @@ const getExchangeUrl = (name: string) => {
       return 'https://www.superex.com/trade/DMT-NAT_USDT';
     case 'OrdinalsWallet':
       return 'https://ordinalswallet.com/collection/tap-DMT-NAT';
-    case 'SatX':
-      return 'https://www.satsx.io/ordinals/tap/dmt-nat/listed';
     case 'Hypermall':
       return 'https://www.hypermall.io';
     case 'Uniswap':
       return 'https://app.uniswap.org/explore/pools/ethereum/0xa1eeec225bf382384e92e00f2c5224a23634c29c3e1d86ea7f017b73e55668f9';
     case 'NonKyc':
       return 'https://nonkyc.io/market/NAT_USDT';
-    case 'Bit.com':
-      return 'https://www.bit.com/spot?pair=NAT-USDT';
     case 'Raydium':
       return 'https://raydium.io/swap/?inputMint=Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB&outputMint=FbKRaqBzupLry3V7QujpNghwrHgxutB4MY11M8aeyVa1&referrer=GxqntmUzXYHddbcPeagPmSnH7NpSXw59wmeAiukcNC38';
     default:
@@ -112,14 +103,10 @@ onMounted(() => {
          target="_blank"
          rel="noopener noreferrer"
          class="text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors">Bridge</a>
-      <a href="https://app.uniswap.org/explore/pools/ethereum/0xa1eeec225bf382384e92e00f2c5224a23634c29c3e1d86ea7f017b73e55668f9"
+      <a href="https://app.uniswap.org/explore/pools/ethereum/0xb44cc02c4ffa5ad68cc66ab404800a4f0029e5b6a9752b7cffc1bf8bbaaa92a3"
          target="_blank"
          rel="noopener noreferrer"
-         class="text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors">Pool 1</a>
-      <a href="https://app.uniswap.org/explore/pools/ethereum/0xc2333e81bcd1226bc04d65acaf3df7f23e1f588195b11fbe7ef8f9e8e7b716ba"
-         target="_blank"
-         rel="noopener noreferrer"
-         class="text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors">Pool 2</a>
+         class="text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors">Pool</a>
     </div>
   </div>
 
