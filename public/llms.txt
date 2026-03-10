@@ -1,0 +1,59 @@
+# NAT.fun — Non-Arbitrary Tokens for Bitcoin's Security Budget
+
+## What is NAT.fun?
+
+NAT.fun is a protocol and platform built around Non-Arbitrary Tokens (NAT) — a new economic
+primitive designed to solve Bitcoin's long-term security budget problem. NAT tokens are issued
+through mechanisms tied to Bitcoin's proof-of-work, creating a sustainable new revenue stream
+for miners without compromising Bitcoin's core values.
+
+## The Problem: Bitcoin's Security Budget Crisis
+
+Bitcoin's security model is elegant but faces a structural challenge over time:
+
+- **Proof of Work**: Bitcoin miners expend real-world energy to produce blocks, securing the
+  network against attack. The cost of this energy expenditure is what makes the network safe.
+- **Miner Revenue = Security**: Miners are compensated by block subsidies (newly minted BTC)
+  and transaction fees. This revenue funds the energy expenditure that equals security.
+- **The Halving**: Every ~210,000 blocks (~4 years), the block subsidy halves. It started at
+  50 BTC/block in 2009 and will approach zero over time (21 million BTC cap).
+- **The Fee Gap**: Bitcoin's transaction fee market has not grown proportionally to replace
+  the shrinking subsidy. Fee revenue is volatile and, on average, far below what's needed
+  to sustain current hashrate long-term.
+- **The Risk**: As block subsidies dwindle and fees remain insufficient, miner revenue falls.
+  Lower revenue → less energy expenditure → lower hashrate → weaker security. A network
+  with dramatically reduced hashrate becomes vulnerable to 51% attacks.
+
+## The Solution: Non-Arbitrary Tokens
+
+NAT addresses this by creating new token issuance mechanisms that:
+
+1. **Generate miner revenue** beyond the base block subsidy
+2. **Are tied to real proof-of-work**, preserving Bitcoin's energy-backed security model
+3. **Create fee pressure** that feeds back into Bitcoin transaction fees
+4. **Scale with hashrate**, meaning security and NAT economics are aligned
+
+The "Non-Arbitrary" in NAT is intentional — unlike arbitrary token issuance (airdrops,
+pre-mines, VC allocations), NAT issuance is governed by verifiable, energy-backed work.
+
+## Key Concepts
+
+- **Security Budget**: The total annualized USD value of miner revenue (subsidy + fees).
+  Higher = more secure. Current estimates put Bitcoin's security budget at risk post-2032.
+- **Hashrate**: The total computational power securing the Bitcoin network. Proxy for security.
+- **Fee Market**: The market for Bitcoin transaction fees. Underdeveloped relative to security needs.
+- **Halving**: Every ~4 years, Bitcoin's block reward drops by 50%. Next halvings: 2028, 2032.
+- **51% Attack**: If a single entity controls >50% of hashrate, they can reorg the chain.
+  Costly at current hashrate; becomes cheaper as miner revenue and hashrate fall.
+
+## Why This Matters Now
+
+The 2024 halving reduced the block subsidy to 3.125 BTC. The 2028 halving will cut it to
+1.5625 BTC. Each halving increases the pressure on the fee market to compensate. NAT.fun
+aims to have robust economic infrastructure in place before that gap becomes critical.
+
+## Links & Resources
+
+- **Website**: https://natgmi.com
+- **Twitter / X**: https://twitter.com/natdotfun (@natdotfun)
+- **Twitter / X**: https://twitter.com/NATGMI (@NATGMI)
