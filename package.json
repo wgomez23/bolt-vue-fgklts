@@ -36,6 +36,7 @@
     "vue-tsc": "^3.2.5"
   },
   "overrides": {
-    "minimatch": "^5.1.6"
+    "minimatch": "^5.1.6",
+    "basic-ftp": "^5.2.1"
   }
 }
