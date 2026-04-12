@@ -31,6 +31,8 @@ const getLogoUrl = (name: string) => {
       return OneInchLogo;
     case 'Raydium':
       return '/raydium.png';
+    case 'Satflow':
+      return 'https://www.satflow.com/logo-full-white.svg';
     default:
       return null;
   }
@@ -54,6 +56,8 @@ const getExchangeUrl = (name: string) => {
       return 'https://1inch.com/swap?src=1:0x249130f5e2dd4cf278180c0df8273f3592ad1247&dst=1:USDT';
     case 'Raydium':
       return 'https://raydium.io/swap/?inputMint=Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB&outputMint=FbKRaqBzupLry3V7QujpNghwrHgxutB4MY11M8aeyVa1&referrer=GxqntmUzXYHddbcPeagPmSnH7NpSXw59wmeAiukcNC38';
+    case 'Satflow':
+      return 'https://www.satflow.com/tap/DMT-NAT';
     default:
       return '#';
   }

@@ -2,7 +2,7 @@
     "name": "NAT Website",
     "description": "This web vue.js application is the website for $NAT.",
     "website": "https://natgmi.com",
-    "repository": "https://github.com/wgomez23/NAT-site",
+    "repository": "https://github.com/wgomez23/bolt-vue-fgklts",
     "logo": "https://cdn.discordapp.com/attachments/950914742627749888/1308227631464058880/NAT_logo.png?ex=673d2d6d&is=673bdbed&hm=632367241ab4881f9118f76f28ef3b737a817adeed425aa0cdf1a869eadfae5b&",
     "success_url": "/",
     "stack": "heroku-22",
