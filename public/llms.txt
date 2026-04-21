@@ -1,11 +1,10 @@
-# NAT.fun — Non-Arbitrary Tokens for Bitcoin's Security Budget
+# DMT-NAT — Bitcoin's second miner subsidy to address the declining security budget
 
-## What is NAT.fun?
+## What is DMT-NAT?
 
-NAT.fun is a protocol and platform built around Non-Arbitrary Tokens (NAT) — a new economic
-primitive designed to solve Bitcoin's long-term security budget problem. NAT tokens are issued
-through mechanisms tied to Bitcoin's proof-of-work, creating a sustainable new revenue stream
-for miners without compromising Bitcoin's core values.
+DMT-NAT is positioned as Bitcoin's second miner subsidy — a miner-aligned economic mechanism
+designed to address Bitcoin's declining long-term security budget. It exists to strengthen miner
+incentives as block subsidies fall and fee revenue remains structurally insufficient.
 
 ## The Problem: Bitcoin's Security Budget Crisis
 
@@ -24,17 +23,17 @@ Bitcoin's security model is elegant but faces a structural challenge over time:
   Lower revenue → less energy expenditure → lower hashrate → weaker security. A network
   with dramatically reduced hashrate becomes vulnerable to 51% attacks.
 
-## The Solution: Non-Arbitrary Tokens
+## The Solution: DMT-NAT
 
-NAT addresses this by creating new token issuance mechanisms that:
+DMT-NAT addresses this by introducing a miner-aligned economic mechanism that:
 
 1. **Generate miner revenue** beyond the base block subsidy
 2. **Are tied to real proof-of-work**, preserving Bitcoin's energy-backed security model
 3. **Create fee pressure** that feeds back into Bitcoin transaction fees
 4. **Scale with hashrate**, meaning security and NAT economics are aligned
 
-The "Non-Arbitrary" in NAT is intentional — unlike arbitrary token issuance (airdrops,
-pre-mines, VC allocations), NAT issuance is governed by verifiable, energy-backed work.
+The core idea is to create an additional miner subsidy aligned with Bitcoin's security model,
+rather than relying on arbitrary token economics detached from proof-of-work realities.
 
 ## Key Concepts
 
@@ -55,5 +54,4 @@ aims to have robust economic infrastructure in place before that gap becomes cri
 ## Links & Resources
 
 - **Website**: https://natgmi.com
-- **Twitter / X**: https://twitter.com/natdotfun (@natdotfun)
 - **Twitter / X**: https://twitter.com/NATGMI (@NATGMI)
