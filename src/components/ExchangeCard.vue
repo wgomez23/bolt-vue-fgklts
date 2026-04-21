@@ -33,6 +33,12 @@ const getLogoUrl = (name: string) => {
       return '/raydium.png';
     case 'Satflow':
       return 'https://www.satflow.com/logo-full-white.svg';
+    case 'MEXC':
+      return 'https://static.mocortech.com/image-host/web/common/logo/logo-light.png';
+    case 'LBank':
+      return 'https://www.lbank.com/favicon.ico';
+    case 'CoinEx':
+      return 'https://www.coinex.com/favicon.ico';
     default:
       return null;
   }
@@ -58,6 +64,12 @@ const getExchangeUrl = (name: string) => {
       return 'https://raydium.io/swap/?inputMint=Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB&outputMint=FbKRaqBzupLry3V7QujpNghwrHgxutB4MY11M8aeyVa1&referrer=GxqntmUzXYHddbcPeagPmSnH7NpSXw59wmeAiukcNC38';
     case 'Satflow':
       return 'https://www.satflow.com/tap/DMT-NAT';
+    case 'MEXC':
+      return 'https://www.mexc.com/exchange/NAT_USDT';
+    case 'LBank':
+      return 'https://www.lbank.com/trade/dmtnat_usdt';
+    case 'CoinEx':
+      return 'https://www.coinex.com/zh-hans/price/NAT';
     default:
       return '#';
   }

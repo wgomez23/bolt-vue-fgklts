@@ -123,6 +123,9 @@ const exchanges = [
   { name: '1inch', logo: null },
   { name: 'NonKyc', logo: null },
   { name: 'SuperEx', logo: null },
+  { name: 'MEXC', logo: null },
+  { name: 'LBank', logo: null },
+  { name: 'CoinEx', logo: null },
   { name: 'Raydium', logo: null }
 ];
 const API_URL = 'https://mscribe.io/api/tokens/all';
