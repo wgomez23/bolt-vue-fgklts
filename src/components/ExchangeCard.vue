@@ -15,8 +15,8 @@ const cardRef = ref<HTMLElement | null>(null);
 // Use different placeholder images for each exchange
 const getLogoUrl = (name: string) => {
   switch (name) {
-    case 'TaparooSwap':
-      return 'https://mscribe-webapp.s3.us-east-2.amazonaws.com/Taparooswap.jpg';
+    case 'TapScope':
+      return 'https://tapscope.io/images/TapProtocolLogo.svg';
     case 'SuperEx':
       return 'https://mscribe-webapp.s3.us-east-2.amazonaws.com/superex.png';
     case 'OrdinalsWallet':
@@ -46,8 +46,8 @@ const getLogoUrl = (name: string) => {
 
 const getExchangeUrl = (name: string) => {
   switch (name) {
-    case 'TaparooSwap':
-      return 'https://swap.taparooswap.com/';
+    case 'TapScope':
+      return 'https://market.tapscope.io/trades/dmt-nat';
     case 'SuperEx':
       return 'https://www.superex.com/trade/DMT-NAT_USDT';
     case 'OrdinalsWallet':
@@ -120,7 +120,7 @@ onMounted(() => {
     </div>
     <h3 class="text-xl font-bold">{{ name }}</h3>
     <div class="mt-2 flex flex-col items-center gap-2 text-center sm:flex-row sm:flex-wrap sm:justify-center sm:gap-3">
-      <a href="https://bridge.taparooswap.com/"
+      <a href="https://bridge.tapscope.io/"
          target="_blank"
          rel="noopener noreferrer"
          class="text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors">Bridge</a>

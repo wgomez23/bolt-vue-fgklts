@@ -117,7 +117,7 @@ import FeaturesSection from '../components/FeaturesSection.vue'
 const exchanges = [
   { name: 'Hypermall', logo: null },
   { name: 'OrdinalsWallet', logo: null },
-  { name: 'TaparooSwap', logo: null },
+  { name: 'TapScope', logo: null },
   { name: 'Satflow', logo: null },
   { name: 'Uniswap', logo: null },
   { name: '1inch', logo: null },
