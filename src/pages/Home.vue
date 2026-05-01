@@ -117,7 +117,7 @@ import FeaturesSection from '../components/FeaturesSection.vue'
 const exchanges = [
   { name: 'Hypermall', logo: null },
   { name: 'OrdinalsWallet', logo: null },
-  { name: 'TaparooSwap', logo: null },
+  { name: 'TapScope', logo: null },
   { name: 'Satflow', logo: null },
   { name: 'Uniswap', logo: null },
   { name: '1inch', logo: null },
@@ -126,7 +126,9 @@ const exchanges = [
   { name: 'MEXC', logo: null },
   { name: 'LBank', logo: null },
   { name: 'CoinEx', logo: null },
-  { name: 'Raydium', logo: null }
+  { name: 'Raydium', logo: null },
+  { name: 'BingX', logo: null },
+  { name: 'BitMart', logo: null }
 ];
 const API_URL = 'https://mscribe.io/api/tokens/all';
 const token = ref<any | null>(null);

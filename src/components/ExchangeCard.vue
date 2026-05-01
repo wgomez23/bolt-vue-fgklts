@@ -15,8 +15,8 @@ const cardRef = ref<HTMLElement | null>(null);
 // Use different placeholder images for each exchange
 const getLogoUrl = (name: string) => {
   switch (name) {
-    case 'TaparooSwap':
-      return 'https://mscribe-webapp.s3.us-east-2.amazonaws.com/Taparooswap.jpg';
+    case 'TapScope':
+      return '/tapscope-logo.webp';
     case 'SuperEx':
       return 'https://mscribe-webapp.s3.us-east-2.amazonaws.com/superex.png';
     case 'OrdinalsWallet':
@@ -30,7 +30,7 @@ const getLogoUrl = (name: string) => {
     case '1inch':
       return OneInchLogo;
     case 'Raydium':
-      return '/raydium.png';
+      return '/raydium.webp';
     case 'Satflow':
       return 'https://www.satflow.com/logo-full-white.svg';
     case 'MEXC':
@@ -39,6 +39,10 @@ const getLogoUrl = (name: string) => {
       return 'https://www.lbank.com/favicon.ico';
     case 'CoinEx':
       return 'https://www.coinex.com/favicon.ico';
+    case 'BingX':
+      return '/bingx-logo.webp';
+    case 'BitMart':
+      return '/bitmart-logo.webp';
     default:
       return null;
   }
@@ -46,8 +50,8 @@ const getLogoUrl = (name: string) => {
 
 const getExchangeUrl = (name: string) => {
   switch (name) {
-    case 'TaparooSwap':
-      return 'https://swap.taparooswap.com/';
+    case 'TapScope':
+      return 'https://market.tapscope.io/trades/dmt-nat';
     case 'SuperEx':
       return 'https://www.superex.com/trade/DMT-NAT_USDT';
     case 'OrdinalsWallet':
@@ -70,6 +74,10 @@ const getExchangeUrl = (name: string) => {
       return 'https://www.lbank.com/trade/dmtnat_usdt';
     case 'CoinEx':
       return 'https://www.coinex.com/zh-hans/price/NAT';
+    case 'BingX':
+      return 'https://bingx.com/en/perpetual/10000NAT-USDT';
+    case 'BitMart':
+      return 'https://www.bitmart.com/en-US/trade/NAT_USDT?type=spot';
     default:
       return '#';
   }
@@ -120,7 +128,7 @@ onMounted(() => {
     </div>
     <h3 class="text-xl font-bold">{{ name }}</h3>
     <div class="mt-2 flex flex-col items-center gap-2 text-center sm:flex-row sm:flex-wrap sm:justify-center sm:gap-3">
-      <a href="https://bridge.taparooswap.com/"
+      <a href="https://bridge.tapscope.io/"
          target="_blank"
          rel="noopener noreferrer"
          class="text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors">Bridge</a>
@@ -128,6 +136,33 @@ onMounted(() => {
          target="_blank"
          rel="noopener noreferrer"
          class="text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors">Pool</a>
+    </div>
+  </div>
+
+  <!-- BitMart: show both Spot and Futures links -->
+  <div v-else-if="name === 'BitMart'"
+       ref="cardRef"
+       class="block bg-dark-card p-6 rounded-xl hover:bg-dark-lighter transition-all duration-700 ease-out flex flex-col items-center justify-between h-64 transform"
+       :class="{
+         'opacity-0 translate-y-16 scale-95': !isVisible,
+         'opacity-100 translate-y-0 scale-100': isVisible
+       }">
+    <div class="flex-1 flex items-center justify-center w-full mb-4">
+      <img v-if="displayLogo"
+           :src="displayLogo"
+           :alt="`${name} logo`"
+           class="w-32 h-32 object-contain rounded-lg" />
+    </div>
+    <h3 class="text-xl font-bold">{{ name }}</h3>
+    <div class="mt-2 flex flex-col items-center gap-2 text-center sm:flex-row sm:flex-wrap sm:justify-center sm:gap-3">
+      <a href="https://www.bitmart.com/en-US/trade/NAT_USDT?type=spot"
+         target="_blank"
+         rel="noopener noreferrer"
+         class="text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors">Spot</a>
+      <a href="https://www.bitmart.com/en-US/futures/NATUSDT?theme=dark"
+         target="_blank"
+         rel="noopener noreferrer"
+         class="text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors">Futures</a>
     </div>
   </div>
 
@@ -146,7 +181,7 @@ onMounted(() => {
       <img v-if="displayLogo"
            :src="displayLogo"
            :alt="`${name} logo`"
-           class="w-24 h-24 object-contain rounded-lg" />
+           :class="name === 'BingX' ? 'w-40 h-20 object-contain rounded-lg' : 'w-24 h-24 object-contain rounded-lg'" />
     </div>
     <h3 class="text-xl font-bold">{{ name }}</h3>
   </a>
