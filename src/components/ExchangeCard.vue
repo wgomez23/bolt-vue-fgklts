@@ -39,6 +39,10 @@ const getLogoUrl = (name: string) => {
       return 'https://www.lbank.com/favicon.ico';
     case 'CoinEx':
       return 'https://www.coinex.com/favicon.ico';
+    case 'BingX':
+      return '/bingx-logo.svg';
+    case 'BitMart':
+      return '/bitmart-logo.webp';
     default:
       return null;
   }
@@ -70,6 +74,10 @@ const getExchangeUrl = (name: string) => {
       return 'https://www.lbank.com/trade/dmtnat_usdt';
     case 'CoinEx':
       return 'https://www.coinex.com/zh-hans/price/NAT';
+    case 'BingX':
+      return 'https://bingx.com/en/perpetual/10000NAT-USDT';
+    case 'BitMart':
+      return 'https://www.bitmart.com/en-US/trade/NAT_USDT?type=spot';
     default:
       return '#';
   }
@@ -128,6 +136,33 @@ onMounted(() => {
          target="_blank"
          rel="noopener noreferrer"
          class="text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors">Pool</a>
+    </div>
+  </div>
+
+  <!-- BitMart: show both Spot and Futures links -->
+  <div v-else-if="name === 'BitMart'"
+       ref="cardRef"
+       class="block bg-dark-card p-6 rounded-xl hover:bg-dark-lighter transition-all duration-700 ease-out flex flex-col items-center justify-between h-64 transform"
+       :class="{
+         'opacity-0 translate-y-16 scale-95': !isVisible,
+         'opacity-100 translate-y-0 scale-100': isVisible
+       }">
+    <div class="flex-1 flex items-center justify-center w-full mb-4">
+      <img v-if="displayLogo"
+           :src="displayLogo"
+           :alt="`${name} logo`"
+           class="w-24 h-24 object-contain rounded-lg" />
+    </div>
+    <h3 class="text-xl font-bold">{{ name }}</h3>
+    <div class="mt-2 flex flex-col items-center gap-2 text-center sm:flex-row sm:flex-wrap sm:justify-center sm:gap-3">
+      <a href="https://www.bitmart.com/en-US/trade/NAT_USDT?type=spot"
+         target="_blank"
+         rel="noopener noreferrer"
+         class="text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors">Spot</a>
+      <a href="https://www.bitmart.com/en-US/futures/NATUSDT?theme=dark"
+         target="_blank"
+         rel="noopener noreferrer"
+         class="text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors">Futures</a>
     </div>
   </div>
 
