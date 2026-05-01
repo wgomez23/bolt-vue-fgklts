@@ -151,7 +151,7 @@ onMounted(() => {
       <img v-if="displayLogo"
            :src="displayLogo"
            :alt="`${name} logo`"
-           class="w-24 h-24 object-contain rounded-lg" />
+           class="w-32 h-32 object-contain rounded-lg" />
     </div>
     <h3 class="text-xl font-bold">{{ name }}</h3>
     <div class="mt-2 flex flex-col items-center gap-2 text-center sm:flex-row sm:flex-wrap sm:justify-center sm:gap-3">
