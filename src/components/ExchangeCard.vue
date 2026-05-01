@@ -16,7 +16,7 @@ const cardRef = ref<HTMLElement | null>(null);
 const getLogoUrl = (name: string) => {
   switch (name) {
     case 'TapScope':
-      return 'https://tapscope.io/images/TapProtocolLogo.svg';
+      return '/tapscope-logo.webp';
     case 'SuperEx':
       return 'https://mscribe-webapp.s3.us-east-2.amazonaws.com/superex.png';
     case 'OrdinalsWallet':
