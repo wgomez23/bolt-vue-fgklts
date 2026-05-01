@@ -30,7 +30,7 @@ const getLogoUrl = (name: string) => {
     case '1inch':
       return OneInchLogo;
     case 'Raydium':
-      return '/raydium.png';
+      return '/raydium.webp';
     case 'Satflow':
       return 'https://www.satflow.com/logo-full-white.svg';
     case 'MEXC':
@@ -40,7 +40,7 @@ const getLogoUrl = (name: string) => {
     case 'CoinEx':
       return 'https://www.coinex.com/favicon.ico';
     case 'BingX':
-      return '/bingx-logo.svg';
+      return '/bingx-logo.webp';
     case 'BitMart':
       return '/bitmart-logo.webp';
     default:
@@ -181,7 +181,7 @@ onMounted(() => {
       <img v-if="displayLogo"
            :src="displayLogo"
            :alt="`${name} logo`"
-           class="w-24 h-24 object-contain rounded-lg" />
+           :class="name === 'BingX' ? 'w-40 h-20 object-contain rounded-lg' : 'w-24 h-24 object-contain rounded-lg'" />
     </div>
     <h3 class="text-xl font-bold">{{ name }}</h3>
   </a>

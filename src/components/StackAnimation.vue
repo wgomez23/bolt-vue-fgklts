@@ -83,7 +83,7 @@
 
 <script setup lang="ts">
 import { onMounted, onBeforeUnmount, ref } from 'vue'
-import psychedelicBg from '../assets/psychedelic2.png'
+import psychedelicBg from '../assets/psychedelic2.webp'
 import bitcoinLogo from '../assets/bitcoin.png'
 import ordinalsLogo from '../assets/ordinals.png'
 import tapLogo from '../assets/tap.png'

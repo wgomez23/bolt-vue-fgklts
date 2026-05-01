@@ -5,7 +5,7 @@
         <div class="flex items-center h-14">
           <!-- Logo -->
           <RouterLink to="/" class="flex items-center gap-2">
-            <img src="/Nat_logo.png" class="w-[30px] h-[30px]"/>
+            <img src="/nat-logo.webp" class="w-[30px] h-[30px]"/>
             <span class="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
               $NAT
             </span>

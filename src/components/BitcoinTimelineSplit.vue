@@ -40,8 +40,8 @@
 
 <script setup lang="ts">
 import { onMounted, onBeforeUnmount, ref } from 'vue'
-import ponzi from '../assets/ponzi.png'
-import subsidy from '../assets/subsidy.png'
+import ponzi from '../assets/ponzi.webp'
+import subsidy from '../assets/subsidy.webp'
 
 const root = ref<HTMLDivElement | null>(null)
 const ready = ref(false)

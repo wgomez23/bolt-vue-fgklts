@@ -138,11 +138,11 @@
           <h4 class="text-lg font-semibold text-gray-900 mb-4 text-center">Bitcoin Timeline</h4>
           <div class="grid grid-cols-2 gap-4">
             <div class="text-center">
-              <img src="/src/assets/ponzi.png" alt="Bitcoin centralized by nation states" class="w-full rounded-lg border border-gray-300" />
+              <img src="/src/assets/ponzi.webp" alt="Bitcoin centralized by nation states" class="w-full rounded-lg border border-gray-300" />
               <p class="text-sm text-gray-600 mt-2 italic">Bitcoin centralized by nation states</p>
             </div>
             <div class="text-center">
-              <img src="/src/assets/subsidy.png" alt="Bitcoin decentralized" class="w-full rounded-lg border border-gray-300" />
+              <img src="/src/assets/subsidy.webp" alt="Bitcoin decentralized" class="w-full rounded-lg border border-gray-300" />
               <p class="text-sm text-gray-600 mt-2 italic">Bitcoin decentralized</p>
             </div>
           </div>
@@ -384,7 +384,7 @@
 
         <!-- Zero Value Image -->
         <div class="my-6">
-          <img src="/src/assets/zerovalue.png" alt="Zero Value" class="w-full max-w-lg mx-auto rounded-lg border border-gray-300" />
+          <img src="/src/assets/zerovalue.webp" alt="Zero Value" class="w-full max-w-lg mx-auto rounded-lg border border-gray-300" />
         </div>
 
         <h4 class="text-xl font-semibold text-gray-900 mt-6">Principle 1: Belief Creates Value</h4>
@@ -429,7 +429,7 @@
 
         <!-- Premine Image -->
         <div class="my-6">
-          <img src="/src/assets/premine.png" alt="Premine" class="w-full max-w-lg mx-auto rounded-lg border border-gray-300" />
+          <img src="/src/assets/premine.webp" alt="Premine" class="w-full max-w-lg mx-auto rounded-lg border border-gray-300" />
         </div>
 
         <h4 class="text-xl font-semibold text-gray-900 mt-6">Launch Details</h4>
