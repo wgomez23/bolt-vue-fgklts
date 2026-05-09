@@ -48,6 +48,26 @@ http {
             try_files $uri $uri/ =404;
         }
 
+        location = /natpaper {
+            add_header Cache-Control "no-store, no-cache";
+						add_header Strict-Transport-Security "max-age=86400; includeSubDomains";
+						add_header X-Content-Type-Options "nosniff";
+						add_header X-Frame-Options "DENY";
+						add_header X-XSS-Protection "1; mode=block";
+
+            try_files /natpaper.html =404;
+        }
+
+        location = /natpaper/ {
+            add_header Cache-Control "no-store, no-cache";
+						add_header Strict-Transport-Security "max-age=86400; includeSubDomains";
+						add_header X-Content-Type-Options "nosniff";
+						add_header X-Frame-Options "DENY";
+						add_header X-XSS-Protection "1; mode=block";
+
+            try_files /natpaper.html =404;
+        }
+
         location / {
             add_header 'Cache-Control' "public, max-age=3600";
             try_files $uri $uri/ /index.html;
