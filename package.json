@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build && node scripts/create-route-html.js",
+    "start": "node server.js",
     "preview": "vite preview",
     "generate-pdf": "node scripts/generate-pdf.js",
     "generate-pdf:dev": "node scripts/generate-pdf.js --dev"
