@@ -1,4 +1,4 @@
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { rmSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -78,9 +78,7 @@ const baseHtml = readFileSync(join(distDir, 'index.html'), 'utf8')
 
 for (const page of routePages) {
   const html = buildRouteHtml(baseHtml, page)
-  const outputDir = join(distDir, page.path)
-  mkdirSync(outputDir, { recursive: true })
-  writeFileSync(join(outputDir, 'index.html'), html)
+  rmSync(join(distDir, page.path), { recursive: true, force: true })
   writeFileSync(join(distDir, `${page.path}.html`), html)
   console.log(`Created route metadata page: /${page.path}`)
 }
