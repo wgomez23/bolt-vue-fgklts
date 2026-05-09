@@ -13,10 +13,10 @@ const routePages = [
     description:
       'Read the NATpaper: DMT-NAT’s thesis for reinforcing Bitcoin’s long-term security budget, miner incentives, and proof-of-work economics.',
     canonical: 'https://natgmi.com/natpaper',
-    image: 'https://natgmi.com/natpaper-og-v2.png',
-    imageType: 'image/png',
-    imageWidth: '1200',
-    imageHeight: '630',
+    image: 'https://natgmi.com/natpaper-og-v2.jpg',
+    imageType: 'image/jpeg',
+    imageWidth: '1280',
+    imageHeight: '853',
     imageAlt: 'NATpaper — DMT-NAT Bitcoin Security Budget White Paper',
   },
 ]
