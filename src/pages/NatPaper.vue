@@ -1262,7 +1262,7 @@ const natEndTabs = [
       'Digital Matter Theory (DMT) can revolutionize DeFi yield mechanics by enabling the creation of non-arbitrary yield-bearing assets, where returns such as staking rewards or lending interest are dynamically calibrated based on Bitcoin\'s immutable blockchain data patterns. This reduces arbitrary inflation risks, enhancing economic resilience, and fostering more sustainable, trustless protocol incentives for applications like automated market makers or liquidity pools.'
   }
 ]
-const API_URL = 'https://mscribe.io/api/tokens/all'
+const API_URL = 'https://api.mscribe.io/api/tokens/all'
 const token = ref<any | null>(null)
 const usdValue = ref<number | null>(null)
 const marketCapUsd = ref(0)

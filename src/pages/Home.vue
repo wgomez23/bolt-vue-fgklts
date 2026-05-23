@@ -130,7 +130,7 @@ const exchanges = [
   { name: 'BingX', logo: null },
   { name: 'BitMart', logo: null }
 ];
-const API_URL = 'https://mscribe.io/api/tokens/all';
+const API_URL = 'https://api.mscribe.io/api/tokens/all';
 const token = ref<any | null>(null);
 const usdValue = ref<any | null>(null);
 let getTotalAvailable = (max:string, left:string)=> {
