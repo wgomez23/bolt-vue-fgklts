@@ -174,7 +174,7 @@ export default {
 
       try {
         const response = await fetch(
-          `https://mscribe.io/api/pools/rewards/${this.block.extras.pool?.slug}?offset=${this.offset}&limit=${this.limit}`,
+          `https://api.mscribe.io/api/pools/rewards/${this.block.extras.pool?.slug}?offset=${this.offset}&limit=${this.limit}`,
           { signal }
         );
 
