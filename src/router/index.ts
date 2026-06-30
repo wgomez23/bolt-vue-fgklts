@@ -2,12 +2,14 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../pages/Home.vue'
 import NatPaper from '../pages/NatPaper.vue'
 import NatPaperPrint from '../pages/NatPaperPrint.vue'
+import SecurityBudget from '../pages/SecurityBudget.vue'
 
 const router = createRouter({
   history: createWebHistory(),
   routes: [
     { path: '/', name: 'home', component: Home },
     { path: '/natpaper', name: 'natpaper', component: NatPaper },
+    { path: '/security-budget', name: 'security-budget', component: SecurityBudget },
     { 
       path: '/natpaper-print', 
       name: 'natpaper-print', 
