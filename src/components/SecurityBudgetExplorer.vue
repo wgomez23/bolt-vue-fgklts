@@ -2,7 +2,16 @@
   <div class="w-full">
     <!-- FULL-WIDTH CHART -->
     <div class="w-full rounded-xl border border-white/10 bg-white/[0.02] p-3 sm:p-4">
+      <PowerLawChart
+        v-if="state.priceModel === 'pl'"
+        :power-law-price="powerLawPrice"
+        :security-share-pct="securitySharePct"
+        :year="state.year"
+        :fee="state.fee"
+        :height="chartHeight"
+      />
       <SecurityBudgetChart
+        v-else
         :subsidy-series="subsidySeries"
         :fee-level="feeLevel"
         :nat-level="natLevel"
@@ -105,12 +114,14 @@
 <script setup lang="ts">
 import { computed, onMounted } from 'vue'
 import SecurityBudgetChart from './SecurityBudgetChart.vue'
+import PowerLawChart from './PowerLawChart.vue'
 import { useSecurityBudget } from '../composables/useSecurityBudget'
 
 withDefaults(defineProps<{ chartHeight?: number }>(), { chartHeight: 460 })
 
 const {
   state, subsidySeries, feeLevel, natLevel, yMax, readout, powerLaw, natMcapM, fetchLivePrice,
+  powerLawPrice, securitySharePct,
 } = useSecurityBudget()
 
 function fmtUSD(v: number): string {
