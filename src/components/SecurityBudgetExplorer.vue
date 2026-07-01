@@ -102,20 +102,23 @@
 
     <!-- DATA TABLE: what the user reads as the sliders move -->
     <div class="mt-4 rounded-lg border border-white/10 bg-white/[0.02] p-4 overflow-x-auto">
-      <table class="w-full min-w-[880px] border-collapse">
+      <table class="w-full min-w-[760px] border-collapse">
         <thead>
           <tr class="border-b border-white/10">
-            <th v-for="c in tableCols" :key="c.label"
-              class="px-3 py-2 text-left text-[11px] font-medium uppercase tracking-wide text-gray-400 align-bottom">
-              {{ c.label }}
+            <th class="px-3 py-2 text-left text-[11px] font-medium uppercase tracking-wide text-gray-400 align-bottom"></th>
+            <th v-for="h in colHeaders" :key="h"
+              class="px-3 py-2 text-right text-[11px] font-medium uppercase tracking-wide text-gray-400 align-bottom">
+              {{ h }}
             </th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td v-for="c in tableCols" :key="c.label"
-              class="px-3 pt-3 font-mono text-xl font-semibold whitespace-nowrap" :style="{ color: c.color }">
-              {{ c.value }}
+          <tr v-for="row in assetRows" :key="row.label" class="border-b border-white/5 last:border-0">
+            <td class="px-3 py-3 text-sm font-semibold whitespace-nowrap" :style="{ color: row.color }">{{ row.label }}</td>
+            <td v-for="(c, i) in row.cells" :key="i"
+              class="px-3 py-3 text-right font-mono text-base font-semibold whitespace-nowrap"
+              :style="{ color: c === '\u2014' ? '#525252' : row.color }">
+              {{ c }}
             </td>
           </tr>
         </tbody>
@@ -172,18 +175,39 @@ const natMcapLabel = computed(() => {
   return fmtMcapM(natMcapM())
 })
 
-const tableCols = computed(() => {
+const DASH = '\u2014'
+const colHeaders = ['Market cap', 'Price', 'Subsidy / block', 'Subsidy / year', 'Fees / block', 'Total annual security']
+
+const assetRows = computed(() => {
   const r = readout.value
+  const on = state.nat
+  const NATON = '#00FF94'
+  const NATOFF = '#e0533d'
+  const btcTotal = (r.subsidy + r.fees) * BLOCKS_PER_YEAR
+  const natTotal = r.nat * BLOCKS_PER_YEAR
   return [
-    { label: 'Bitcoin market cap', value: fmtUSD(r.btcMcap), color: '#F7931A' },
-    { label: 'Bitcoin price', value: fmtUSD(r.btcPrice), color: '#F7931A' },
-    { label: 'BTC subsidy / block', value: fmtUSD(r.subsidy), color: '#F7931A' },
-    { label: 'BTC subsidy / year', value: fmtUSD(r.subsidy * BLOCKS_PER_YEAR), color: '#F7931A' },
-    { label: 'Fees / block', value: fmtUSD(r.fees), color: '#F5C542' },
-    { label: '$NAT value / block', value: state.nat ? fmtUSD(r.nat) : '$0', color: state.nat ? '#00FF94' : '#e0533d' },
-    { label: '$NAT subsidy / year', value: state.nat ? fmtUSD(r.nat * BLOCKS_PER_YEAR) : '$0', color: state.nat ? '#00FF94' : '#e0533d' },
-    { label: 'Total annual security', value: fmtUSD(r.annualSecurity), color: '#FFFFFF' },
-    { label: 'Security % of BTC mcap', value: fmtPct(r.btcMcap > 0 ? (r.annualSecurity / r.btcMcap) * 100 : 0), color: '#FFFFFF' },
+    {
+      label: 'Bitcoin', color: '#F7931A',
+      cells: [
+        fmtUSD(r.btcMcap),
+        fmtUSD(r.btcPrice),
+        fmtUSD(r.subsidy),
+        fmtUSD(r.subsidy * BLOCKS_PER_YEAR),
+        fmtUSD(r.fees),
+        fmtUSD(btcTotal),
+      ],
+    },
+    {
+      label: '$NAT', color: on ? NATON : NATOFF,
+      cells: [
+        on ? fmtUSD(natMcapM() * 1e6) : '$0',
+        DASH,
+        on ? fmtUSD(r.nat) : '$0',
+        on ? fmtUSD(r.nat * BLOCKS_PER_YEAR) : '$0',
+        DASH,
+        on ? fmtUSD(natTotal) : '$0',
+      ],
+    },
   ]
 })
 
