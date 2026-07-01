@@ -127,13 +127,7 @@ const option = computed<EChartsOption>(() => {
       label: { show: false },
     })
   }
-  // interactive year marker: a single vertical line that slides horizontally as the
-  // Year slider changes (its own series so the halving bars stay put).
-  const yearMl: any[] = [{
-    xAxis: yr,
-    lineStyle: { color: TERT, type: [3, 3], width: 1.2, opacity: 0.85 },
-    label: { show: true, position: 'end', formatter: () => String(yr), color: textCol(), fontFamily: 'monospace', fontSize: 11 },
-  }]
+  // (year marker is rendered as a plain line series below, not a markLine)
 
   return {
     backgroundColor: 'transparent',
@@ -245,16 +239,19 @@ const option = computed<EChartsOption>(() => {
         },
       },
       {
-        // year marker on its own series: the single vertical line translates horizontally
-        // (animated position update) while the halving bars above stay fixed.
+        // year marker as a plain 2-point vertical line (full y-extent). animation:false
+        // at the series level means it never draws bottom-to-top: it just re-renders at
+        // the selected year's x, tracking horizontally with the slider. markLines were
+        // replaced here because their appear/update animation grows the line vertically.
         name: 'Year marker', type: 'line', symbol: 'none', yAxisIndex: 0,
-        data: [], silent: true, z: 6,
-        markLine: {
-          // animation off so the line never redraws bottom-to-top; it simply tracks
-          // horizontally to the selected year as the slider moves.
-          silent: true, symbol: 'none', animation: false,
-          data: yearMl,
+        z: 6, silent: true, animation: false,
+        lineStyle: { color: TERT, type: [3, 3], width: 1.2, opacity: 0.85 },
+        endLabel: {
+          show: true, formatter: () => String(yr),
+          color: textCol(), fontFamily: 'monospace', fontSize: 11,
+          offset: [4, 2],
         },
+        data: [[yr, 1], [yr, 1e10]],
       },
     ] as any,
     graphic: [
