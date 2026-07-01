@@ -1,7 +1,20 @@
 <template>
   <div class="w-full">
+    <!-- TOUR CTA -->
+    <div v-if="!tour.active" class="mb-4">
+      <button @click="startTour"
+        class="group w-full flex items-center gap-3 rounded-xl border border-[#00FF94]/30 bg-[#00FF94]/[0.06] px-4 py-3 text-left transition-colors hover:bg-[#00FF94]/[0.10]">
+        <span class="tour-pulse flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#00FF94] text-black text-sm">&#9654;</span>
+        <span class="min-w-0">
+          <span class="block text-sm font-semibold text-gray-100">New here? Take the 90-second tour</span>
+          <span class="block text-xs text-gray-400">The whole argument, hands-free. Pause or take over anytime.</span>
+        </span>
+        <span class="ml-auto hidden sm:block text-[#00FF94] text-sm font-medium">Start tour &rarr;</span>
+      </button>
+    </div>
+
     <!-- FULL-WIDTH CHART -->
-    <div class="w-full rounded-xl border border-white/10 bg-white/[0.02] p-3 sm:p-4">
+    <div data-tour="chart" class="w-full rounded-xl border border-white/10 bg-white/[0.02] p-3 sm:p-4">
       <PowerLawChart
         v-if="state.priceModel === 'pl'"
         :power-law-price="powerLawPrice"
@@ -29,7 +42,7 @@
 
     <!-- TOGGLES: scenario config, right below the chart -->
     <div class="mt-4 rounded-lg border border-white/10 bg-white/[0.02] p-4 flex flex-wrap gap-x-8 gap-y-4 items-start">
-      <div>
+      <div data-tour="nat">
         <div class="text-sm font-medium text-gray-200 mb-2">NAT layer</div>
         <div class="flex gap-2">
           <button @click="state.nat = false" :class="segBtn(!state.nat)">Without NAT</button>
@@ -79,7 +92,7 @@
 
     <!-- SLIDERS: the two primary controls that drive the data below -->
     <div class="mt-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
-      <div class="rounded-lg border border-white/10 bg-white/[0.02] p-4">
+      <div data-tour="year" class="rounded-lg border border-white/10 bg-white/[0.02] p-4">
         <div class="flex items-center justify-between mb-2">
           <label class="text-sm font-medium text-gray-200">Year</label>
           <span class="font-mono text-[#F7931A]">{{ state.year }}</span>
@@ -87,7 +100,7 @@
         <input type="range" :min="2026" :max="2140" step="1" v-model.number="state.year" class="sb-range w-full" />
         <div class="flex justify-between text-[11px] text-gray-500 mt-1"><span>2026</span><span>2140</span></div>
       </div>
-      <div class="rounded-lg border border-white/10 bg-white/[0.02] p-4">
+      <div data-tour="mcap" class="rounded-lg border border-white/10 bg-white/[0.02] p-4">
         <div class="flex items-center justify-between mb-2">
           <label class="text-sm font-medium text-gray-200">$NAT market cap</label>
           <span class="font-mono text-[#00FF94]">{{ natMcapLabel }}</span>
@@ -101,7 +114,7 @@
     </div>
 
     <!-- DATA TABLE: what the user reads as the sliders move -->
-    <div class="mt-4 rounded-lg border border-white/10 bg-white/[0.02] p-4 overflow-x-auto">
+    <div data-tour="table" class="mt-4 rounded-lg border border-white/10 bg-white/[0.02] p-4 overflow-x-auto">
       <table class="w-full min-w-[760px] border-collapse">
         <thead>
           <tr class="border-b border-white/10">
@@ -129,11 +142,36 @@
       Scenarios, not forecasts. $NAT's contribution is demand-driven and reflexive, not guaranteed. Power-law price is a
       long-run projection calibrated to today's anchor. Model ported from the NAT security-budget explorable.
     </p>
+
+    <!-- TOUR OVERLAY -->
+    <div v-if="tour.active" class="fixed inset-x-0 bottom-0 z-[60] px-3 pb-3 pointer-events-none">
+      <div class="pointer-events-auto mx-auto max-w-3xl rounded-xl border border-white/10 bg-[#0b0b0d]/95 backdrop-blur p-4 shadow-2xl">
+        <div class="h-1 w-full rounded-full bg-white/10 overflow-hidden mb-3">
+          <div class="h-full rounded-full bg-[#00FF94] transition-all duration-500" :style="{ width: barPct + '%' }"></div>
+        </div>
+        <div class="flex items-start gap-3">
+          <span v-if="tourSteps[tour.step].badge"
+            class="shrink-0 rounded bg-[#00FF94]/15 text-[#00FF94] text-[10px] font-bold px-2 py-1 tracking-wide">
+            {{ tourSteps[tour.step].badge }}
+          </span>
+          <p class="text-sm leading-relaxed text-gray-100">{{ tourSteps[tour.step].caption }}</p>
+        </div>
+        <div class="mt-3 flex items-center gap-2">
+          <span class="text-[11px] text-gray-500 font-mono">{{ tour.step + 1 }} / {{ tourSteps.length }}</span>
+          <div class="ml-auto flex items-center gap-2">
+            <button @click="prev" :disabled="tour.step === 0" class="tour-btn disabled:opacity-30">Back</button>
+            <button @click="togglePlay" class="tour-btn">{{ tour.playing ? 'Pause' : 'Play' }}</button>
+            <button v-if="tour.step < tourSteps.length - 1" @click="next()" class="tour-btn-primary">Next</button>
+            <button @click="exitTour" class="tour-btn">{{ tour.step === tourSteps.length - 1 ? 'Done' : 'Exit' }}</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, onBeforeUnmount, reactive, nextTick } from 'vue'
 import SecurityBudgetChart from './SecurityBudgetChart.vue'
 import PowerLawChart from './PowerLawChart.vue'
 import { useSecurityBudget, BLOCKS_PER_YEAR } from '../composables/useSecurityBudget'
@@ -241,7 +279,130 @@ function segBtn(active: boolean): string {
   ].join(' ')
 }
 
+/* ---------------- GUIDED TOUR ---------------- */
+interface TourStep { caption: string; badge?: string; spot?: string; dwell: number; apply?: () => void }
+
+const tour = reactive({ active: false, step: 0, playing: false })
+const barPct = computed(() => ((tour.step + 1) / tourSteps.length) * 100)
+
+let tweenRaf = 0
+function tween(get: () => number, set: (v: number) => void, target: number, ms = 1400): void {
+  cancelAnimationFrame(tweenRaf)
+  const start = get()
+  const t0 = performance.now()
+  const frame = (now: number) => {
+    const p = Math.min(1, (now - t0) / ms)
+    const e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2
+    set(Math.round(start + (target - start) * e))
+    if (p < 1) tweenRaf = requestAnimationFrame(frame)
+  }
+  tweenRaf = requestAnimationFrame(frame)
+}
+
+let lastSpot: HTMLElement | null = null
+function setSpot(sel?: string): void {
+  if (lastSpot) { lastSpot.classList.remove('tour-spotlight'); lastSpot = null }
+  if (!sel) return
+  const el = document.querySelector(sel) as HTMLElement | null
+  if (el) {
+    el.classList.add('tour-spotlight')
+    lastSpot = el
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  }
+}
+
+const tourSteps: TourStep[] = [
+  {
+    caption: "Bitcoin's security budget is the total value paid to miners each year to keep the chain secure. Today it is almost entirely the block subsidy.",
+    spot: '[data-tour=chart]', dwell: 8000,
+    apply: () => { cancelAnimationFrame(tweenRaf); state.priceModel = 'pl'; state.nat = false; state.showSecurity = false; state.mcapSlider = 0; state.year = 2026 },
+  },
+  {
+    caption: "Every four years the subsidy halves. Watch the miner reward fall as we move through time.",
+    spot: '[data-tour=year]', dwell: 6500,
+    apply: () => tween(() => state.year, v => (state.year = v), 2060, 2800),
+  },
+  {
+    caption: "By 2140 the block subsidy reaches zero. New bitcoin issuance ends forever.",
+    spot: '[data-tour=chart]', dwell: 7000,
+    apply: () => tween(() => state.year, v => (state.year = v), 2140, 2800),
+  },
+  {
+    caption: "Fees will not fill the gap. They are a fixed dollar amount, so as the price climbs their share only shrinks.",
+    spot: '[data-tour=table]', dwell: 8000,
+    apply: () => { state.showSecurity = true },
+  },
+  {
+    caption: "So Bitcoin's security keeps falling as a share of its own market cap. This is the security budget problem.",
+    spot: '[data-tour=chart]', dwell: 7500,
+    apply: () => { state.showSecurity = true },
+  },
+  {
+    caption: "Now add the $NAT layer. $NAT pays miners on top of the subsidy.",
+    badge: 'TRY IT', spot: '[data-tour=nat]', dwell: 6500,
+    apply: () => { state.nat = true },
+  },
+  {
+    caption: "Drag $NAT's market cap up and the total security budget recovers, even after the subsidy is gone.",
+    badge: 'TRY IT', spot: '[data-tour=mcap]', dwell: 7500,
+    apply: () => { state.nat = true; tween(() => state.mcapSlider, v => (state.mcapSlider = v), 700, 2800) },
+  },
+  {
+    caption: "That is the whole argument. As the subsidy fades, $NAT can refill the security budget. Now try the sliders yourself.",
+    spot: '[data-tour=table]', dwell: 9000,
+    apply: () => {},
+  },
+]
+
+let tourTimer: ReturnType<typeof setTimeout> | undefined
+function schedule(): void {
+  clearTimeout(tourTimer)
+  if (!tour.playing) return
+  tourTimer = setTimeout(() => next(), tourSteps[tour.step].dwell)
+}
+function applyStep(i: number): void {
+  tour.step = i
+  tourSteps[i].apply?.()
+  nextTick(() => setSpot(tourSteps[i].spot))
+}
+function startTour(): void {
+  tour.active = true
+  tour.playing = true
+  applyStep(0)
+  schedule()
+}
+function next(): void {
+  if (tour.step < tourSteps.length - 1) {
+    applyStep(tour.step + 1)
+    schedule()
+  } else {
+    tour.playing = false
+    clearTimeout(tourTimer)
+  }
+}
+function prev(): void {
+  if (tour.step > 0) {
+    tour.playing = false
+    clearTimeout(tourTimer)
+    cancelAnimationFrame(tweenRaf)
+    applyStep(tour.step - 1)
+  }
+}
+function togglePlay(): void {
+  tour.playing = !tour.playing
+  if (tour.playing) schedule()
+  else clearTimeout(tourTimer)
+}
+function exitTour(): void {
+  tour.active = false
+  tour.playing = false
+  clearTimeout(tourTimer)
+  cancelAnimationFrame(tweenRaf)
+  setSpot()
+}
+
 onMounted(() => { fetchLivePrice() })
+onBeforeUnmount(() => { clearTimeout(tourTimer); cancelAnimationFrame(tweenRaf); setSpot() })
 </script>
 
 <style scoped>
@@ -270,5 +431,39 @@ onMounted(() => { fetchLivePrice() })
   background: #F7931A;
   cursor: pointer;
   border: 2px solid #000;
+}
+
+.tour-btn {
+  padding: 0.4rem 0.7rem;
+  border-radius: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.06);
+  color: #d1d5db;
+  transition: background-color 0.15s ease;
+}
+.tour-btn:hover { background: rgba(255, 255, 255, 0.12); }
+.tour-btn-primary {
+  padding: 0.4rem 0.85rem;
+  border-radius: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: #00FF94;
+  color: #000;
+}
+.tour-pulse { animation: tourPulse 2s ease-in-out infinite; }
+@keyframes tourPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0, 255, 148, 0.5); }
+  50% { box-shadow: 0 0 0 8px rgba(0, 255, 148, 0); }
+}
+</style>
+
+<style>
+.tour-spotlight {
+  position: relative;
+  z-index: 45;
+  border-radius: 12px;
+  box-shadow: 0 0 0 3px #00FF94, 0 0 0 9999px rgba(0, 0, 0, 0.62);
+  transition: box-shadow 0.35s ease;
 }
 </style>
