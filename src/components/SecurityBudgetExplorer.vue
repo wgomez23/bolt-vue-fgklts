@@ -176,34 +176,43 @@ const natMcapLabel = computed(() => {
 })
 
 const DASH = '\u2014'
-const colHeaders = ['Market cap', 'Price', 'Subsidy / block', 'Subsidy / year', 'Fees / block', 'Total annual security']
+const NAT_SUPPLY = 391e12   // ~391T $NAT total supply, for implied price
+const colHeaders = ['Price', 'Subsidy / block', 'Subsidy / year', 'Fees / block', 'Fees / year', 'Total annual security']
+
+function fmtPrice(v: number): string {
+  if (v >= 1) return fmtUSD(v)
+  if (v >= 0.01) return '$' + v.toFixed(3)
+  return '$' + v.toPrecision(2)
+}
 
 const assetRows = computed(() => {
   const r = readout.value
   const on = state.nat
   const NATON = '#00FF94'
   const NATOFF = '#e0533d'
+  const feesYear = r.fees * BLOCKS_PER_YEAR
   const btcTotal = (r.subsidy + r.fees) * BLOCKS_PER_YEAR
   const natTotal = r.nat * BLOCKS_PER_YEAR
+  const natPrice = (natMcapM() * 1e6) / NAT_SUPPLY
   return [
     {
       label: 'Bitcoin', color: '#F7931A',
       cells: [
-        fmtUSD(r.btcMcap),
         fmtUSD(r.btcPrice),
         fmtUSD(r.subsidy),
         fmtUSD(r.subsidy * BLOCKS_PER_YEAR),
         fmtUSD(r.fees),
+        fmtUSD(feesYear),
         fmtUSD(btcTotal),
       ],
     },
     {
       label: '$NAT', color: on ? NATON : NATOFF,
       cells: [
-        on ? fmtUSD(natMcapM() * 1e6) : '$0',
-        DASH,
+        on ? fmtPrice(natPrice) : '$0',
         on ? fmtUSD(r.nat) : '$0',
         on ? fmtUSD(r.nat * BLOCKS_PER_YEAR) : '$0',
+        DASH,
         DASH,
         on ? fmtUSD(natTotal) : '$0',
       ],
@@ -211,11 +220,11 @@ const assetRows = computed(() => {
     {
       label: 'Total', color: '#e5e7eb', total: true,
       cells: [
-        fmtUSD(r.btcMcap + (on ? natMcapM() * 1e6 : 0)),
         DASH,
         fmtUSD(r.subsidy + (on ? r.nat : 0)),
         fmtUSD((r.subsidy + (on ? r.nat : 0)) * BLOCKS_PER_YEAR),
         fmtUSD(r.fees),
+        fmtUSD(feesYear),
         fmtUSD(btcTotal + (on ? natTotal : 0)),
       ],
     },
