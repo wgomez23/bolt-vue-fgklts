@@ -250,8 +250,9 @@ const option = computed<EChartsOption>(() => {
         name: 'Year marker', type: 'line', symbol: 'none', yAxisIndex: 0,
         data: [], silent: true, z: 6,
         markLine: {
-          silent: true, symbol: 'none',
-          animation: !props.printMode, animationDurationUpdate: 350, animationEasingUpdate: 'cubicOut',
+          // animation off so the line never redraws bottom-to-top; it simply tracks
+          // horizontally to the selected year as the slider moves.
+          silent: true, symbol: 'none', animation: false,
           data: yearMl,
         },
       },
