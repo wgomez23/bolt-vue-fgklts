@@ -117,20 +117,23 @@ const option = computed<EChartsOption>(() => {
   // the collapsed tail sits flat on the bottom.
   const stairData: [number, number][] = props.subsidyBtcSeries.map(([x, v]) => [x, Math.max(1e-3, v)])
 
-  // halving markers + interactive year marker
-  const mlData: any[] = []
+  // halving markers (year-independent, static): green dashed verticals at each halving.
+  // Animation is disabled on this markLine so the bars never redraw when the year moves.
+  const halvingMl: any[] = []
   for (let h = 2012; h <= YR_HI; h += 4) {
-    mlData.push({
+    halvingMl.push({
       xAxis: h,
       lineStyle: { color: TEAL, type: [2, 4], width: 1, opacity: h <= 2040 ? 0.5 : 0.2 },
       label: { show: false },
     })
   }
-  mlData.push({
+  // interactive year marker: a single vertical line that slides horizontally as the
+  // Year slider changes (its own series so the halving bars stay put).
+  const yearMl: any[] = [{
     xAxis: yr,
     lineStyle: { color: TERT, type: [3, 3], width: 1.2, opacity: 0.85 },
     label: { show: true, position: 'end', formatter: () => String(yr), color: textCol(), fontFamily: 'monospace', fontSize: 11 },
-  })
+  }]
 
   return {
     backgroundColor: 'transparent',
@@ -232,12 +235,24 @@ const option = computed<EChartsOption>(() => {
       {
         name: 'BTC price', type: 'line', symbol: 'none', yAxisIndex: 0,
         data: priceData, color: WHITE, lineStyle: { color: WHITE, width: 2.5 }, z: 5,
-        markLine: { silent: true, symbol: 'none', data: mlData },
+        // static halving bars: animation off so they hold position across year changes
+        markLine: { silent: true, symbol: 'none', animation: false, data: halvingMl },
         markPoint: {
           silent: true, symbol: 'circle', symbolSize: 9,
           itemStyle: { color: WHITE, borderColor: props.printMode ? '#f8f7f4' : '#0a0a0a', borderWidth: 1.5 },
           label: { show: false },
           data: [{ coord: [yr, plp(yr)] }],
+        },
+      },
+      {
+        // year marker on its own series: the single vertical line translates horizontally
+        // (animated position update) while the halving bars above stay fixed.
+        name: 'Year marker', type: 'line', symbol: 'none', yAxisIndex: 0,
+        data: [], silent: true, z: 6,
+        markLine: {
+          silent: true, symbol: 'none',
+          animation: !props.printMode, animationDurationUpdate: 350, animationEasingUpdate: 'cubicOut',
+          data: yearMl,
         },
       },
     ] as any,
