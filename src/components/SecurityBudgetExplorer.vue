@@ -84,8 +84,8 @@
           <label class="text-sm font-medium text-gray-200">Year</label>
           <span class="font-mono text-[#F7931A]">{{ state.year }}</span>
         </div>
-        <input type="range" :min="2024" :max="2140" step="1" v-model.number="state.year" class="sb-range w-full" />
-        <div class="flex justify-between text-[11px] text-gray-500 mt-1"><span>2024</span><span>2140</span></div>
+        <input type="range" :min="2026" :max="2140" step="1" v-model.number="state.year" class="sb-range w-full" />
+        <div class="flex justify-between text-[11px] text-gray-500 mt-1"><span>2026</span><span>2140</span></div>
       </div>
       <div class="rounded-lg border border-white/10 bg-white/[0.02] p-4">
         <div class="flex items-center justify-between mb-2">
@@ -113,7 +113,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="row in assetRows" :key="row.label" class="border-b border-white/5 last:border-0">
+          <tr v-for="row in assetRows" :key="row.label" class="border-b border-white/5 last:border-0" :class="row.total ? 'border-t border-white/15' : ''">
             <td class="px-3 py-3 text-sm font-semibold whitespace-nowrap" :style="{ color: row.color }">{{ row.label }}</td>
             <td v-for="(c, i) in row.cells" :key="i"
               class="px-3 py-3 text-right font-mono text-base font-semibold whitespace-nowrap"
@@ -206,6 +206,17 @@ const assetRows = computed(() => {
         on ? fmtUSD(r.nat * BLOCKS_PER_YEAR) : '$0',
         DASH,
         on ? fmtUSD(natTotal) : '$0',
+      ],
+    },
+    {
+      label: 'Total', color: '#e5e7eb', total: true,
+      cells: [
+        fmtUSD(r.btcMcap + (on ? natMcapM() * 1e6 : 0)),
+        DASH,
+        fmtUSD(r.subsidy + (on ? r.nat : 0)),
+        fmtUSD((r.subsidy + (on ? r.nat : 0)) * BLOCKS_PER_YEAR),
+        fmtUSD(r.fees),
+        fmtUSD(btcTotal + (on ? natTotal : 0)),
       ],
     },
   ]

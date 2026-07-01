@@ -40,7 +40,7 @@ export interface SBState {
 
 export function useSecurityBudget() {
   const state = reactive<SBState>({
-    year: 2140,
+    year: 2026,
     nat: true,
     fee: 'lo',
     mcapSlider: 0,
