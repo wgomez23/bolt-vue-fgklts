@@ -178,7 +178,7 @@ export function useSecurityBudget() {
 
   const subsidySeries = computed(() => subsidyStepSeries())
   const subsidyBtcSeries = computed(() => subsidyBtcStep())
-  const feeLevel = computed(() => feeUSD() * priceMult())        // flat across years
+  const feeLevel = computed(() => feeUSD())                       // fixed USD (share shrinks as price climbs); do NOT scale by price
   const natLevel = computed(() => natUSD())                      // flat across years
 
   // dynamic y-axis ceiling so price-scaled subsidy never clips
