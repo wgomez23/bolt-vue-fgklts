@@ -76,21 +76,15 @@ const option = computed<EChartsOption>(() => {
       name: '$NAT', type: 'line', symbol: 'none', color: TEAL, data: natData.value,
       lineStyle: { color: TEAL, width: 2.5 },
       z: 4,
-      markLine: {
-        silent: true, symbol: 'none',
-        lineStyle: { color: axisText(), type: 'dashed', width: 1, opacity: 0.7 },
-        label: { show: false },
-        data: [{ xAxis: props.year }],
-      },
     })
-  } else {
-    series[0].markLine = {
-      silent: true, symbol: 'none',
-      lineStyle: { color: axisText(), type: 'dashed', width: 1, opacity: 0.7 },
-      label: { show: false },
-      data: [{ xAxis: props.year }],
-    }
   }
+  // Year marker: static plain line series (animation:false) so it never redraws
+  // bottom-to-top when the year changes; it only tracks horizontally.
+  series.push({
+    name: 'Year', type: 'line', symbol: 'none', silent: true, animation: false, z: 6,
+    lineStyle: { color: axisText(), type: 'dashed', width: 1, opacity: 0.7 },
+    data: [[props.year, 10], [props.year, props.yMax]],
+  })
 
   return {
     backgroundColor: 'transparent',

@@ -102,7 +102,7 @@
 
     <!-- DATA TABLE: what the user reads as the sliders move -->
     <div class="mt-4 rounded-lg border border-white/10 bg-white/[0.02] p-4 overflow-x-auto">
-      <table class="w-full min-w-[560px] border-collapse">
+      <table class="w-full min-w-[680px] border-collapse">
         <thead>
           <tr class="border-b border-white/10">
             <th v-for="c in tableCols" :key="c.label"
@@ -156,19 +156,33 @@ function fmtMcapM(m: number): string {
   return '$' + Math.round(m) + 'M'
 }
 
-const natMcapLabel = computed(() => fmtMcapM(natMcapM()))
+function fmtPct(p: number): string {
+  if (p >= 10) return p.toFixed(0) + '%'
+  if (p >= 1) return p.toFixed(1) + '%'
+  if (p >= 0.01) return p.toFixed(2) + '%'
+  return p.toPrecision(1) + '%'
+}
+
+const natMcapLabel = computed(() => {
+  if (state.natScale === 'rel') {
+    const m = readout.value.btcMcap
+    const pct = m > 0 ? (natMcapM() * 1e6 / m) * 100 : 0
+    return fmtPct(pct)
+  }
+  return fmtMcapM(natMcapM())
+})
 
 const tableCols = computed(() => {
   const r = readout.value
-  const cols = [
+  return [
     { label: 'Bitcoin market cap', value: fmtUSD(r.btcMcap), color: '#F7931A' },
+    { label: 'Bitcoin price', value: fmtUSD(r.btcPrice), color: '#F7931A' },
     { label: 'BTC subsidy / block', value: fmtUSD(r.subsidy), color: '#F7931A' },
     { label: 'BTC subsidy / year', value: fmtUSD(r.subsidy * BLOCKS_PER_YEAR), color: '#F7931A' },
     { label: 'Fees / block', value: fmtUSD(r.fees), color: '#F5C542' },
+    { label: '$NAT value / block', value: state.nat ? fmtUSD(r.nat) : '$0', color: state.nat ? '#00FF94' : '#e0533d' },
+    { label: 'Total annual security', value: fmtUSD(r.annualSecurity), color: '#FFFFFF' },
   ]
-  if (state.nat) cols.push({ label: '$NAT value / block', value: fmtUSD(r.nat), color: '#00FF94' })
-  cols.push({ label: 'Total annual security', value: fmtUSD(r.annualSecurity), color: '#FFFFFF' })
-  return cols
 })
 
 function segBtn(active: boolean): string {
