@@ -6,6 +6,8 @@
         v-if="state.priceModel === 'pl'"
         :power-law-price="powerLawPrice"
         :security-share-pct="securitySharePct"
+        :subsidy-btc-series="subsidyBtcSeries"
+        :show-security="state.showSecurity"
         :year="state.year"
         :fee="state.fee"
         :height="chartHeight"
@@ -78,6 +80,13 @@
             <button @click="state.natScale = 'rel'" :class="segBtn(state.natScale === 'rel')">% of BTC</button>
           </div>
         </div>
+        <div v-if="state.priceModel === 'pl'">
+          <div class="text-sm font-medium text-gray-200 mb-2">Security % line</div>
+          <div class="flex gap-2">
+            <button @click="state.showSecurity = false" :class="segBtn(!state.showSecurity)">Hide</button>
+            <button @click="state.showSecurity = true" :class="segBtn(state.showSecurity)">Show</button>
+          </div>
+        </div>
       </div>
 
       <!-- BTC price model -->
@@ -120,7 +129,7 @@ import { useSecurityBudget } from '../composables/useSecurityBudget'
 withDefaults(defineProps<{ chartHeight?: number }>(), { chartHeight: 460 })
 
 const {
-  state, subsidySeries, feeLevel, natLevel, yMax, readout, powerLaw, natMcapM, fetchLivePrice,
+  state, subsidySeries, subsidyBtcSeries, feeLevel, natLevel, yMax, readout, powerLaw, natMcapM, fetchLivePrice,
   powerLawPrice, securitySharePct,
 } = useSecurityBudget()
 

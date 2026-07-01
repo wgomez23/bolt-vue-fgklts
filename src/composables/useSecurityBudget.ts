@@ -33,6 +33,7 @@ export interface SBState {
   mcapSlider: number        // 0..1000
   priceModel: PriceModel
   natScale: NatScale
+  showSecurity: boolean       // Power Law chart: overlay the security-% decay line
   customPrice: number
   livePrice: number | null  // live spot when available
 }
@@ -45,6 +46,7 @@ export function useSecurityBudget() {
     mcapSlider: 0,
     priceModel: 'today',
     natScale: 'abs',
+    showSecurity: false,
     customPrice: 150000,
     livePrice: null,
   })
@@ -72,6 +74,28 @@ export function useSecurityBudget() {
   // circulating supply by year (BTC), halving-consistent
   function supplyAt(year: number): number {
     return year <= 2009 ? 1 : SUPPLY_BTC * (1 - Math.pow(2, -(year - 2008) / 4))
+  }
+
+  // raw block subsidy in BTC (price-independent), full halving schedule incl. history.
+  // This is the "halving staircase": miner issuance is cut in half every ~4 years
+  // regardless of price, collapsing toward 0 by ~2140.
+  function subsidyBtcAt(year: number): number {
+    if (year >= 2140) return 0
+    const h = Math.floor((year - 2024) / 4)
+    return SUBSIDY_BTC_24 / Math.pow(2, h)
+  }
+
+  // staircase points across the Power Law chart span (2011..2140), flat at 0 past 2140
+  function subsidyBtcStep(): [number, number][] {
+    const pts: [number, number][] = [[2011, subsidyBtcAt(2011)]]
+    let prev = 2011
+    for (let hy = 2012; hy <= 2140; hy += 4) {
+      pts.push([hy, subsidyBtcAt(prev)])   // hold prior level up to the halving
+      pts.push([hy, subsidyBtcAt(hy)])     // vertical step down
+      prev = hy
+    }
+    pts.push([2140, 0])
+    return pts
   }
 
   function priceMult(): number {
@@ -126,6 +150,7 @@ export function useSecurityBudget() {
   }
 
   const subsidySeries = computed(() => subsidyStepSeries())
+  const subsidyBtcSeries = computed(() => subsidyBtcStep())
   const feeLevel = computed(() => feeUSD() * priceMult())        // flat across years
   const natLevel = computed(() => natUSD())                      // flat across years
 
@@ -192,10 +217,10 @@ export function useSecurityBudget() {
   return {
     state,
     // model fns
-    subsidyUSD, feeUSD, powerLawMult, powerLawPrice, supplyAt,
+    subsidyUSD, feeUSD, powerLawMult, powerLawPrice, supplyAt, subsidyBtcAt,
     priceMult, btcMcapUSD, mcapMult, natMcapM, natUSD, securitySharePct,
     // series + computed
-    subsidySeries, feeLevel, natLevel, yMax, readout, powerLaw,
+    subsidySeries, subsidyBtcSeries, feeLevel, natLevel, yMax, readout, powerLaw,
     fetchLivePrice,
   }
 }

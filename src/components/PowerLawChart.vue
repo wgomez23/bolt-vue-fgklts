@@ -29,6 +29,8 @@ use([
 const props = withDefaults(defineProps<{
   powerLawPrice: (y: number) => number
   securitySharePct: (y: number) => number
+  subsidyBtcSeries: [number, number][]
+  showSecurity: boolean
   year: number
   fee: string
   printMode?: boolean
@@ -39,6 +41,7 @@ const props = withDefaults(defineProps<{
 const WHITE = '#fafafa'
 const RED = '#e0533d'
 const TEAL = '#5daa3e'
+const ORANGE = '#f7931a'
 const TERT = '#737373'
 const SEC = '#a3a3a3'
 const grid = () => (props.printMode ? 'rgba(0,0,0,0.10)' : '#1f1f1f')
@@ -95,6 +98,10 @@ const option = computed<EChartsOption>(() => {
   // security line (right axis, collapsing) — start at 2013 to skip mid-year halving boundary
   const secData: [number, number][] = []
   for (let y = 2013; y <= YR_HI; y++) secData.push([y, ssp(y)])
+
+  // always-on halving staircase (raw BTC subsidy, hidden axis). Clamp 0 -> axis floor so
+  // the collapsed tail sits flat on the bottom.
+  const stairData: [number, number][] = props.subsidyBtcSeries.map(([x, v]) => [x, Math.max(1e-3, v)])
 
   // halving markers + interactive year marker
   const mlData: any[] = []
@@ -167,6 +174,10 @@ const option = computed<EChartsOption>(() => {
           },
         },
       },
+      {
+        // hidden axis: raw BTC block subsidy for the always-on halving staircase
+        type: 'log', min: 1e-3, max: 60, show: false, position: 'right',
+      },
     ],
     series: [
       {
@@ -174,6 +185,13 @@ const option = computed<EChartsOption>(() => {
         data: bandData, yAxisIndex: 0, z: 1, silent: true,
       },
       {
+        // always-on halving staircase (hidden axis): miner issuance cut in half every ~4y
+        name: 'Subsidy (halvings)', type: 'line', symbol: 'none', yAxisIndex: 2,
+        data: stairData, color: ORANGE, z: 3, silent: true,
+        lineStyle: { color: ORANGE, width: 1.8, opacity: 0.75 },
+        areaStyle: { color: ORANGE, opacity: 0.06 },
+      },
+      ...(props.showSecurity ? [{
         name: 'Security %', type: 'line', symbol: 'none', yAxisIndex: 1,
         data: secData, color: RED, lineStyle: { color: RED, width: 2.5 }, z: 4,
         markPoint: {
@@ -182,7 +200,7 @@ const option = computed<EChartsOption>(() => {
           label: { show: false },
           data: [{ coord: [yr, ssp(yr)] }],
         },
-      },
+      }] : []),
       {
         name: 'BTC price', type: 'line', symbol: 'none', yAxisIndex: 0,
         data: priceData, color: WHITE, lineStyle: { color: WHITE, width: 2.5 }, z: 5,
@@ -194,7 +212,7 @@ const option = computed<EChartsOption>(() => {
           data: [{ coord: [yr, plp(yr)] }],
         },
       },
-    ],
+    ] as any,
     graphic: [
       {
         type: 'group', left: 72, top: 32, z: 20,
