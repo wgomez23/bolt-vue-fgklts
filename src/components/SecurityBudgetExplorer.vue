@@ -102,7 +102,7 @@
 
     <!-- DATA TABLE: what the user reads as the sliders move -->
     <div class="mt-4 rounded-lg border border-white/10 bg-white/[0.02] p-4 overflow-x-auto">
-      <table class="w-full min-w-[680px] border-collapse">
+      <table class="w-full min-w-[780px] border-collapse">
         <thead>
           <tr class="border-b border-white/10">
             <th v-for="c in tableCols" :key="c.label"
@@ -181,6 +181,7 @@ const tableCols = computed(() => {
     { label: 'BTC subsidy / year', value: fmtUSD(r.subsidy * BLOCKS_PER_YEAR), color: '#F7931A' },
     { label: 'Fees / block', value: fmtUSD(r.fees), color: '#F5C542' },
     { label: '$NAT value / block', value: state.nat ? fmtUSD(r.nat) : '$0', color: state.nat ? '#00FF94' : '#e0533d' },
+    { label: '$NAT subsidy / year', value: state.nat ? fmtUSD(r.nat * BLOCKS_PER_YEAR) : '$0', color: state.nat ? '#00FF94' : '#e0533d' },
     { label: 'Total annual security', value: fmtUSD(r.annualSecurity), color: '#FFFFFF' },
   ]
 })
