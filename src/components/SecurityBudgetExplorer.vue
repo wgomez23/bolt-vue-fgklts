@@ -5,9 +5,12 @@
       <PowerLawChart
         v-if="state.priceModel === 'pl'"
         :power-law-price="powerLawPrice"
-        :security-share-pct="securitySharePct"
+        :security-usd="securitySharePctUSD"
         :subsidy-btc-series="subsidyBtcSeries"
         :show-security="state.showSecurity"
+        :nat-on="state.nat"
+        :mcap-slider="state.mcapSlider"
+        :nat-scale="state.natScale"
         :year="state.year"
         :fee="state.fee"
         :height="chartHeight"
@@ -130,7 +133,7 @@ withDefaults(defineProps<{ chartHeight?: number }>(), { chartHeight: 460 })
 
 const {
   state, subsidySeries, subsidyBtcSeries, feeLevel, natLevel, yMax, readout, powerLaw, natMcapM, fetchLivePrice,
-  powerLawPrice, securitySharePct,
+  powerLawPrice, securitySharePctUSD,
 } = useSecurityBudget()
 
 function fmtUSD(v: number): string {

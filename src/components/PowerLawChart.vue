@@ -28,9 +28,12 @@ use([
 
 const props = withDefaults(defineProps<{
   powerLawPrice: (y: number) => number
-  securitySharePct: (y: number) => number
+  securityUsd: (y: number, includeNat: boolean) => number
   subsidyBtcSeries: [number, number][]
   showSecurity: boolean
+  natOn: boolean
+  mcapSlider: number
+  natScale: string
   year: number
   fee: string
   printMode?: boolean
@@ -43,6 +46,7 @@ const RED = '#e0533d'
 const TEAL = '#5daa3e'
 const ORANGE = '#f7931a'
 const TERT = '#737373'
+const NATG = '#00FF94'   // $NAT lift line
 const SEC = '#a3a3a3'
 const grid = () => (props.printMode ? 'rgba(0,0,0,0.10)' : '#1f1f1f')
 const axisLine = () => (props.printMode ? '#b8b2a6' : '#404040')
@@ -76,11 +80,14 @@ function fmtPct(v: number): string {
 }
 
 const option = computed<EChartsOption>(() => {
-  // touch reactive deps so the chart recomputes on year/fee changes
+  // touch reactive deps so the chart recomputes on year/fee/NAT/slider changes
   const yr = props.year
   const _feeKey = props.fee
+  const _natOn = props.natOn
+  const _mcap = props.mcapSlider
+  const _natScale = props.natScale
   const plp = props.powerLawPrice
-  const ssp = props.securitySharePct
+  const sec = props.securityUsd
 
   // band polygons (custom series): one polygon per band, drawn behind everything
   const bandData = [0, 1, 2, 3, 4].map((b) => ({ value: b }))
@@ -95,9 +102,16 @@ const option = computed<EChartsOption>(() => {
   // price line (the iconic climb)
   const priceData: [number, number][] = []
   for (let y = YR_LO; y <= YR_HI; y++) priceData.push([y, plp(y)])
-  // security line (right axis, collapsing) — start at 2013 to skip mid-year halving boundary
-  const secData: [number, number][] = []
-  for (let y = 2013; y <= YR_HI; y++) secData.push([y, ssp(y)])
+  // security-share lines (right axis). USD-equivalent share of BTC value spent on security.
+  // Baseline (no NAT) collapses toward 0 as subsidy halves + fees shrink vs a climbing price.
+  // With-NAT holds a flat floor (NAT tracks a % of BTC mcap, not the halving schedule) and the
+  // slider raises that floor. Start at 2024 to avoid power-law backcast distortion.
+  const secBase: [number, number][] = []
+  const secNat: [number, number][] = []
+  for (let y = 2024; y <= YR_HI; y++) {
+    secBase.push([y, sec(y, false)])
+    if (_natOn) secNat.push([y, sec(y, true)])
+  }
 
   // always-on halving staircase (raw BTC subsidy, hidden axis). Clamp 0 -> axis floor so
   // the collapsed tail sits flat on the bottom.
@@ -129,7 +143,8 @@ const option = computed<EChartsOption>(() => {
         let s = '<b>' + x + '</b>'
         for (const p of (Array.isArray(ps) ? ps : [ps])) {
           if (p.seriesName === 'BTC price') s += '<br/>' + p.marker + ' Price: ' + fmtUSD(p.value[1])
-          if (p.seriesName === 'Security %') s += '<br/>' + p.marker + ' Security: ' + fmtPct(Number(p.value[1].toFixed(3)))
+          if (p.seriesName === 'Security % (no NAT)') s += '<br/>' + p.marker + ' Security: ' + fmtPct(Number(p.value[1].toFixed(3)))
+          if (p.seriesName === 'Security % (+NAT)') s += '<br/>' + p.marker + ' + $NAT: ' + fmtPct(Number(p.value[1].toFixed(3)))
         }
         return s
       },
@@ -191,16 +206,29 @@ const option = computed<EChartsOption>(() => {
         lineStyle: { color: ORANGE, width: 1.8, opacity: 0.75 },
         areaStyle: { color: ORANGE, opacity: 0.06 },
       },
-      ...(props.showSecurity ? [{
-        name: 'Security %', type: 'line', symbol: 'none', yAxisIndex: 1,
-        data: secData, color: RED, lineStyle: { color: RED, width: 2.5 }, z: 4,
-        markPoint: {
-          silent: true, symbol: 'circle', symbolSize: 9,
-          itemStyle: { color: RED, borderColor: props.printMode ? '#f8f7f4' : '#0a0a0a', borderWidth: 1.5 },
-          label: { show: false },
-          data: [{ coord: [yr, ssp(yr)] }],
+      ...(props.showSecurity ? [
+        {
+          name: 'Security % (no NAT)', type: 'line', symbol: 'none', yAxisIndex: 1,
+          data: secBase, color: RED, z: 4,
+          lineStyle: { color: RED, width: 2.5, type: _natOn ? [6, 4] : 'solid', opacity: _natOn ? 0.5 : 1 },
+          markPoint: {
+            silent: true, symbol: 'circle', symbolSize: 9,
+            itemStyle: { color: RED, borderColor: props.printMode ? '#f8f7f4' : '#0a0a0a', borderWidth: 1.5, opacity: _natOn ? 0.5 : 1 },
+            label: { show: false },
+            data: [{ coord: [yr, sec(yr, false)] }],
+          },
         },
-      }] : []),
+        ...(_natOn ? [{
+          name: 'Security % (+NAT)', type: 'line', symbol: 'none', yAxisIndex: 1,
+          data: secNat, color: NATG, lineStyle: { color: NATG, width: 2.5 }, z: 5,
+          markPoint: {
+            silent: true, symbol: 'circle', symbolSize: 9,
+            itemStyle: { color: NATG, borderColor: props.printMode ? '#f8f7f4' : '#0a0a0a', borderWidth: 1.5 },
+            label: { show: false },
+            data: [{ coord: [yr, sec(yr, true)] }],
+          },
+        }] : []),
+      ] : []),
       {
         name: 'BTC price', type: 'line', symbol: 'none', yAxisIndex: 0,
         data: priceData, color: WHITE, lineStyle: { color: WHITE, width: 2.5 }, z: 5,

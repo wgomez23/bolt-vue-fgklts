@@ -129,6 +129,33 @@ export function useSecurityBudget() {
     return (annualBtc / supplyAt(year)) * 100
   }
 
+  // ----- Power Law view: USD-equivalent security share, evaluated PER YEAR along
+  // the power-law price path. Subsidy $ halves, fees are a fixed $ (share shrinks as
+  // price climbs), and $NAT (a % of BTC market cap) contributes a constant share that
+  // the slider scales directly. Verified: BTC market cap cancels in the NAT term, so
+  // NAT holds a flat floor and the slider raises it. Nothing is nudged arbitrarily.
+  const btcMcapAtPL = (year: number) => powerLawPrice(year) * supplyAt(year)
+  function capMultAt(year: number): number {
+    const c = btcMcapAtPL(year) / (MCAP_BASE * 1e6)
+    return c > 1 ? c : 1
+  }
+  function mcapMultAt(year: number): number {
+    const capMult = capMultAt(year)
+    const t = state.mcapSlider / 1000
+    const m = state.natScale === 'rel'
+      ? (1e-5 * Math.pow(1e5, t)) * capMult
+      : Math.pow(capMult, t)
+    return Math.min(m, capMult)
+  }
+  const natUSDAt = (year: number) => NAT_BASE_USD * mcapMultAt(year)   // ungated (caller decides)
+  function securitySharePctUSD(year: number, includeNat: boolean): number {
+    const price = powerLawPrice(year)
+    const subUSD = subsidyBtcAt(year) * price
+    const natUSDv = includeNat ? natUSDAt(year) : 0
+    const annualUSD = (subUSD + feeUSD() + natUSDv) * BLOCKS_PER_YEAR
+    return (annualUSD / (price * supplyAt(year))) * 100
+  }
+
   // ---------- series for the main chart (log $/block over years) ----------
   // subsidy step path across the full timeline (price-scaled)
   function subsidyStepSeries(): [number, number][] {
@@ -218,7 +245,7 @@ export function useSecurityBudget() {
     state,
     // model fns
     subsidyUSD, feeUSD, powerLawMult, powerLawPrice, supplyAt, subsidyBtcAt,
-    priceMult, btcMcapUSD, mcapMult, natMcapM, natUSD, securitySharePct,
+    priceMult, btcMcapUSD, mcapMult, natMcapM, natUSD, securitySharePct, securitySharePctUSD, natUSDAt,
     // series + computed
     subsidySeries, subsidyBtcSeries, feeLevel, natLevel, yMax, readout, powerLaw,
     fetchLivePrice,
