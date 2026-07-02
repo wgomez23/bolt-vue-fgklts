@@ -7,7 +7,7 @@
         $NAT combine, and why $NAT matters to Bitcoin's long-term security.
       </p>
     </header>
-    <SecurityBudgetExplorer :chart-height="480" />
+    <SecurityBudgetExplorer :chart-height="640" />
   </div>
 </template>
 
