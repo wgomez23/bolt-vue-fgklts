@@ -43,7 +43,7 @@
       </div>
 
       <!-- CONTROL SIDEBAR: sliders first, then toggles, then the % hero -->
-      <div class="lg:col-span-1 flex flex-col gap-4">
+      <div class="lg:col-span-1 flex flex-col gap-4 lg:justify-between">
         <!-- SLIDERS -->
         <div class="rounded-lg border border-white/10 bg-white/[0.02] p-4 flex flex-col gap-4">
           <div data-tour="year">
