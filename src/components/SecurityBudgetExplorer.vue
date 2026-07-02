@@ -40,6 +40,41 @@
       />
     </div>
 
+    <!-- DATA TABLE: what the user reads as the sliders move -->
+    <div data-tour="table" class="mt-4 rounded-lg border border-white/10 bg-white/[0.02] p-4 overflow-x-auto">
+      <table class="w-full min-w-[760px] border-collapse">
+        <thead>
+          <tr class="border-b border-white/10">
+            <th class="px-3 py-2 text-left text-[11px] font-medium uppercase tracking-wide text-gray-400 align-bottom"></th>
+            <th v-for="h in colHeaders" :key="h"
+              class="px-3 py-2 text-right text-[11px] font-medium uppercase tracking-wide text-gray-400 align-bottom">
+              {{ h }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="row in assetRows" :key="row.label" class="border-b border-white/5 last:border-0" :class="row.total ? 'border-t border-white/15' : ''">
+            <td class="px-3 py-3 text-sm font-semibold whitespace-nowrap" :style="{ color: row.color }">{{ row.label }}</td>
+            <td v-for="(c, i) in row.cells" :key="i"
+              class="px-3 py-3 text-right font-mono text-base font-semibold whitespace-nowrap"
+              :style="{ color: c === '\u2014' ? '#525252' : row.color }">
+              {{ c }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- HERO STAT: $NAT share of the security budget -->
+    <div data-tour="natshare"
+      class="mt-4 rounded-xl border p-5 flex flex-col items-center text-center transition-colors"
+      :class="state.nat ? 'border-[#00FF94]/40 bg-[#00FF94]/[0.06]' : 'border-white/10 bg-white/[0.02]'">
+      <div class="font-mono text-4xl sm:text-5xl font-bold leading-none" :style="{ color: state.nat ? '#00FF94' : '#e0533d' }">
+        {{ fmtPct(readout.natSharePct) }}
+      </div>
+      <div class="mt-2 text-sm text-gray-300">of the security budget is <span class="font-semibold text-[#00FF94]">$NAT</span></div>
+    </div>
+
     <!-- TOGGLES: scenario config, right below the chart -->
     <div class="mt-4 rounded-lg border border-white/10 bg-white/[0.02] p-4 flex flex-wrap gap-x-8 gap-y-4 items-start">
       <div data-tour="nat">
@@ -111,41 +146,6 @@
           <span>100% of BTC</span>
         </div>
       </div>
-    </div>
-
-    <!-- HERO STAT: $NAT share of the security budget -->
-    <div data-tour="natshare"
-      class="mt-4 rounded-xl border p-5 flex flex-col items-center text-center transition-colors"
-      :class="state.nat ? 'border-[#00FF94]/40 bg-[#00FF94]/[0.06]' : 'border-white/10 bg-white/[0.02]'">
-      <div class="font-mono text-4xl sm:text-5xl font-bold leading-none" :style="{ color: state.nat ? '#00FF94' : '#e0533d' }">
-        {{ fmtPct(readout.natSharePct) }}
-      </div>
-      <div class="mt-2 text-sm text-gray-300">of the security budget is <span class="font-semibold text-[#00FF94]">$NAT</span></div>
-    </div>
-
-    <!-- DATA TABLE: what the user reads as the sliders move -->
-    <div data-tour="table" class="mt-4 rounded-lg border border-white/10 bg-white/[0.02] p-4 overflow-x-auto">
-      <table class="w-full min-w-[760px] border-collapse">
-        <thead>
-          <tr class="border-b border-white/10">
-            <th class="px-3 py-2 text-left text-[11px] font-medium uppercase tracking-wide text-gray-400 align-bottom"></th>
-            <th v-for="h in colHeaders" :key="h"
-              class="px-3 py-2 text-right text-[11px] font-medium uppercase tracking-wide text-gray-400 align-bottom">
-              {{ h }}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="row in assetRows" :key="row.label" class="border-b border-white/5 last:border-0" :class="row.total ? 'border-t border-white/15' : ''">
-            <td class="px-3 py-3 text-sm font-semibold whitespace-nowrap" :style="{ color: row.color }">{{ row.label }}</td>
-            <td v-for="(c, i) in row.cells" :key="i"
-              class="px-3 py-3 text-right font-mono text-base font-semibold whitespace-nowrap"
-              :style="{ color: c === '\u2014' ? '#525252' : row.color }">
-              {{ c }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
     </div>
 
     <p class="mt-4 text-[11px] leading-relaxed text-gray-500">

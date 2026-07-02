@@ -139,9 +139,9 @@ const option = computed<EChartsOption>(() => {
         const x = Array.isArray(ps) && ps.length ? ps[0].axisValue : ''
         let s = '<b>' + x + '</b>'
         for (const p of (Array.isArray(ps) ? ps : [ps])) {
-          if (p.seriesName === 'BTC price') s += '<br/>' + p.marker + ' Price: ' + fmtUSD(p.value[1])
-          if (p.seriesName === 'Security % (no NAT)') s += '<br/>' + p.marker + ' Security: ' + fmtPct(Number(p.value[1].toFixed(3)))
-          if (p.seriesName === 'Security % (+NAT)') s += '<br/>' + p.marker + ' + $NAT: ' + fmtPct(Number(p.value[1].toFixed(3)))
+          if (p.seriesName === 'BTC price') s += '<br/>' + p.marker + ' BTC price (model): ' + fmtUSD(p.value[1])
+          if (p.seriesName === 'Security % (no NAT)') s += '<br/>' + p.marker + ' Security budget, no $NAT: ' + fmtPct(Number(p.value[1].toFixed(3))) + ' of mcap'
+          if (p.seriesName === 'Security % (+NAT)') s += '<br/>' + p.marker + ' With $NAT: ' + fmtPct(Number(p.value[1].toFixed(3))) + ' of mcap'
         }
         return s
       },

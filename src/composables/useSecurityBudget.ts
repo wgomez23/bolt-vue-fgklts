@@ -46,7 +46,7 @@ export function useSecurityBudget() {
     mcapSlider: 0,
     priceModel: 'pl',
     natScale: 'abs',
-    showSecurity: false,
+    showSecurity: true,
     customPrice: 150000,
     livePrice: null,
   })
