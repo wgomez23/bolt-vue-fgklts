@@ -167,15 +167,28 @@ watchEffect(async () => {
       })
     });
   const response = await request.json();
-  token.value = response?.deployments?.[0] ?? null;
+  const deployment = response?.deployments?.[0] ?? null;
   usdValue.value = response?.usd_value ?? null;
+  // derive token properties only if a deployment exists
+  if (deployment) {
+    deployment.totalSupply = getTotalAvailable(deployment.max, deployment.mintLeft);
+    deployment.marketcap = deployment.floor_price * deployment.totalSupply;
+    // Fold in Ethereum $DMT-NAT holders (client-side, Ethplorer free key)
+    try {
+      const ethRes = await fetch('https://api.ethplorer.io/getTokenInfo/0x249130f5e2dd4cf278180c0df8273f3592ad1247?apiKey=freekey');
+      const ethInfo = await ethRes.json();
+      const ethHolders = Number(ethInfo?.holdersCount) || 0;
+      if (ethHolders > 0) {
+        deployment.holders = (Number(deployment.holders) || 0) + ethHolders;
+      }
+    } catch (e) {
+      console.log('eth holders fetch failed', e);
+    }
+  }
+  // assign once, after holders are combined, so the counter shows the total
+  token.value = deployment;
   } catch (error) {
     console.log(error);
   }
- // derive token properties only if token exists
- if (token.value) {
-   token.value.totalSupply = getTotalAvailable(token.value.max, token.value.mintLeft);
-   token.value.marketcap = token.value.floor_price * token.value.totalSupply;
- }
 })
 </script>
