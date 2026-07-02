@@ -184,6 +184,26 @@ watchEffect(async () => {
     } catch (e) {
       console.log('eth holders fetch failed', e);
     }
+    // Fold in BSC $DMT-NAT holders (client-side, Ankr Advanced API)
+    try {
+      const bscRes = await fetch('https://rpc.ankr.com/multichain/ff361887ec45cd4385c2baddc80ab0bce30c9dd897be1d80017edb536e8e4ec5', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          jsonrpc: '2.0',
+          method: 'ankr_getTokenHoldersCount',
+          params: { blockchain: 'bsc', contractAddress: '0x600e3b55d5368c32a94f9372563318adb6a3f882' },
+          id: 1
+        })
+      });
+      const bscInfo = await bscRes.json();
+      const bscHolders = Number(bscInfo?.result?.holderCountHistory?.[0]?.holderCount) || 0;
+      if (bscHolders > 0) {
+        deployment.holders = (Number(deployment.holders) || 0) + bscHolders;
+      }
+    } catch (e) {
+      console.log('bsc holders fetch failed', e);
+    }
   }
   // assign once, after holders are combined, so the counter shows the total
   token.value = deployment;
