@@ -14,9 +14,9 @@
     </div>
 
     <!-- MAIN: chart (>= 2/3) on the left, control sidebar (1/3) on the right -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 items-start">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
       <!-- CHART: takes at least two thirds of the width -->
-      <div data-tour="chart" class="lg:col-span-2 rounded-xl border border-white/10 bg-white/[0.02] p-3 sm:p-4">
+      <div data-tour="chart" class="lg:col-span-2 flex flex-col rounded-xl border border-white/10 bg-white/[0.02] p-3 sm:p-4">
         <PowerLawChart
           v-if="state.priceModel === 'pl'"
           :power-law-price="powerLawPrice"

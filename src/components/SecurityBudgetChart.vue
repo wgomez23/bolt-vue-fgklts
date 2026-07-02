@@ -1,11 +1,11 @@
 <template>
-  <div ref="container" class="w-full" :style="{ minHeight: height + 'px' }">
+  <div ref="container" class="w-full h-full" :style="{ minHeight: height + 'px' }">
     <v-chart
       v-if="visible"
       :option="option"
       autoresize
-      class="w-full"
-      :style="{ height: height + 'px' }"
+      class="w-full h-full"
+      :style="{ height: '100%', minHeight: height + 'px' }"
     />
   </div>
 </template>
