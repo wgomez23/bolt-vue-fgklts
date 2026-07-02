@@ -13,34 +13,123 @@
       </button>
     </div>
 
-    <!-- FULL-WIDTH CHART -->
-    <div data-tour="chart" class="w-full rounded-xl border border-white/10 bg-white/[0.02] p-3 sm:p-4">
-      <PowerLawChart
-        v-if="state.priceModel === 'pl'"
-        :power-law-price="powerLawPrice"
-        :security-usd="securitySharePctUSD"
-        :subsidy-btc-series="subsidyBtcSeries"
-        :show-security="state.showSecurity"
-        :nat-on="state.nat"
-        :mcap-slider="state.mcapSlider"
-        :nat-scale="state.natScale"
-        :year="state.year"
-        :fee="state.fee"
-        :height="chartHeight"
-      />
-      <SecurityBudgetChart
-        v-else
-        :subsidy-series="subsidySeries"
-        :fee-level="feeLevel"
-        :nat-level="natLevel"
-        :nat-enabled="state.nat"
-        :y-max="yMax"
-        :year="state.year"
-        :height="chartHeight"
-      />
+    <!-- MAIN: chart (>= 2/3) on the left, control sidebar (1/3) on the right -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 items-start">
+      <!-- CHART: takes at least two thirds of the width -->
+      <div data-tour="chart" class="lg:col-span-2 rounded-xl border border-white/10 bg-white/[0.02] p-3 sm:p-4">
+        <PowerLawChart
+          v-if="state.priceModel === 'pl'"
+          :power-law-price="powerLawPrice"
+          :security-usd="securitySharePctUSD"
+          :subsidy-btc-series="subsidyBtcSeries"
+          :show-security="state.showSecurity"
+          :nat-on="state.nat"
+          :mcap-slider="state.mcapSlider"
+          :nat-scale="state.natScale"
+          :year="state.year"
+          :fee="state.fee"
+          :height="chartHeight"
+        />
+        <SecurityBudgetChart
+          v-else
+          :subsidy-series="subsidySeries"
+          :fee-level="feeLevel"
+          :nat-level="natLevel"
+          :nat-enabled="state.nat"
+          :y-max="yMax"
+          :year="state.year"
+          :height="chartHeight"
+        />
+      </div>
+
+      <!-- CONTROL SIDEBAR: sliders first, then toggles, then the % hero -->
+      <div class="lg:col-span-1 flex flex-col gap-4">
+        <!-- SLIDERS -->
+        <div class="rounded-lg border border-white/10 bg-white/[0.02] p-4 flex flex-col gap-4">
+          <div data-tour="year">
+            <div class="flex items-center justify-between mb-2">
+              <label class="text-sm font-medium text-gray-200">Year</label>
+              <span class="font-mono text-[#F7931A]">{{ state.year }}</span>
+            </div>
+            <input type="range" :min="2026" :max="2140" step="1" v-model.number="state.year" class="sb-range w-full" />
+            <div class="flex justify-between text-[11px] text-gray-500 mt-1"><span>2026</span><span>2140</span></div>
+          </div>
+          <div data-tour="mcap">
+            <div class="flex items-center justify-between mb-2">
+              <label class="text-sm font-medium text-gray-200">$NAT market cap</label>
+              <span class="font-mono text-[#00FF94]">{{ natMcapLabel }}</span>
+            </div>
+            <input type="range" :min="0" :max="1000" step="1" v-model.number="state.mcapSlider" :disabled="!state.nat" class="sb-range w-full disabled:opacity-40" />
+            <div class="flex justify-between text-[11px] text-gray-500 mt-1">
+              <span>{{ state.natScale === 'rel' ? '0.001% of BTC' : '$32.9M' }}</span>
+              <span>100% of BTC</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- TOGGLES -->
+        <div class="rounded-lg border border-white/10 bg-white/[0.02] p-4 flex flex-wrap gap-x-6 gap-y-4 items-start">
+          <div data-tour="nat">
+            <div class="text-sm font-medium text-gray-200 mb-2">NAT layer</div>
+            <div class="flex gap-2">
+              <button @click="state.nat = false" :class="segBtn(!state.nat)">Without NAT</button>
+              <button @click="state.nat = true" :class="segBtn(state.nat)">With NAT</button>
+            </div>
+          </div>
+          <div>
+            <div class="text-sm font-medium text-gray-200 mb-2">Fee scenario</div>
+            <div class="flex gap-2">
+              <button @click="state.fee = 'lo'" :class="segBtn(state.fee === 'lo')">Baseline</button>
+              <button @click="state.fee = 'hi'" :class="segBtn(state.fee === 'hi')">Congestion</button>
+            </div>
+          </div>
+          <div>
+            <div class="text-sm font-medium text-gray-200 mb-2">NAT scale</div>
+            <div class="flex gap-2">
+              <button @click="state.natScale = 'abs'" :class="segBtn(state.natScale === 'abs')">$ value</button>
+              <button @click="state.natScale = 'rel'" :class="segBtn(state.natScale === 'rel')">% of BTC</button>
+            </div>
+          </div>
+          <div v-if="state.priceModel === 'pl'">
+            <div class="text-sm font-medium text-gray-200 mb-2">Security % line</div>
+            <div class="flex gap-2">
+              <button @click="state.showSecurity = false" :class="segBtn(!state.showSecurity)">Hide</button>
+              <button @click="state.showSecurity = true" :class="segBtn(state.showSecurity)">Show</button>
+            </div>
+          </div>
+          <div>
+            <div class="text-sm font-medium text-gray-200 mb-2">Bitcoin price</div>
+            <div class="flex gap-2">
+              <button @click="state.priceModel = 'today'" :class="segBtn(state.priceModel === 'today')">
+                Today<span v-if="state.livePrice" class="ml-1 text-[10px] text-gray-400">({{ fmtUSD(state.livePrice) }})</span>
+              </button>
+              <button @click="state.priceModel = 'custom'" :class="segBtn(state.priceModel === 'custom')">Custom</button>
+              <button @click="state.priceModel = 'pl'" :class="segBtn(state.priceModel === 'pl')">Power law</button>
+            </div>
+            <div v-if="state.priceModel === 'custom'" class="flex items-center gap-2 mt-2">
+              <span class="text-gray-400">$</span>
+              <input type="number" v-model.number="state.customPrice" min="1000" step="1000"
+                class="w-40 rounded bg-black/30 border border-white/10 px-2 py-1 font-mono text-gray-100" />
+            </div>
+            <div v-else-if="state.priceModel === 'pl'" class="text-sm text-gray-400 mt-2">
+              Projected BTC price in {{ state.year }}: <span class="font-mono text-gray-100">{{ fmtUSD(powerLaw.price) }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- HERO STAT: $NAT share of the security budget -->
+        <div data-tour="natshare"
+          class="rounded-xl border p-5 flex flex-col items-center text-center transition-colors"
+          :class="state.nat ? 'border-[#00FF94]/40 bg-[#00FF94]/[0.06]' : 'border-white/10 bg-white/[0.02]'">
+          <div class="font-mono text-4xl sm:text-5xl font-bold leading-none" :style="{ color: state.nat ? '#00FF94' : '#e0533d' }">
+            {{ fmtPct(readout.natSharePct) }}
+          </div>
+          <div class="mt-2 text-sm text-gray-300">of the security budget is <span class="font-semibold text-[#00FF94]">$NAT</span></div>
+        </div>
+      </div>
     </div>
 
-    <!-- DATA TABLE: what the user reads as the sliders move -->
+    <!-- DATA TABLE: full width below the chart and controls -->
     <div data-tour="table" class="mt-4 rounded-lg border border-white/10 bg-white/[0.02] p-4 overflow-x-auto">
       <table class="w-full min-w-[760px] border-collapse">
         <thead>
@@ -63,89 +152,6 @@
           </tr>
         </tbody>
       </table>
-    </div>
-
-    <!-- HERO STAT: $NAT share of the security budget -->
-    <div data-tour="natshare"
-      class="mt-4 rounded-xl border p-5 flex flex-col items-center text-center transition-colors"
-      :class="state.nat ? 'border-[#00FF94]/40 bg-[#00FF94]/[0.06]' : 'border-white/10 bg-white/[0.02]'">
-      <div class="font-mono text-4xl sm:text-5xl font-bold leading-none" :style="{ color: state.nat ? '#00FF94' : '#e0533d' }">
-        {{ fmtPct(readout.natSharePct) }}
-      </div>
-      <div class="mt-2 text-sm text-gray-300">of the security budget is <span class="font-semibold text-[#00FF94]">$NAT</span></div>
-    </div>
-
-    <!-- TOGGLES: scenario config, right below the chart -->
-    <div class="mt-4 rounded-lg border border-white/10 bg-white/[0.02] p-4 flex flex-wrap gap-x-8 gap-y-4 items-start">
-      <div data-tour="nat">
-        <div class="text-sm font-medium text-gray-200 mb-2">NAT layer</div>
-        <div class="flex gap-2">
-          <button @click="state.nat = false" :class="segBtn(!state.nat)">Without NAT</button>
-          <button @click="state.nat = true" :class="segBtn(state.nat)">With NAT</button>
-        </div>
-      </div>
-      <div>
-        <div class="text-sm font-medium text-gray-200 mb-2">Fee scenario</div>
-        <div class="flex gap-2">
-          <button @click="state.fee = 'lo'" :class="segBtn(state.fee === 'lo')">Baseline</button>
-          <button @click="state.fee = 'hi'" :class="segBtn(state.fee === 'hi')">Congestion</button>
-        </div>
-      </div>
-      <div>
-        <div class="text-sm font-medium text-gray-200 mb-2">NAT scale</div>
-        <div class="flex gap-2">
-          <button @click="state.natScale = 'abs'" :class="segBtn(state.natScale === 'abs')">$ value</button>
-          <button @click="state.natScale = 'rel'" :class="segBtn(state.natScale === 'rel')">% of BTC</button>
-        </div>
-      </div>
-      <div v-if="state.priceModel === 'pl'">
-        <div class="text-sm font-medium text-gray-200 mb-2">Security % line</div>
-        <div class="flex gap-2">
-          <button @click="state.showSecurity = false" :class="segBtn(!state.showSecurity)">Hide</button>
-          <button @click="state.showSecurity = true" :class="segBtn(state.showSecurity)">Show</button>
-        </div>
-      </div>
-      <div>
-        <div class="text-sm font-medium text-gray-200 mb-2">Bitcoin price</div>
-        <div class="flex gap-2">
-          <button @click="state.priceModel = 'today'" :class="segBtn(state.priceModel === 'today')">
-            Today<span v-if="state.livePrice" class="ml-1 text-[10px] text-gray-400">({{ fmtUSD(state.livePrice) }})</span>
-          </button>
-          <button @click="state.priceModel = 'custom'" :class="segBtn(state.priceModel === 'custom')">Custom</button>
-          <button @click="state.priceModel = 'pl'" :class="segBtn(state.priceModel === 'pl')">Power law</button>
-        </div>
-        <div v-if="state.priceModel === 'custom'" class="flex items-center gap-2 mt-2">
-          <span class="text-gray-400">$</span>
-          <input type="number" v-model.number="state.customPrice" min="1000" step="1000"
-            class="w-40 rounded bg-black/30 border border-white/10 px-2 py-1 font-mono text-gray-100" />
-        </div>
-        <div v-else-if="state.priceModel === 'pl'" class="text-sm text-gray-400 mt-2">
-          Projected BTC price in {{ state.year }}: <span class="font-mono text-gray-100">{{ fmtUSD(powerLaw.price) }}</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- SLIDERS: the two primary controls that drive the data below -->
-    <div class="mt-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
-      <div data-tour="year" class="rounded-lg border border-white/10 bg-white/[0.02] p-4">
-        <div class="flex items-center justify-between mb-2">
-          <label class="text-sm font-medium text-gray-200">Year</label>
-          <span class="font-mono text-[#F7931A]">{{ state.year }}</span>
-        </div>
-        <input type="range" :min="2026" :max="2140" step="1" v-model.number="state.year" class="sb-range w-full" />
-        <div class="flex justify-between text-[11px] text-gray-500 mt-1"><span>2026</span><span>2140</span></div>
-      </div>
-      <div data-tour="mcap" class="rounded-lg border border-white/10 bg-white/[0.02] p-4">
-        <div class="flex items-center justify-between mb-2">
-          <label class="text-sm font-medium text-gray-200">$NAT market cap</label>
-          <span class="font-mono text-[#00FF94]">{{ natMcapLabel }}</span>
-        </div>
-        <input type="range" :min="0" :max="1000" step="1" v-model.number="state.mcapSlider" :disabled="!state.nat" class="sb-range w-full disabled:opacity-40" />
-        <div class="flex justify-between text-[11px] text-gray-500 mt-1">
-          <span>{{ state.natScale === 'rel' ? '0.001% of BTC' : '$32.9M' }}</span>
-          <span>100% of BTC</span>
-        </div>
-      </div>
     </div>
 
     <p class="mt-4 text-[11px] leading-relaxed text-gray-500">
