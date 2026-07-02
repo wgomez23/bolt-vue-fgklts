@@ -113,6 +113,16 @@
       </div>
     </div>
 
+    <!-- HERO STAT: $NAT share of the security budget -->
+    <div data-tour="natshare"
+      class="mt-4 rounded-xl border p-5 flex flex-col items-center text-center transition-colors"
+      :class="state.nat ? 'border-[#00FF94]/40 bg-[#00FF94]/[0.06]' : 'border-white/10 bg-white/[0.02]'">
+      <div class="font-mono text-4xl sm:text-5xl font-bold leading-none" :style="{ color: state.nat ? '#00FF94' : '#e0533d' }">
+        {{ fmtPct(readout.natSharePct) }}
+      </div>
+      <div class="mt-2 text-sm text-gray-300">of the security budget is <span class="font-semibold text-[#00FF94]">$NAT</span></div>
+    </div>
+
     <!-- DATA TABLE: what the user reads as the sliders move -->
     <div data-tour="table" class="mt-4 rounded-lg border border-white/10 bg-white/[0.02] p-4 overflow-x-auto">
       <table class="w-full min-w-[760px] border-collapse">
@@ -348,8 +358,8 @@ const tourSteps: TourStep[] = [
     apply: () => { state.nat = true; tween(() => state.mcapSlider, v => (state.mcapSlider = v), 700, 2800) },
   },
   {
-    caption: "That is the whole argument. As the subsidy fades, $NAT can refill the security budget. Now try the sliders yourself.",
-    spot: '[data-tour=table]', dwell: 9000,
+    caption: "That is the whole argument. As the subsidy is halved, $NAT makes up a growing share of the security budget. Try the sliders yourself.",
+    spot: '[data-tour=natshare]', dwell: 9000,
     apply: () => {},
   },
 ]
