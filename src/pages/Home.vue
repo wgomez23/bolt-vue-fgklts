@@ -25,6 +25,18 @@
       <MinerLeaderBoard :currentMarketCap="token?.marketcap * usdValue" />
     </AnimatedSection>
 
+    <!-- Bitcoin Security Budget explorer -->
+    <AnimatedSection :delay="150">
+      <section>
+        <SectionTitle>The Bitcoin Security Budget</SectionTitle>
+        <p class="text-gray-400 max-w-3xl -mt-2 mb-6">
+          As the block subsidy halves toward zero by 2140, who pays to secure Bitcoin? Explore how subsidy, fees, and
+          $NAT combine, and why $NAT matters to Bitcoin's long-term security.
+        </p>
+        <SecurityBudgetExplorer :chart-height="640" />
+      </section>
+    </AnimatedSection>
+
     <AnimatedSection :delay="200">
       <section>
         <SectionTitle>Hash Power & $NAT Expansion</SectionTitle>
@@ -112,6 +124,7 @@ import FallingSquares from '../components/FallingSquares.vue'
 import AnimatedSection from '../components/AnimatedSection.vue'
 import MempoolBlocks from '../components/MempoolBlocks.vue'
 import MinerLeaderBoard from '../components/MinerLeaderBoard.vue'
+import SecurityBudgetExplorer from '../components/SecurityBudgetExplorer.vue'
 import FeaturesSection from '../components/FeaturesSection.vue'
 
 const exchanges = [
@@ -123,7 +136,6 @@ const exchanges = [
   { name: '1inch', logo: null },
   { name: 'NonKyc', logo: null },
   { name: 'SuperEx', logo: null },
-  { name: 'MEXC', logo: null },
   { name: 'LBank', logo: null },
   { name: 'CoinEx', logo: null },
   { name: 'Raydium', logo: null },
@@ -154,15 +166,48 @@ watchEffect(async () => {
       })
     });
   const response = await request.json();
-  token.value = response?.deployments?.[0] ?? null;
+  const deployment = response?.deployments?.[0] ?? null;
   usdValue.value = response?.usd_value ?? null;
+  // derive token properties only if a deployment exists
+  if (deployment) {
+    deployment.totalSupply = getTotalAvailable(deployment.max, deployment.mintLeft);
+    deployment.marketcap = deployment.floor_price * deployment.totalSupply;
+    // Fold in Ethereum $DMT-NAT holders (client-side, Ethplorer free key)
+    try {
+      const ethRes = await fetch('https://api.ethplorer.io/getTokenInfo/0x249130f5e2dd4cf278180c0df8273f3592ad1247?apiKey=freekey');
+      const ethInfo = await ethRes.json();
+      const ethHolders = Number(ethInfo?.holdersCount) || 0;
+      if (ethHolders > 0) {
+        deployment.holders = (Number(deployment.holders) || 0) + ethHolders;
+      }
+    } catch (e) {
+      console.log('eth holders fetch failed', e);
+    }
+    // Fold in BSC $DMT-NAT holders (client-side, Ankr Advanced API)
+    try {
+      const bscRes = await fetch('https://rpc.ankr.com/multichain/ff361887ec45cd4385c2baddc80ab0bce30c9dd897be1d80017edb536e8e4ec5', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          jsonrpc: '2.0',
+          method: 'ankr_getTokenHoldersCount',
+          params: { blockchain: 'bsc', contractAddress: '0x600e3b55d5368c32a94f9372563318adb6a3f882' },
+          id: 1
+        })
+      });
+      const bscInfo = await bscRes.json();
+      const bscHolders = Number(bscInfo?.result?.holderCountHistory?.[0]?.holderCount) || 0;
+      if (bscHolders > 0) {
+        deployment.holders = (Number(deployment.holders) || 0) + bscHolders;
+      }
+    } catch (e) {
+      console.log('bsc holders fetch failed', e);
+    }
+  }
+  // assign once, after holders are combined, so the counter shows the total
+  token.value = deployment;
   } catch (error) {
     console.log(error);
   }
- // derive token properties only if token exists
- if (token.value) {
-   token.value.totalSupply = getTotalAvailable(token.value.max, token.value.mintLeft);
-   token.value.marketcap = token.value.floor_price * token.value.totalSupply;
- }
 })
 </script>
