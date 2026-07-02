@@ -25,6 +25,18 @@
       <MinerLeaderBoard :currentMarketCap="token?.marketcap * usdValue" />
     </AnimatedSection>
 
+    <!-- Bitcoin Security Budget explorer -->
+    <AnimatedSection :delay="150">
+      <section>
+        <SectionTitle>The Bitcoin Security Budget</SectionTitle>
+        <p class="text-gray-400 max-w-3xl -mt-2 mb-6">
+          As the block subsidy halves toward zero by 2140, who pays to secure Bitcoin? Explore how subsidy, fees, and
+          $NAT combine, and why $NAT matters to Bitcoin's long-term security.
+        </p>
+        <SecurityBudgetExplorer :chart-height="640" />
+      </section>
+    </AnimatedSection>
+
     <AnimatedSection :delay="200">
       <section>
         <SectionTitle>Hash Power & $NAT Expansion</SectionTitle>
@@ -112,6 +124,7 @@ import FallingSquares from '../components/FallingSquares.vue'
 import AnimatedSection from '../components/AnimatedSection.vue'
 import MempoolBlocks from '../components/MempoolBlocks.vue'
 import MinerLeaderBoard from '../components/MinerLeaderBoard.vue'
+import SecurityBudgetExplorer from '../components/SecurityBudgetExplorer.vue'
 import FeaturesSection from '../components/FeaturesSection.vue'
 
 const exchanges = [
