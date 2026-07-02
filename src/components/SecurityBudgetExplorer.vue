@@ -156,7 +156,9 @@
 
     <p class="mt-4 text-[11px] leading-relaxed text-gray-500">
       Scenarios, not forecasts. $NAT's contribution is demand-driven and reflexive, not guaranteed. Power-law price is a
-      long-run projection calibrated to today's anchor. Model ported from the NAT security-budget explorable.
+      long-run projection calibrated to today's anchor. Original chart and security-budget model created by
+      <a href="https://x.com/choirzooh" target="_blank" rel="noopener noreferrer"
+        class="font-medium text-[#00FF94] hover:underline">@choirzooh</a>; reproduced here with attribution.
     </p>
 
     <!-- TOUR OVERLAY -->
