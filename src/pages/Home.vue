@@ -138,9 +138,7 @@ const exchanges = [
   { name: 'SuperEx', logo: null },
   { name: 'LBank', logo: null },
   { name: 'CoinEx', logo: null },
-  { name: 'Raydium', logo: null },
-  { name: 'BingX', logo: null },
-  { name: 'BitMart', logo: null }
+  { name: 'Raydium', logo: null }
 ];
 const API_URL = 'https://api.mscribe.io/api/tokens/all';
 const token = ref<any | null>(null);

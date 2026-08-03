@@ -26,7 +26,6 @@ export default defineConfig({
       protocol: 'ws',
       overlay: false,
     },
-    sourcemap: true,
   },
   preview: {
     host: '127.0.0.1',
@@ -38,6 +37,7 @@ export default defineConfig({
     },
   },
   build: {
-    sourcemap: true,
+    // Do not publish application source through production .map files.
+    sourcemap: false,
   },
 })
