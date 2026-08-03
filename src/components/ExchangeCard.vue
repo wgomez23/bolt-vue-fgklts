@@ -39,10 +39,6 @@ const getLogoUrl = (name: string) => {
       return 'https://www.lbank.com/favicon.ico';
     case 'CoinEx':
       return 'https://www.coinex.com/favicon.ico';
-    case 'BingX':
-      return '/bingx-logo.webp';
-    case 'BitMart':
-      return '/bitmart-logo.webp';
     default:
       return null;
   }
@@ -74,10 +70,6 @@ const getExchangeUrl = (name: string) => {
       return 'https://www.lbank.com/trade/dmtnat_usdt';
     case 'CoinEx':
       return 'https://www.coinex.com/zh-hans/price/NAT';
-    case 'BingX':
-      return 'https://bingx.com/en/perpetual/10000NAT-USDT';
-    case 'BitMart':
-      return 'https://www.bitmart.com/en-US/trade/NAT_USDT?type=spot';
     default:
       return '#';
   }
