@@ -67,7 +67,8 @@
           </div>
 
           <!-- COMPACT READOUT: key values beside the sliders so changes are visible while dragging -->
-          <table data-tour="mini-table" class="w-full border-collapse border-t border-white/10">
+          <FitText v-slot="{ compact }" data-tour="mini-table">
+          <table class="w-full border-collapse border-t border-white/10">
             <thead>
               <tr>
                 <th class="pt-3 pb-1.5 pr-2 text-left"></th>
@@ -80,7 +81,7 @@
             <tbody>
               <tr v-for="row in miniRows" :key="row.label" class="border-t border-white/5">
                 <td class="py-1.5 pr-2 text-xs font-semibold whitespace-nowrap" :style="{ color: row.color }">{{ row.label }}</td>
-                <td v-for="(c, i) in row.cells" :key="i"
+                <td v-for="(c, i) in (compact ? row.compactCells : row.cells)" :key="i"
                   class="py-1.5 pl-2 text-right font-mono text-sm font-semibold whitespace-nowrap tabular-nums"
                   :style="{ color: row.color }">
                   {{ c }}
@@ -88,17 +89,22 @@
               </tr>
             </tbody>
           </table>
+          </FitText>
 
           <!-- YEARLY SPEND: total annual security / BTC market cap -->
           <div data-tour="spend" class="border-t border-white/10 pt-3 text-center">
-            <div class="font-mono text-3xl sm:text-4xl font-bold leading-none" :style="{ color: state.nat ? '#00FF94' : '#F7931A' }">
-              {{ fmtPct(spendPct.current) }}
-            </div>
+            <FitText v-slot="{ compact }">
+              <div class="font-mono text-3xl sm:text-4xl font-bold leading-none" :style="{ color: state.nat ? '#00FF94' : '#F7931A' }">
+                {{ fmtPct(spendPct.current, compact) }}
+              </div>
+            </FitText>
             <div class="mt-1.5 text-xs text-gray-300">of Bitcoin's market cap spent on security each year</div>
-            <div class="mt-1 text-[11px] font-mono text-gray-500">
-              Without NAT <span class="text-[#F7931A]">{{ fmtPct(spendPct.without) }}</span>
-              · With NAT <span class="text-[#00FF94]">{{ fmtPct(spendPct.with) }}</span>
-            </div>
+            <FitText v-slot="{ compact }" class="mt-1">
+              <div class="text-[11px] font-mono text-gray-500">
+                Without NAT <span class="text-[#F7931A]">{{ fmtPct(spendPct.without, compact) }}</span>
+                · With NAT <span class="text-[#00FF94]">{{ fmtPct(spendPct.with, compact) }}</span>
+              </div>
+            </FitText>
           </div>
         </div>
 
@@ -156,9 +162,11 @@
         <div data-tour="natshare"
           class="rounded-xl border p-5 flex flex-col items-center text-center transition-colors"
           :class="state.nat ? 'border-[#00FF94]/40 bg-[#00FF94]/[0.06]' : 'border-white/10 bg-white/[0.02]'">
-          <div class="font-mono text-4xl sm:text-5xl font-bold leading-none" :style="{ color: state.nat ? '#00FF94' : '#e0533d' }">
-            {{ fmtPct(readout.natSharePct) }}
-          </div>
+          <FitText v-slot="{ compact }" class="w-full">
+            <div class="font-mono text-4xl sm:text-5xl font-bold leading-none" :style="{ color: state.nat ? '#00FF94' : '#e0533d' }">
+              {{ fmtPct(readout.natSharePct, compact) }}
+            </div>
+          </FitText>
           <div class="mt-2 text-sm text-gray-300">of the security budget is <span class="font-semibold text-[#00FF94]">$NAT</span></div>
         </div>
       </div>
@@ -237,6 +245,8 @@
 <script setup lang="ts">
 import { computed, onMounted, onBeforeUnmount, reactive, ref, nextTick } from 'vue'
 import SecurityBudgetChart from './SecurityBudgetChart.vue'
+import FitText from './FitText.vue'
+import { fmtPct, sigDecimals } from '../utils/format'
 import PowerLawChart from './PowerLawChart.vue'
 import { useSecurityBudget, BLOCKS_PER_YEAR } from '../composables/useSecurityBudget'
 
@@ -261,14 +271,6 @@ function fmtMcapM(m: number): string {
   return '$' + Math.round(m) + 'M'
 }
 
-function fmtPct(p: number): string {
-  if (p >= 10) return p.toFixed(0) + '%'
-  if (p >= 1) return p.toFixed(1) + '%'
-  if (p >= 0.01) return p.toFixed(2) + '%'
-  if (p > 0 && p < 1e-4) return '<0.0001%'
-  return p.toPrecision(1) + '%'
-}
-
 const natMcapLabel = computed(() => {
   if (state.natScale === 'rel') {
     const m = readout.value.btcMcap
@@ -282,13 +284,17 @@ const DASH = '\u2014'
 const NAT_SUPPLY = 391e12   // ~391T $NAT total supply, for implied price
 const colHeaders = ['Market cap', 'Price', 'Subsidy / block', 'Subsidy / year', 'Fees / block', 'Fees / year', 'Total annual security']
 
-function fmtPrice(v: number): string {
+function fmtPrice(v: number, compact = false): string {
   if (v >= 1) return fmtUSD(v)
   if (v >= 0.01) return '$' + v.toFixed(3)
-  return '$' + v.toPrecision(2)
+  if (!(v > 0)) return '$0'
+  if (compact && v < 1e-4) return '<$0.0001'
+  return '$' + v.toFixed(sigDecimals(v))
 }
 
-const assetRows = computed(() => {
+interface AssetRow { label: string; color: string; cells: string[]; compactCells?: string[]; total?: boolean }
+
+const assetRows = computed((): AssetRow[] => {
   const r = readout.value
   const on = state.nat
   const NATON = '#00FF94'
@@ -321,6 +327,16 @@ const assetRows = computed(() => {
         DASH,
         on ? fmtUSD(natTotal) : '$0',
       ],
+      // compact readout only: tiny prices truncate when the column can't fit the full decimal
+      compactCells: [
+        on ? fmtUSD(natMcapM() * 1e6) : '$0',
+        on ? fmtPrice(natPrice, true) : '$0',
+        on ? fmtUSD(r.nat) : '$0',
+        on ? fmtUSD(r.nat * BLOCKS_PER_YEAR) : '$0',
+        DASH,
+        DASH,
+        on ? fmtUSD(natTotal) : '$0',
+      ],
     },
     {
       label: 'Total', color: '#e5e7eb', total: true,
@@ -341,7 +357,11 @@ const assetRows = computed(() => {
 const MINI_COLS = [0, 1, 2, 6]
 const miniHeaders = ['Mkt cap', 'Price', 'Subsidy / blk', 'Annual security']
 const miniRows = computed(() =>
-  assetRows.value.slice(0, 2).map(row => ({ ...row, cells: MINI_COLS.map(i => row.cells[i]) })),
+  assetRows.value.slice(0, 2).map(row => ({
+    ...row,
+    cells: MINI_COLS.map(i => row.cells[i]),
+    compactCells: MINI_COLS.map(i => (row.compactCells ?? row.cells)[i]),
+  })),
 )
 
 // Yearly security spend as % of BTC market cap: (subsidy + fees [+ NAT]) × blocks/yr ÷ BTC mcap × 100
@@ -510,7 +530,7 @@ const tourSteps: TourStep[] = [
     caption: () => {
       const { without, with: withNat } = spendPct.value
       const x = without > 0 ? withNat / without : 0
-      const from = without < 1e-4 ? 'almost nothing' : fmtPct(without)
+      const from = fmtPct(without)
       const times = x >= 2e6 ? `${Math.floor(x / 1e6)} million times`
         : x >= 1e6 ? 'over a million times'
         : x >= 1000 ? `${Math.round(x / 1000).toLocaleString('en-US')},000 times`
