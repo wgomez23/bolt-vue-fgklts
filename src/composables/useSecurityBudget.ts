@@ -7,7 +7,7 @@ import { reactive, computed } from 'vue'
 // ---------- constants (2026-05 snapshot) ----------
 export const BTC_PRICE = 59901        // USD snapshot; Today mode overrides with live spot when available
 export const SUBSIDY_BTC_24 = 3.125   // BTC/block after the 4th halving (block 840,000)
-export const FEE_LO = 2243            // USD/block, 24h mean (0.0267 BTC/block), mempool.space fees/24h, 2026-09-24
+export const FEE_LO = 1905            // USD/block, 7-day mean (0.0228 BTC/block), mempool.space fees/1w, 2026-09-18..24
 export const FEE_HI = 28000           // USD/block, congestion-spike scenario
 export const NAT_BASE_USD = 32.68     // USD/block at base market cap
 export const MCAP_BASE = 32.9         // $M, today's NAT market cap
