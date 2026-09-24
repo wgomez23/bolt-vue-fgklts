@@ -88,6 +88,18 @@
               </tr>
             </tbody>
           </table>
+
+          <!-- YEARLY SPEND: total annual security / BTC market cap -->
+          <div data-tour="spend" class="border-t border-white/10 pt-3 text-center">
+            <div class="font-mono text-3xl sm:text-4xl font-bold leading-none" :style="{ color: state.nat ? '#00FF94' : '#F7931A' }">
+              {{ fmtPct(spendPct.current) }}
+            </div>
+            <div class="mt-1.5 text-xs text-gray-300">of Bitcoin's market cap spent on security each year</div>
+            <div class="mt-1 text-[11px] font-mono text-gray-500">
+              Without NAT <span class="text-[#F7931A]">{{ fmtPct(spendPct.without) }}</span>
+              · With NAT <span class="text-[#00FF94]">{{ fmtPct(spendPct.with) }}</span>
+            </div>
+          </div>
         </div>
 
         <!-- TOGGLES -->
@@ -319,6 +331,14 @@ const miniHeaders = ['Mkt cap', 'Price', 'Subsidy / blk', 'Annual security']
 const miniRows = computed(() =>
   assetRows.value.slice(0, 2).map(row => ({ ...row, cells: MINI_COLS.map(i => row.cells[i]) })),
 )
+
+// Yearly security spend as % of BTC market cap: (subsidy + fees [+ NAT]) × blocks/yr ÷ BTC mcap × 100
+const spendPct = computed(() => {
+  const r = readout.value
+  const without = ((r.subsidy + r.fees) * BLOCKS_PER_YEAR / r.btcMcap) * 100
+  const withNat = ((r.subsidy + r.fees + r.natPotential) * BLOCKS_PER_YEAR / r.btcMcap) * 100
+  return { without, with: withNat, current: state.nat ? withNat : without }
+})
 
 function segBtn(active: boolean): string {
   return [

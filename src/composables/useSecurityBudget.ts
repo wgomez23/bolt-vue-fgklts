@@ -201,6 +201,7 @@ export function useSecurityBudget() {
       subsidy: sub,
       fees: fee,
       nat,
+      natPotential: NAT_BASE_USD * mcapMult(),                   // $NAT/block ignoring the NAT toggle
       total,
       btcMcap: btcMcapUSD(),
       annualSecurity: total * BLOCKS_PER_YEAR,
