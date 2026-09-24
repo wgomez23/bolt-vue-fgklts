@@ -359,7 +359,7 @@ function segBtn(active: boolean): string {
 }
 
 /* ---------------- GUIDED TOUR ---------------- */
-interface TourStep { caption: string; badge?: string; spot?: string; place?: Place; dwell: number; apply?: () => void }
+interface TourStep { caption: string; badge?: string; spot?: string; place?: Place; lift?: string[]; dwell: number; apply?: () => void }
 
 const tour = reactive({ active: false, step: 0, playing: false })
 const barPct = computed(() => ((tour.step + 1) / tourSteps.length) * 100)
@@ -379,8 +379,13 @@ function tween(get: () => number, set: (v: number) => void, target: number, ms =
 }
 
 let lastSpot: HTMLElement | null = null
-function setSpot(sel?: string): void {
+let lifted: HTMLElement[] = []
+function setSpot(sel?: string, lift: string[] = []): void {
   if (lastSpot) { lastSpot.classList.remove('tour-spotlight'); lastSpot = null }
+  lifted.forEach(el => el.classList.remove('tour-lift'))
+  // lifted elements render above the dim layer without the spotlight ring
+  lifted = lift.map(q => document.querySelector(q) as HTMLElement | null).filter((el): el is HTMLElement => !!el)
+  lifted.forEach(el => el.classList.add('tour-lift'))
   if (!sel) return
   const el = document.querySelector(sel) as HTMLElement | null
   if (el) {
@@ -471,9 +476,9 @@ const tourSteps: TourStep[] = [
     apply: () => { cancelAnimationFrame(tweenRaf); state.priceModel = 'pl'; state.nat = false; state.showSecurity = false; state.mcapSlider = 0; state.year = 2026 },
   },
   {
-    caption: "Every four years the subsidy halves. Watch the miner reward fall as we move through time.",
-    spot: '[data-tour=year]', dwell: 6500,
-    apply: () => tween(() => state.year, v => (state.year = v), 2060, 2800),
+    caption: "Every four years the subsidy halves. Watch the share of Bitcoin's market cap spent on security fall as time moves forward.",
+    spot: '[data-tour=spend]', place: 'below', lift: ['[data-tour=chart]'], dwell: 7000,
+    apply: () => tween(() => state.year, v => (state.year = v), 2060, 4000),
   },
   {
     caption: "By 2140 the block subsidy reaches zero. New bitcoin issuance ends forever.",
@@ -516,7 +521,7 @@ function schedule(): void {
 function applyStep(i: number): void {
   tour.step = i
   tourSteps[i].apply?.()
-  nextTick(() => { setSpot(tourSteps[i].spot); followSpot() })
+  nextTick(() => { setSpot(tourSteps[i].spot, tourSteps[i].lift); followSpot() })
 }
 function startTour(): void {
   tour.active = true
@@ -646,5 +651,9 @@ onBeforeUnmount(() => {
   border-radius: 12px;
   box-shadow: 0 0 0 3px #00FF94, 0 0 0 9999px rgba(0, 0, 0, 0.62);
   transition: box-shadow 0.35s ease;
+}
+.tour-lift {
+  position: relative;
+  z-index: 46;
 }
 </style>
