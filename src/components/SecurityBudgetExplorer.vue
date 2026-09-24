@@ -514,7 +514,7 @@ const tourSteps: TourStep[] = [
   },
   {
     // Fees are a model assumption (held flat in USD), not a law; say so and give the numbers
-    caption: () => `Fees rise and fall with demand for block space. This model holds them at a recent 24-hour average, about $${FEE_LO.toLocaleString('en-US')} per block. ` +
+    caption: () => `Fees rise and fall with demand for block space. This model holds them at the 24-hour average as of September 2026, about $${FEE_LO.toLocaleString('en-US')} per block. ` +
       `To fill the gap, fees would have to grow as fast as Bitcoin's price. Even at congestion levels ($${FEE_HI.toLocaleString('en-US')} per block) they stay a tiny share.`,
     spot: '[data-tour=mini-table]', dwell: 8000,
     apply: () => { state.showSecurity = true },
