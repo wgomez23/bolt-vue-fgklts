@@ -248,7 +248,7 @@ import SecurityBudgetChart from './SecurityBudgetChart.vue'
 import FitText from './FitText.vue'
 import { fmtPct, sigDecimals } from '../utils/format'
 import PowerLawChart from './PowerLawChart.vue'
-import { useSecurityBudget, BLOCKS_PER_YEAR } from '../composables/useSecurityBudget'
+import { useSecurityBudget, BLOCKS_PER_YEAR, FEE_LO, FEE_HI } from '../composables/useSecurityBudget'
 
 withDefaults(defineProps<{ chartHeight?: number }>(), { chartHeight: 460 })
 
@@ -513,7 +513,9 @@ const tourSteps: TourStep[] = [
     apply: () => tween(() => state.year, v => (state.year = v), 2140, 2800),
   },
   {
-    caption: "Fees will not fill the gap. They are a fixed dollar amount, so as the price climbs their share only shrinks.",
+    // Fees are a model assumption (held flat in USD), not a law; say so and give the numbers
+    caption: () => `Fees rise and fall with demand for block space. This model holds them at a recent 24-hour average, about $${FEE_LO.toLocaleString('en-US')} per block. ` +
+      `To fill the gap, fees would have to grow as fast as Bitcoin's price. Even at congestion levels ($${FEE_HI.toLocaleString('en-US')} per block) they stay a tiny share.`,
     spot: '[data-tour=mini-table]', dwell: 8000,
     apply: () => { state.showSecurity = true },
   },

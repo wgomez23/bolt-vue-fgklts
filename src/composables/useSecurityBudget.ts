@@ -130,7 +130,7 @@ export function useSecurityBudget() {
   }
 
   // ----- Power Law view: USD-equivalent security share, evaluated PER YEAR along
-  // the power-law price path. Subsidy $ halves, fees are a fixed $ (share shrinks as
+  // the power-law price path. Subsidy $ halves, fees are held flat in $ by assumption (share shrinks as
   // price climbs), and $NAT (a % of BTC market cap) contributes a constant share that
   // the slider scales directly. Verified: BTC market cap cancels in the NAT term, so
   // NAT holds a flat floor and the slider raises it. Nothing is nudged arbitrarily.
@@ -178,7 +178,7 @@ export function useSecurityBudget() {
 
   const subsidySeries = computed(() => subsidyStepSeries())
   const subsidyBtcSeries = computed(() => subsidyBtcStep())
-  const feeLevel = computed(() => feeUSD())                       // fixed USD (share shrinks as price climbs); do NOT scale by price
+  const feeLevel = computed(() => feeUSD())                       // held flat in USD by assumption (share shrinks as price climbs); do NOT scale by price
   const natLevel = computed(() => natUSD())                      // flat across years
 
   // dynamic y-axis ceiling so price-scaled subsidy never clips
