@@ -49,7 +49,7 @@ const feeData = computed<[number, number][]>(() => [[YEAR_MIN, props.feeLevel], 
 const natData = computed<[number, number][]>(() => [[YEAR_MIN, props.natLevel], [YEAR_MAX, props.natLevel]])
 
 function fmtUSD(v: number): string {
-  if (v >= 1e12) return '$' + (v / 1e12).toFixed(1) + 'T'
+  if (v >= 1e12) return '$' + (v / 1e12).toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + 'T'
   if (v >= 1e9) return '$' + (v / 1e9).toFixed(1) + 'B'
   if (v >= 1e6) return '$' + (v / 1e6).toFixed(1) + 'M'
   if (v >= 1e3) return '$' + (v / 1e3).toFixed(1) + 'k'

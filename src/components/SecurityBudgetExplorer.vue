@@ -73,7 +73,7 @@
               <tr>
                 <th class="pt-3 pb-1.5 pr-2 text-left"></th>
                 <th v-for="h in miniHeaders" :key="h"
-                  class="pt-3 pb-1.5 pl-2 text-right text-[10px] font-medium uppercase tracking-wide text-gray-400 align-bottom">
+                  class="pt-3 pb-1.5 pl-1.5 sm:pl-2 text-right text-[10px] font-medium uppercase tracking-wide text-gray-400 align-bottom">
                   {{ h }}
                 </th>
               </tr>
@@ -82,7 +82,7 @@
               <tr v-for="row in miniRows" :key="row.label" class="border-t border-white/5">
                 <td class="py-1.5 pr-2 text-xs font-semibold whitespace-nowrap" :style="{ color: row.color }">{{ row.label }}</td>
                 <td v-for="(c, i) in (compact ? row.compactCells : row.cells)" :key="i"
-                  class="py-1.5 pl-2 text-right font-mono text-sm font-semibold whitespace-nowrap tabular-nums"
+                  class="py-1.5 pl-1.5 sm:pl-2 text-right font-mono text-xs sm:text-sm font-semibold whitespace-nowrap tabular-nums"
                   :style="{ color: row.color }">
                   {{ c }}
                 </td>
@@ -257,17 +257,19 @@ const {
   powerLawPrice, securitySharePctUSD,
 } = useSecurityBudget()
 
+// one decimal with thousands separators, so $175074.6T reads $175,074.6T
+const d1 = (n: number) => n.toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 })
 function fmtUSD(v: number): string {
-  if (v >= 1e12) return '$' + (v / 1e12).toFixed(1) + 'T'
-  if (v >= 1e9) return '$' + (v / 1e9).toFixed(1) + 'B'
-  if (v >= 1e6) return '$' + (v / 1e6).toFixed(1) + 'M'
-  if (v >= 1e3) return '$' + (v / 1e3).toFixed(1) + 'k'
+  if (v >= 1e12) return '$' + d1(v / 1e12) + 'T'
+  if (v >= 1e9) return '$' + d1(v / 1e9) + 'B'
+  if (v >= 1e6) return '$' + d1(v / 1e6) + 'M'
+  if (v >= 1e3) return '$' + d1(v / 1e3) + 'k'
   if (v >= 1) return '$' + Math.round(v).toLocaleString('en-US')
   return '$' + v.toFixed(2)
 }
 function fmtMcapM(m: number): string {
-  if (m >= 1e6) return '$' + (m / 1e6).toFixed(1) + 'T'
-  if (m >= 1000) return '$' + (m / 1000).toFixed(1) + 'B'
+  if (m >= 1e6) return '$' + d1(m / 1e6) + 'T'
+  if (m >= 1000) return '$' + d1(m / 1000) + 'B'
   return '$' + Math.round(m) + 'M'
 }
 
