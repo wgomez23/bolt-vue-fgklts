@@ -65,6 +65,29 @@
               <span>100% of BTC</span>
             </div>
           </div>
+
+          <!-- COMPACT READOUT: key values beside the sliders so changes are visible while dragging -->
+          <table data-tour="mini-table" class="w-full border-collapse border-t border-white/10">
+            <thead>
+              <tr>
+                <th class="pt-3 pb-1.5 pr-2 text-left"></th>
+                <th v-for="h in miniHeaders" :key="h"
+                  class="pt-3 pb-1.5 pl-2 text-right text-[10px] font-medium uppercase tracking-wide text-gray-400 align-bottom">
+                  {{ h }}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="row in miniRows" :key="row.label" class="border-t border-white/5">
+                <td class="py-1.5 pr-2 text-xs font-semibold whitespace-nowrap" :style="{ color: row.color }">{{ row.label }}</td>
+                <td v-for="(c, i) in row.cells" :key="i"
+                  class="py-1.5 pl-2 text-right font-mono text-sm font-semibold whitespace-nowrap tabular-nums"
+                  :style="{ color: row.color }">
+                  {{ c }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
 
         <!-- TOGGLES -->
@@ -289,6 +312,13 @@ const assetRows = computed(() => {
     },
   ]
 })
+
+// Compact readout beside the sliders: Market cap, Price, Subsidy / block, Total annual security
+const MINI_COLS = [0, 1, 2, 6]
+const miniHeaders = ['Mkt cap', 'Price', 'Subsidy / blk', 'Annual security']
+const miniRows = computed(() =>
+  assetRows.value.slice(0, 2).map(row => ({ ...row, cells: MINI_COLS.map(i => row.cells[i]) })),
+)
 
 function segBtn(active: boolean): string {
   return [
