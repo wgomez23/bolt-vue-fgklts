@@ -217,7 +217,7 @@
               class="shrink-0 rounded bg-[#00FF94]/15 text-[#00FF94] text-[10px] font-bold px-2 py-1 tracking-wide">
               {{ tourSteps[tour.step].badge }}
             </span>
-            <p class="text-sm leading-relaxed text-gray-100">{{ tourSteps[tour.step].caption }}</p>
+            <p class="text-sm leading-relaxed text-gray-100">{{ tourCaption }}</p>
           </div>
           <div class="mt-3 flex items-center gap-2">
             <span class="text-[11px] text-gray-500 font-mono">{{ tour.step + 1 }} / {{ tourSteps.length }}</span>
@@ -265,6 +265,7 @@ function fmtPct(p: number): string {
   if (p >= 10) return p.toFixed(0) + '%'
   if (p >= 1) return p.toFixed(1) + '%'
   if (p >= 0.01) return p.toFixed(2) + '%'
+  if (p > 0 && p < 1e-4) return '<0.0001%'
   return p.toPrecision(1) + '%'
 }
 
@@ -359,9 +360,13 @@ function segBtn(active: boolean): string {
 }
 
 /* ---------------- GUIDED TOUR ---------------- */
-interface TourStep { caption: string; badge?: string; spot?: string; place?: Place; lift?: string[]; dwell: number; apply?: () => void }
+interface TourStep { caption: string | (() => string); badge?: string; spot?: string; place?: Place; lift?: string[]; dwell: number; apply?: () => void }
 
 const tour = reactive({ active: false, step: 0, playing: false })
+const tourCaption = computed(() => {
+  const c = tourSteps[tour.step].caption
+  return typeof c === 'function' ? c() : c
+})
 const barPct = computed(() => ((tour.step + 1) / tourSteps.length) * 100)
 
 let tweenRaf = 0
@@ -473,7 +478,7 @@ const tourSteps: TourStep[] = [
   {
     caption: "Bitcoin's security budget is the total value paid to miners each year to keep the chain secure. Today it is almost entirely the block subsidy.",
     spot: '[data-tour=chart]', place: 'beside', dwell: 8000,
-    apply: () => { cancelAnimationFrame(tweenRaf); state.priceModel = 'pl'; state.nat = false; state.showSecurity = false; state.mcapSlider = 0; state.year = 2026 },
+    apply: () => { cancelAnimationFrame(tweenRaf); state.priceModel = 'pl'; state.nat = false; state.showSecurity = false; state.natScale = 'abs'; state.mcapSlider = 0; state.year = 2026 },
   },
   {
     caption: "Every four years the subsidy halves. Watch the share of Bitcoin's market cap spent on security fall as time moves forward.",
@@ -501,9 +506,22 @@ const tourSteps: TourStep[] = [
     apply: () => { state.nat = true },
   },
   {
-    caption: "Drag $NAT's market cap up and the total security budget recovers, even after the subsidy is gone.",
-    badge: 'TRY IT', spot: '[data-tour=mcap]', dwell: 7500,
-    apply: () => { state.nat = true; tween(() => state.mcapSlider, v => (state.mcapSlider = v), 700, 2800) },
+    // Live caption: numbers track the slider as it animates up to 1% of BTC
+    caption: () => {
+      const { without, with: withNat } = spendPct.value
+      const x = without > 0 ? withNat / without : 0
+      const from = without < 1e-4 ? 'almost nothing' : fmtPct(without)
+      const times = x >= 2e6 ? `${Math.floor(x / 1e6)} million times`
+        : x >= 1e6 ? 'over a million times'
+        : x >= 1000 ? `${Math.round(x / 1000).toLocaleString('en-US')},000 times`
+        : `${Math.round(x)} times`
+      return `Now size $NAT at a modest 1% of Bitcoin's market cap. With the subsidy gone, yearly security spend goes from ${from} to ${fmtPct(withNat)} of Bitcoin's value` +
+        (x >= 2 ? `, ${times} more.` : '.')
+    },
+    badge: 'TRY IT', spot: '[data-tour=spend]', place: 'below',
+    lift: ['[data-tour=chart]', '[data-tour=mcap]', '[data-tour=mini-table]'], dwell: 9000,
+    // % of BTC scale runs log 0.001%..100% across 0..1000, so 600 is exactly 1%
+    apply: () => { state.nat = true; state.natScale = 'rel'; state.mcapSlider = 0; tween(() => state.mcapSlider, v => (state.mcapSlider = v), 600, 3200) },
   },
   {
     caption: "That is the whole argument. As the subsidy is halved, $NAT makes up a growing share of the security budget. Try the sliders yourself.",
