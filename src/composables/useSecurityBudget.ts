@@ -7,7 +7,7 @@ import { reactive, computed } from 'vue'
 // ---------- constants (2026-05 snapshot) ----------
 export const BTC_PRICE = 59901        // USD snapshot; Today mode overrides with live spot when available
 export const SUBSIDY_BTC_24 = 3.125   // BTC/block after the 4th halving (block 840,000)
-export const FEE_LO = 1359            // USD/block, 24h average baseline
+export const FEE_LO = 1905            // USD/block, 7-day mean (0.0228 BTC/block), mempool.space fees/1w, 2026-09-18..24
 export const FEE_HI = 28000           // USD/block, congestion-spike scenario
 export const NAT_BASE_USD = 32.68     // USD/block at base market cap
 export const MCAP_BASE = 32.9         // $M, today's NAT market cap
@@ -130,7 +130,7 @@ export function useSecurityBudget() {
   }
 
   // ----- Power Law view: USD-equivalent security share, evaluated PER YEAR along
-  // the power-law price path. Subsidy $ halves, fees are a fixed $ (share shrinks as
+  // the power-law price path. Subsidy $ halves, fees are held flat in $ by assumption (share shrinks as
   // price climbs), and $NAT (a % of BTC market cap) contributes a constant share that
   // the slider scales directly. Verified: BTC market cap cancels in the NAT term, so
   // NAT holds a flat floor and the slider raises it. Nothing is nudged arbitrarily.
@@ -178,7 +178,7 @@ export function useSecurityBudget() {
 
   const subsidySeries = computed(() => subsidyStepSeries())
   const subsidyBtcSeries = computed(() => subsidyBtcStep())
-  const feeLevel = computed(() => feeUSD())                       // fixed USD (share shrinks as price climbs); do NOT scale by price
+  const feeLevel = computed(() => feeUSD())                       // held flat in USD by assumption (share shrinks as price climbs); do NOT scale by price
   const natLevel = computed(() => natUSD())                      // flat across years
 
   // dynamic y-axis ceiling so price-scaled subsidy never clips
@@ -201,6 +201,7 @@ export function useSecurityBudget() {
       subsidy: sub,
       fees: fee,
       nat,
+      natPotential: NAT_BASE_USD * mcapMult(),                   // $NAT/block ignoring the NAT toggle
       total,
       btcMcap: btcMcapUSD(),
       annualSecurity: total * BLOCKS_PER_YEAR,

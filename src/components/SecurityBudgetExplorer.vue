@@ -65,6 +65,47 @@
               <span>100% of BTC</span>
             </div>
           </div>
+
+          <!-- COMPACT READOUT: key values beside the sliders so changes are visible while dragging -->
+          <FitText v-slot="{ compact }" data-tour="mini-table">
+          <table class="w-full border-collapse border-t border-white/10">
+            <thead>
+              <tr>
+                <th class="pt-3 pb-1.5 pr-2 text-left"></th>
+                <th v-for="h in miniHeaders" :key="h"
+                  class="pt-3 pb-1.5 pl-1.5 sm:pl-2 text-right text-[10px] font-medium uppercase tracking-wide text-gray-400 align-bottom">
+                  {{ h }}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="row in miniRows" :key="row.label" class="border-t border-white/5">
+                <td class="py-1.5 pr-2 text-xs font-semibold whitespace-nowrap" :style="{ color: row.color }">{{ row.label }}</td>
+                <td v-for="(c, i) in (compact ? row.compactCells : row.cells)" :key="i"
+                  class="py-1.5 pl-1.5 sm:pl-2 text-right font-mono text-xs sm:text-sm font-semibold whitespace-nowrap tabular-nums"
+                  :style="{ color: row.color }">
+                  {{ c }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          </FitText>
+
+          <!-- YEARLY SPEND: total annual security / BTC market cap -->
+          <div data-tour="spend" class="border-t border-white/10 pt-3 text-center">
+            <FitText v-slot="{ compact }">
+              <div class="font-mono text-3xl sm:text-4xl font-bold leading-none" :style="{ color: state.nat ? '#00FF94' : '#F7931A' }">
+                {{ fmtPct(spendPct.current, compact) }}
+              </div>
+            </FitText>
+            <div class="mt-1.5 text-xs text-gray-300">of Bitcoin's market cap spent on security each year</div>
+            <FitText v-slot="{ compact }" class="mt-1">
+              <div class="text-[11px] font-mono text-gray-500">
+                Without NAT <span class="text-[#F7931A]">{{ fmtPct(spendPct.without, compact) }}</span>
+                · With NAT <span class="text-[#00FF94]">{{ fmtPct(spendPct.with, compact) }}</span>
+              </div>
+            </FitText>
+          </div>
         </div>
 
         <!-- TOGGLES -->
@@ -121,9 +162,11 @@
         <div data-tour="natshare"
           class="rounded-xl border p-5 flex flex-col items-center text-center transition-colors"
           :class="state.nat ? 'border-[#00FF94]/40 bg-[#00FF94]/[0.06]' : 'border-white/10 bg-white/[0.02]'">
-          <div class="font-mono text-4xl sm:text-5xl font-bold leading-none" :style="{ color: state.nat ? '#00FF94' : '#e0533d' }">
-            {{ fmtPct(readout.natSharePct) }}
-          </div>
+          <FitText v-slot="{ compact }" class="w-full">
+            <div class="font-mono text-4xl sm:text-5xl font-bold leading-none" :style="{ color: state.nat ? '#00FF94' : '#e0533d' }">
+              {{ fmtPct(readout.natSharePct, compact) }}
+            </div>
+          </FitText>
           <div class="mt-2 text-sm text-gray-300">of the security budget is <span class="font-semibold text-[#00FF94]">$NAT</span></div>
         </div>
       </div>
@@ -162,37 +205,50 @@
     </p>
 
     <!-- TOUR OVERLAY -->
-    <div v-if="tour.active" class="fixed inset-x-0 bottom-0 z-[60] px-3 pb-3 pointer-events-none">
-      <div class="pointer-events-auto mx-auto max-w-3xl rounded-xl border border-white/10 bg-[#0b0b0d]/95 backdrop-blur p-4 shadow-2xl">
-        <div class="h-1 w-full rounded-full bg-white/10 overflow-hidden mb-3">
-          <div class="h-full rounded-full bg-[#00FF94] transition-all duration-500" :style="{ width: barPct + '%' }"></div>
-        </div>
-        <div class="flex items-start gap-3">
-          <span v-if="tourSteps[tour.step].badge"
-            class="shrink-0 rounded bg-[#00FF94]/15 text-[#00FF94] text-[10px] font-bold px-2 py-1 tracking-wide">
-            {{ tourSteps[tour.step].badge }}
-          </span>
-          <p class="text-sm leading-relaxed text-gray-100">{{ tourSteps[tour.step].caption }}</p>
-        </div>
-        <div class="mt-3 flex items-center gap-2">
-          <span class="text-[11px] text-gray-500 font-mono">{{ tour.step + 1 }} / {{ tourSteps.length }}</span>
-          <div class="ml-auto flex items-center gap-2">
-            <button @click="prev" :disabled="tour.step === 0" class="tour-btn disabled:opacity-30">Back</button>
-            <button @click="togglePlay" class="tour-btn">{{ tour.playing ? 'Pause' : 'Play' }}</button>
-            <button v-if="tour.step < tourSteps.length - 1" @click="next()" class="tour-btn-primary">Next</button>
-            <button @click="exitTour" class="tour-btn">{{ tour.step === tourSteps.length - 1 ? 'Done' : 'Exit' }}</button>
+    <!-- Anchored beside the spotlighted element on wide screens; docked to the bottom on narrow ones.
+         Teleported to <body>: the page's scroll-reveal wrapper keeps a transform, which would make
+         position:fixed resolve against that wrapper instead of the viewport. -->
+    <Teleport to="body">
+      <div v-if="tour.active"
+        :class="cardPos.mode === 'dock' ? 'fixed inset-x-0 bottom-0 z-[60] px-3 pb-3 pointer-events-none' : 'fixed z-[60]'"
+        :style="cardPos.mode === 'float' ? { top: cardPos.top + 'px', left: cardPos.left + 'px', width: CARD_W + 'px' } : undefined">
+        <span v-if="cardPos.mode === 'float' && cardPos.arrow" class="tour-arrow" :class="'tour-arrow-' + cardPos.arrow"
+          :style="cardPos.arrow === 'left' || cardPos.arrow === 'right' ? { top: cardPos.arrowAt + 'px' } : { left: cardPos.arrowAt + 'px' }"></span>
+        <div ref="cardEl" :key="tour.step"
+          class="tour-card pointer-events-auto rounded-xl border border-[#00FF94]/30 bg-[#0b0b0d]/95 backdrop-blur p-4 shadow-2xl"
+          :class="cardPos.mode === 'dock' ? 'mx-auto max-w-3xl' : ''">
+          <div class="h-1 w-full rounded-full bg-white/10 overflow-hidden mb-3">
+            <div class="h-full rounded-full bg-[#00FF94] transition-all duration-500" :style="{ width: barPct + '%' }"></div>
+          </div>
+          <div class="flex items-start gap-3">
+            <span v-if="tourSteps[tour.step].badge"
+              class="shrink-0 rounded bg-[#00FF94]/15 text-[#00FF94] text-[10px] font-bold px-2 py-1 tracking-wide">
+              {{ tourSteps[tour.step].badge }}
+            </span>
+            <p class="text-sm leading-relaxed text-gray-100">{{ tourCaption }}</p>
+          </div>
+          <div class="mt-3 flex items-center gap-2">
+            <span class="text-[11px] text-gray-500 font-mono">{{ tour.step + 1 }} / {{ tourSteps.length }}</span>
+            <div class="ml-auto flex items-center gap-2">
+              <button @click="prev" :disabled="tour.step === 0" class="tour-btn disabled:opacity-30">Back</button>
+              <button @click="togglePlay" class="tour-btn">{{ tour.playing ? 'Pause' : 'Play' }}</button>
+              <button v-if="tour.step < tourSteps.length - 1" @click="next()" class="tour-btn-primary">Next</button>
+              <button @click="exitTour" class="tour-btn">{{ tour.step === tourSteps.length - 1 ? 'Done' : 'Exit' }}</button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </Teleport>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onBeforeUnmount, reactive, nextTick } from 'vue'
+import { computed, onMounted, onBeforeUnmount, reactive, ref, nextTick } from 'vue'
 import SecurityBudgetChart from './SecurityBudgetChart.vue'
+import FitText from './FitText.vue'
+import { fmtPct, sigDecimals } from '../utils/format'
 import PowerLawChart from './PowerLawChart.vue'
-import { useSecurityBudget, BLOCKS_PER_YEAR } from '../composables/useSecurityBudget'
+import { useSecurityBudget, BLOCKS_PER_YEAR, FEE_LO, FEE_HI } from '../composables/useSecurityBudget'
 
 withDefaults(defineProps<{ chartHeight?: number }>(), { chartHeight: 460 })
 
@@ -201,25 +257,20 @@ const {
   powerLawPrice, securitySharePctUSD,
 } = useSecurityBudget()
 
+// one decimal with thousands separators, so $175074.6T reads $175,074.6T
+const d1 = (n: number) => n.toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 })
 function fmtUSD(v: number): string {
-  if (v >= 1e12) return '$' + (v / 1e12).toFixed(1) + 'T'
-  if (v >= 1e9) return '$' + (v / 1e9).toFixed(1) + 'B'
-  if (v >= 1e6) return '$' + (v / 1e6).toFixed(1) + 'M'
-  if (v >= 1e3) return '$' + (v / 1e3).toFixed(1) + 'k'
+  if (v >= 1e12) return '$' + d1(v / 1e12) + 'T'
+  if (v >= 1e9) return '$' + d1(v / 1e9) + 'B'
+  if (v >= 1e6) return '$' + d1(v / 1e6) + 'M'
+  if (v >= 1e3) return '$' + d1(v / 1e3) + 'k'
   if (v >= 1) return '$' + Math.round(v).toLocaleString('en-US')
   return '$' + v.toFixed(2)
 }
 function fmtMcapM(m: number): string {
-  if (m >= 1e6) return '$' + (m / 1e6).toFixed(1) + 'T'
-  if (m >= 1000) return '$' + (m / 1000).toFixed(1) + 'B'
+  if (m >= 1e6) return '$' + d1(m / 1e6) + 'T'
+  if (m >= 1000) return '$' + d1(m / 1000) + 'B'
   return '$' + Math.round(m) + 'M'
-}
-
-function fmtPct(p: number): string {
-  if (p >= 10) return p.toFixed(0) + '%'
-  if (p >= 1) return p.toFixed(1) + '%'
-  if (p >= 0.01) return p.toFixed(2) + '%'
-  return p.toPrecision(1) + '%'
 }
 
 const natMcapLabel = computed(() => {
@@ -235,13 +286,17 @@ const DASH = '\u2014'
 const NAT_SUPPLY = 391e12   // ~391T $NAT total supply, for implied price
 const colHeaders = ['Market cap', 'Price', 'Subsidy / block', 'Subsidy / year', 'Fees / block', 'Fees / year', 'Total annual security']
 
-function fmtPrice(v: number): string {
+function fmtPrice(v: number, compact = false): string {
   if (v >= 1) return fmtUSD(v)
   if (v >= 0.01) return '$' + v.toFixed(3)
-  return '$' + v.toPrecision(2)
+  if (!(v > 0)) return '$0'
+  if (compact && v < 1e-4) return '<$0.0001'
+  return '$' + v.toFixed(sigDecimals(v))
 }
 
-const assetRows = computed(() => {
+interface AssetRow { label: string; color: string; cells: string[]; compactCells?: string[]; total?: boolean }
+
+const assetRows = computed((): AssetRow[] => {
   const r = readout.value
   const on = state.nat
   const NATON = '#00FF94'
@@ -274,6 +329,16 @@ const assetRows = computed(() => {
         DASH,
         on ? fmtUSD(natTotal) : '$0',
       ],
+      // compact readout only: tiny prices truncate when the column can't fit the full decimal
+      compactCells: [
+        on ? fmtUSD(natMcapM() * 1e6) : '$0',
+        on ? fmtPrice(natPrice, true) : '$0',
+        on ? fmtUSD(r.nat) : '$0',
+        on ? fmtUSD(r.nat * BLOCKS_PER_YEAR) : '$0',
+        DASH,
+        DASH,
+        on ? fmtUSD(natTotal) : '$0',
+      ],
     },
     {
       label: 'Total', color: '#e5e7eb', total: true,
@@ -290,6 +355,25 @@ const assetRows = computed(() => {
   ]
 })
 
+// Compact readout beside the sliders: Market cap, Price, Subsidy / block, Total annual security
+const MINI_COLS = [0, 1, 2, 6]
+const miniHeaders = ['Mkt cap', 'Price', 'Subsidy / blk', 'Annual security']
+const miniRows = computed(() =>
+  assetRows.value.slice(0, 2).map(row => ({
+    ...row,
+    cells: MINI_COLS.map(i => row.cells[i]),
+    compactCells: MINI_COLS.map(i => (row.compactCells ?? row.cells)[i]),
+  })),
+)
+
+// Yearly security spend as % of BTC market cap: (subsidy + fees [+ NAT]) × blocks/yr ÷ BTC mcap × 100
+const spendPct = computed(() => {
+  const r = readout.value
+  const without = ((r.subsidy + r.fees) * BLOCKS_PER_YEAR / r.btcMcap) * 100
+  const withNat = ((r.subsidy + r.fees + r.natPotential) * BLOCKS_PER_YEAR / r.btcMcap) * 100
+  return { without, with: withNat, current: state.nat ? withNat : without }
+})
+
 function segBtn(active: boolean): string {
   return [
     'px-3 py-1.5 rounded-md text-sm font-medium transition-colors',
@@ -298,9 +382,13 @@ function segBtn(active: boolean): string {
 }
 
 /* ---------------- GUIDED TOUR ---------------- */
-interface TourStep { caption: string; badge?: string; spot?: string; dwell: number; apply?: () => void }
+interface TourStep { caption: string | (() => string); badge?: string; spot?: string; place?: Place; lift?: string[]; dwell: number; apply?: () => void }
 
 const tour = reactive({ active: false, step: 0, playing: false })
+const tourCaption = computed(() => {
+  const c = tourSteps[tour.step].caption
+  return typeof c === 'function' ? c() : c
+})
 const barPct = computed(() => ((tour.step + 1) / tourSteps.length) * 100)
 
 let tweenRaf = 0
@@ -318,41 +406,122 @@ function tween(get: () => number, set: (v: number) => void, target: number, ms =
 }
 
 let lastSpot: HTMLElement | null = null
-function setSpot(sel?: string): void {
+let lifted: HTMLElement[] = []
+function setSpot(sel?: string, lift: string[] = []): void {
   if (lastSpot) { lastSpot.classList.remove('tour-spotlight'); lastSpot = null }
+  lifted.forEach(el => el.classList.remove('tour-lift'))
+  // lifted elements render above the dim layer without the spotlight ring
+  lifted = lift.map(q => document.querySelector(q) as HTMLElement | null).filter((el): el is HTMLElement => !!el)
+  lifted.forEach(el => el.classList.add('tour-lift'))
   if (!sel) return
   const el = document.querySelector(sel) as HTMLElement | null
   if (el) {
     el.classList.add('tour-spotlight')
     lastSpot = el
-    el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    if (window.innerWidth < FLOAT_MIN_W) {
+      // Docked card covers the bottom of the screen, so park the target near the top instead of the center
+      window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - NAV_H - 8, behavior: 'smooth' })
+    } else {
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }
   }
 }
+
+/* Card placement: sit next to the spotlight with an arrow pointing at it */
+type Place = 'left' | 'right' | 'below' | 'above' | 'beside'
+const CARD_W = 380
+const FLOAT_MIN_W = 1024 // below this the sidebar stacks under the chart; dock the card instead
+const NAV_H = 84         // fixed site nav (top-4 + bar)
+const GAP = 16
+const EDGE = 12
+const cardEl = ref<HTMLElement | null>(null)
+const cardPos = reactive({ mode: 'dock' as 'dock' | 'float', top: 0, left: 0, arrow: null as null | 'left' | 'right' | 'up' | 'down', arrowAt: 0 })
+
+function positionCard(): void {
+  const el = lastSpot
+  const card = cardEl.value
+  const vw = window.innerWidth
+  const vh = window.innerHeight
+  if (!el || !card || vw < FLOAT_MIN_W) { cardPos.mode = 'dock'; return }
+  const r = el.getBoundingClientRect()
+  const h = card.offsetHeight
+  const clampY = (y: number) => Math.min(Math.max(y, NAV_H + EDGE), vh - h - EDGE)
+  const clampX = (x: number) => Math.min(Math.max(x, EDGE), vw - CARD_W - EDGE)
+  const midY = r.top + r.height / 2
+  const midX = r.left + r.width / 2
+
+  const tryPlace = (p: Place): boolean => {
+    let top: number, left: number, arrow: typeof cardPos.arrow, arrowAt: number
+    if (p === 'left' || p === 'right') {
+      left = p === 'left' ? r.left - CARD_W - GAP : r.right + GAP
+      if (left < EDGE || left + CARD_W > vw - EDGE) return false
+      top = clampY(midY - h / 2)
+      arrow = p === 'left' ? 'right' : 'left'
+      arrowAt = Math.min(Math.max(midY - top, 18), h - 18)
+    } else if (p === 'below' || p === 'above') {
+      top = p === 'below' ? r.bottom + GAP : r.top - h - GAP
+      if (top < NAV_H + EDGE || top + h > vh - EDGE) return false
+      left = clampX(midX - CARD_W / 2)
+      arrow = p === 'below' ? 'up' : 'down'
+      arrowAt = Math.min(Math.max(midX - left, 18), CARD_W - 18)
+    } else {
+      // the chart: sit over the dimmed sidebar, overlapping the chart's right edge only if the viewport is tight
+      left = clampX(r.right + GAP)
+      const visTop = Math.max(r.top, NAV_H)
+      const visMid = (visTop + Math.min(r.bottom, vh)) / 2
+      top = clampY(visMid - h / 2)
+      arrow = left >= r.right ? 'left' : null
+      arrowAt = Math.min(Math.max(visMid - top, 18), h - 18)
+    }
+    Object.assign(cardPos, { mode: 'float', top, left, arrow, arrowAt })
+    return true
+  }
+
+  const order: Place[] = tourSteps[tour.step].place
+    ? [tourSteps[tour.step].place!, 'left', 'right', 'below', 'above']
+    : ['left', 'right', 'below', 'above']
+  if (!order.some(tryPlace)) cardPos.mode = 'dock'
+}
+
+// Track the target while it smooth-scrolls into place, then settle on scroll/resize listeners
+let followRaf = 0
+function followSpot(ms = 1200): void {
+  cancelAnimationFrame(followRaf)
+  const t0 = performance.now()
+  const frame = (now: number) => {
+    positionCard()
+    if (now - t0 < ms) followRaf = requestAnimationFrame(frame)
+  }
+  followRaf = requestAnimationFrame(frame)
+}
+const onViewportChange = () => { if (tour.active) positionCard() }
 
 const tourSteps: TourStep[] = [
   {
     caption: "Bitcoin's security budget is the total value paid to miners each year to keep the chain secure. Today it is almost entirely the block subsidy.",
-    spot: '[data-tour=chart]', dwell: 8000,
-    apply: () => { cancelAnimationFrame(tweenRaf); state.priceModel = 'pl'; state.nat = false; state.showSecurity = false; state.mcapSlider = 0; state.year = 2026 },
+    spot: '[data-tour=chart]', place: 'beside', dwell: 8000,
+    apply: () => { cancelAnimationFrame(tweenRaf); state.priceModel = 'pl'; state.nat = false; state.showSecurity = false; state.natScale = 'abs'; state.mcapSlider = 0; state.year = 2026 },
   },
   {
-    caption: "Every four years the subsidy halves. Watch the miner reward fall as we move through time.",
-    spot: '[data-tour=year]', dwell: 6500,
-    apply: () => tween(() => state.year, v => (state.year = v), 2060, 2800),
+    caption: "Every four years the subsidy halves. Watch the share of Bitcoin's market cap spent on security fall as time moves forward.",
+    spot: '[data-tour=spend]', place: 'below', lift: ['[data-tour=chart]'], dwell: 7000,
+    apply: () => tween(() => state.year, v => (state.year = v), 2060, 4000),
   },
   {
     caption: "By 2140 the block subsidy reaches zero. New bitcoin issuance ends forever.",
-    spot: '[data-tour=chart]', dwell: 7000,
+    spot: '[data-tour=chart]', place: 'beside', dwell: 7000,
     apply: () => tween(() => state.year, v => (state.year = v), 2140, 2800),
   },
   {
-    caption: "Fees will not fill the gap. They are a fixed dollar amount, so as the price climbs their share only shrinks.",
-    spot: '[data-tour=table]', dwell: 8000,
+    // Fees are a model assumption (held flat in USD), not a law; say so and give the numbers
+    caption: () => `Fees rise and fall with demand for block space. This model holds them at the 7-day average as of September 2026, about $${FEE_LO.toLocaleString('en-US')} per block. ` +
+      `To fill the gap, fees would have to grow as fast as Bitcoin's price. Even at congestion levels ($${FEE_HI.toLocaleString('en-US')} per block) they stay a tiny share.`,
+    spot: '[data-tour=mini-table]', dwell: 8000,
     apply: () => { state.showSecurity = true },
   },
   {
     caption: "So Bitcoin's security keeps falling as a share of its own market cap. This is the security budget problem.",
-    spot: '[data-tour=chart]', dwell: 7500,
+    spot: '[data-tour=chart]', place: 'beside', dwell: 7500,
     apply: () => { state.showSecurity = true },
   },
   {
@@ -361,9 +530,22 @@ const tourSteps: TourStep[] = [
     apply: () => { state.nat = true },
   },
   {
-    caption: "Drag $NAT's market cap up and the total security budget recovers, even after the subsidy is gone.",
-    badge: 'TRY IT', spot: '[data-tour=mcap]', dwell: 7500,
-    apply: () => { state.nat = true; tween(() => state.mcapSlider, v => (state.mcapSlider = v), 700, 2800) },
+    // Live caption: numbers track the slider as it animates up to 1% of BTC
+    caption: () => {
+      const { without, with: withNat } = spendPct.value
+      const x = without > 0 ? withNat / without : 0
+      const from = fmtPct(without)
+      const times = x >= 2e6 ? `${Math.floor(x / 1e6)} million times`
+        : x >= 1e6 ? 'over a million times'
+        : x >= 1000 ? `${Math.round(x / 1000).toLocaleString('en-US')},000 times`
+        : `${Math.round(x)} times`
+      return `Now size $NAT at a modest 1% of Bitcoin's market cap. With the subsidy gone, yearly security spend goes from ${from} to ${fmtPct(withNat)} of Bitcoin's value` +
+        (x >= 2 ? `, ${times} more.` : '.')
+    },
+    badge: 'TRY IT', spot: '[data-tour=spend]', place: 'below',
+    lift: ['[data-tour=chart]', '[data-tour=mcap]', '[data-tour=mini-table]'], dwell: 9000,
+    // % of BTC scale runs log 0.001%..100% across 0..1000, so 600 is exactly 1%
+    apply: () => { state.nat = true; state.natScale = 'rel'; state.mcapSlider = 0; tween(() => state.mcapSlider, v => (state.mcapSlider = v), 600, 3200) },
   },
   {
     caption: "That is the whole argument. As the subsidy is halved, $NAT makes up a growing share of the security budget. Try the sliders yourself.",
@@ -381,7 +563,7 @@ function schedule(): void {
 function applyStep(i: number): void {
   tour.step = i
   tourSteps[i].apply?.()
-  nextTick(() => setSpot(tourSteps[i].spot))
+  nextTick(() => { setSpot(tourSteps[i].spot, tourSteps[i].lift); followSpot() })
 }
 function startTour(): void {
   tour.active = true
@@ -416,11 +598,20 @@ function exitTour(): void {
   tour.playing = false
   clearTimeout(tourTimer)
   cancelAnimationFrame(tweenRaf)
+  cancelAnimationFrame(followRaf)
   setSpot()
 }
 
-onMounted(() => { fetchLivePrice() })
-onBeforeUnmount(() => { clearTimeout(tourTimer); cancelAnimationFrame(tweenRaf); setSpot() })
+onMounted(() => {
+  fetchLivePrice()
+  window.addEventListener('scroll', onViewportChange, { passive: true })
+  window.addEventListener('resize', onViewportChange)
+})
+onBeforeUnmount(() => {
+  clearTimeout(tourTimer); cancelAnimationFrame(tweenRaf); cancelAnimationFrame(followRaf); setSpot()
+  window.removeEventListener('scroll', onViewportChange)
+  window.removeEventListener('resize', onViewportChange)
+})
 </script>
 
 <style scoped>
@@ -469,6 +660,25 @@ onBeforeUnmount(() => { clearTimeout(tourTimer); cancelAnimationFrame(tweenRaf);
   background: #00FF94;
   color: #000;
 }
+.tour-card { animation: tourIn 0.25s ease-out; }
+@keyframes tourIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: none; }
+}
+/* arrow: a rotated square on the card edge facing the spotlight */
+.tour-arrow {
+  position: absolute;
+  z-index: 1;
+  width: 14px;
+  height: 14px;
+  background: #0b0b0d;
+  border: 1px solid rgba(0, 255, 148, 0.3);
+  transform: rotate(45deg);
+}
+.tour-arrow-left { left: -7px; margin-top: -7px; border-top: 0; border-right: 0; }
+.tour-arrow-right { right: -7px; margin-top: -7px; border-bottom: 0; border-left: 0; }
+.tour-arrow-up { top: -7px; margin-left: -7px; border-right: 0; border-bottom: 0; }
+.tour-arrow-down { bottom: -7px; margin-left: -7px; border-top: 0; border-left: 0; }
 .tour-pulse { animation: tourPulse 2s ease-in-out infinite; }
 @keyframes tourPulse {
   0%, 100% { box-shadow: 0 0 0 0 rgba(0, 255, 148, 0.5); }
@@ -483,5 +693,9 @@ onBeforeUnmount(() => { clearTimeout(tourTimer); cancelAnimationFrame(tweenRaf);
   border-radius: 12px;
   box-shadow: 0 0 0 3px #00FF94, 0 0 0 9999px rgba(0, 0, 0, 0.62);
   transition: box-shadow 0.35s ease;
+}
+.tour-lift {
+  position: relative;
+  z-index: 46;
 }
 </style>

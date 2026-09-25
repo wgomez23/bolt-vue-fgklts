@@ -20,6 +20,7 @@ import {
   GridComponent, TooltipComponent, MarkLineComponent, MarkPointComponent, GraphicComponent,
 } from 'echarts/components'
 import type { EChartsOption } from 'echarts'
+import { fmtPct as fmtPctFull } from '../utils/format'
 
 use([
   CanvasRenderer, LineChart, CustomChart, GridComponent,
@@ -140,8 +141,8 @@ const option = computed<EChartsOption>(() => {
         let s = '<b>' + x + '</b>'
         for (const p of (Array.isArray(ps) ? ps : [ps])) {
           if (p.seriesName === 'BTC price') s += '<br/>' + p.marker + ' BTC price (model): ' + fmtUSD(p.value[1])
-          if (p.seriesName === 'Security % (no NAT)') s += '<br/>' + p.marker + ' Security budget, no $NAT: ' + fmtPct(Number(p.value[1].toFixed(3))) + ' of mcap'
-          if (p.seriesName === 'Security % (+NAT)') s += '<br/>' + p.marker + ' With $NAT: ' + fmtPct(Number(p.value[1].toFixed(3))) + ' of mcap'
+          if (p.seriesName === 'Security % (no NAT)') s += '<br/>' + p.marker + ' Security budget, no $NAT: ' + fmtPctFull(p.value[1]) + ' of mcap'
+          if (p.seriesName === 'Security % (+NAT)') s += '<br/>' + p.marker + ' With $NAT: ' + fmtPctFull(p.value[1]) + ' of mcap'
         }
         return s
       },
