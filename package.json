@@ -18,7 +18,7 @@
     "@headlessui/vue": "^1.7.19",
     "@lottiefiles/dotlottie-vue": "^0.4.0",
     "@motionone/vue": "^10.16.4",
-    "@vueuse/core": "^10.7.2",
+    "@vueuse/core": "^14.4.0",
     "canvas-confetti": "^1.9.2",
     "chart.js": "^4.4.1",
     "echarts": "^6.1.0",
