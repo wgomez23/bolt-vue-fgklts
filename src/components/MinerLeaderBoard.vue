@@ -131,8 +131,8 @@
                 </div>
               </td>
               <td class="py-2 px-4 text-center whitespace-nowrap">{{ formatNumber(item.total_rewards) }}</td>
-              <td class="py-2 px-4 text-center whitespace-nowrap">{{ formatNumber(item.balance) }}</td>
-              <td class="py-2 px-4 text-center text-green-400 whitespace-nowrap">${{ new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(calculateTheoreticalValueRaw(item.balance)) }}</td>
+              <td class="py-2 px-4 text-center whitespace-nowrap">{{ item.balance == null ? '—' : formatNumber(item.balance) }}</td>
+              <td class="py-2 px-4 text-center text-green-400 whitespace-nowrap">{{ item.balance == null ? '—' : '$' }}{{ item.balance == null ? '' : new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(calculateTheoreticalValueRaw(item.balance)) }}</td>
               <td class="py-2 px-4 text-center whitespace-nowrap">
                 {{ formatNumber(satsToBitcoin(item?.extraData?.totalReward, 0)) }} <span class="text-xs text-primary">BTC</span>
               </td>
@@ -153,6 +153,7 @@
 <script>
 import Pagination from "./Pagination.vue";
 import confetti from 'canvas-confetti';
+import { poolListUrl } from "../utils/natApi";
 
 export default {
   components: {
@@ -318,7 +319,7 @@ export default {
 
       try {
         const response = await fetch(
-          `https://api.mscribe.io/api/pools/list?offset=${this.offset}&limit=${this.limit}`,
+          poolListUrl(this.offset, this.limit),
           { signal }
         );
 

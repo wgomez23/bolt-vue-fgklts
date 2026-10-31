@@ -1,0 +1,15 @@
+name = "natgmi-block-api"
+main = "src/index.js"
+compatibility_date = "2026-10-01"
+
+# Every 2 minutes. Blocks come about every 10 minutes, so most runs make one tiny request.
+[triggers]
+crons = ["*/2 * * * *"]
+
+[vars]
+START_HEIGHT = "885588"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "natgmi-blocks"
+database_id = "REPLACE_WITH_ID_FROM_wrangler_d1_create"

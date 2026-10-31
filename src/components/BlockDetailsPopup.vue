@@ -68,14 +68,14 @@
               <th class="py-2 px-4 text-primary">Timestamp</th>
               <th class="py-2 px-4 text-primary">Mined</th>
               <th class="py-2 px-4 text-primary">Amount</th>
-              <th class="py-2 px-4 text-primary">Status</th>
+              <th v-if="showStatus" class="py-2 px-4 text-primary">Status</th>
             </tr>
           </thead>
           <tbody>
             <!-- Loading skeleton -->
             <template v-if="isLoading">
               <tr v-for="i in 10" :key="i" class="text-gray-300 animate-pulse">
-                <td v-for="j in 5" :key="j" class="py-2 px-4">
+                <td v-for="j in (showStatus ? 5 : 4)" :key="j" class="py-2 px-4">
                   <div class="h-4 bg-gray-700 rounded w-20"></div>
                 </td>
               </tr>
@@ -86,11 +86,11 @@
               class="text-gray-300"
               :class="{ 'bg-dark': index % 2 == 0 }"
               v-for="(entry, index) in entries"
-              :key="entry.tx"
+              :key="entry.tx || entry.blck"
             >
               <td class="py-2 px-4 cursor-pointer">
                 <a
-                  :href="'https://mempool.space/tx/' + entry.tx"
+                  :href="rewardLink(entry)"
                   target="_blank"
                   class="hover:underline hover:text-primary"
                 >
@@ -100,7 +100,7 @@
               <td class="py-2 px-4">{{ formatTimestamp(entry.ts) }}</td>
               <td class="py-2 px-4">{{ formatRelativeTime(entry.ts) }}</td>
               <td class="py-2 px-4">{{ formatNumber(entry.amt) }}</td>
-              <td class="py-2 px-4">
+              <td v-if="showStatus" class="py-2 px-4">
                 <span
                   class="px-2 py-1 rounded-full text-sm"
                   :class="
@@ -128,6 +128,7 @@
 
 <script>
 import Pagination from "./Pagination.vue";
+import { USE_NAT_API, poolRewardsUrl, rewardLink } from "../utils/natApi";
 export default {
   components: {
     Pagination,
@@ -138,6 +139,8 @@ export default {
   },
   data() {
     return {
+      // The free block API has no TAP data, so it can't say whether a reward transfer was valid.
+      showStatus: !USE_NAT_API,
       isLoading: false,
       entries: [],
       totalRewards: null,
@@ -164,6 +167,7 @@ export default {
     },
   },
   methods: {
+    rewardLink,
     async fetchPoolData() {
       this.isLoading = true;
       if (this.abortController) {
@@ -174,7 +178,7 @@ export default {
 
       try {
         const response = await fetch(
-          `https://api.mscribe.io/api/pools/rewards/${this.block.extras.pool?.slug}?offset=${this.offset}&limit=${this.limit}`,
+          poolRewardsUrl(this.block.extras.pool?.slug, this.offset, this.limit),
           { signal }
         );
 

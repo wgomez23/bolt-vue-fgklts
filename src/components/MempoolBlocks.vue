@@ -33,42 +33,91 @@
 <script >
 import Block from './Block.vue';
 import BlockDetailsPopup from './BlockDetailsPopup.vue';
+import { USE_NAT_API, latestBlocksUrl } from '../utils/natApi';
+
+const POLL_MS = 60_000; // a new block comes about every 10 minutes
 
 export default{
   mounted() {
-    this.connectWebSocket();
+    if (USE_NAT_API) {
+      this.startPolling();
+    } else {
+      this.connectWebSocket();
+    }
   },
-  beforeDestroy() {
+  beforeUnmount() {
+    this.stopped = true;
     if (this.ws) {
+      this.ws.onclose = null;
       this.ws.close();
     }
     if (this.pingInterval) {
       clearInterval(this.pingInterval);
     }
+    if (this.pollTimer) {
+      clearInterval(this.pollTimer);
+    }
+    document.removeEventListener('visibilitychange', this.onVisibility);
   },
   components:{Block, BlockDetailsPopup},
   data(){
     return {
       CDN_URL: 'https://mscribe-webapp.s3.amazonaws.com/',
       blocks: [],
-      ws: new WebSocket('wss://mscribe-indexer-32036803921d.herokuapp.com'),
+      ws: null,
       pingInterval: null,
+      pollTimer: null,
+      stopped: false,
       newBlockHash:null,
       selectedBlock: null
     }
   },
   computed:{
     sortedBlocks(){
-      return this.blocks.sort((a, b) => b.height - a.height);
+      return [...this.blocks].sort((a, b) => b.height - a.height);
     }
   },
   methods:{
+    // Free block API: fetch the latest blocks once a minute while the tab is visible.
+    startPolling() {
+      this.onVisibility = () => {
+        if (document.visibilityState === 'visible') this.fetchBlocks();
+      };
+      document.addEventListener('visibilitychange', this.onVisibility);
+      this.fetchBlocks();
+      this.pollTimer = setInterval(() => {
+        if (document.visibilityState === 'visible') this.fetchBlocks();
+      }, POLL_MS);
+    },
+    async fetchBlocks() {
+      try {
+        const res = await fetch(latestBlocksUrl(15));
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const { blocks } = await res.json();
+        if (!Array.isArray(blocks) || this.stopped) return;
+        const known = new Set(this.blocks.map((b) => b.id));
+        const hadBlocks = this.blocks.length > 0;
+        this.blocks = blocks;
+        const newest = blocks.reduce((a, b) => (b.height > (a?.height ?? -1) ? b : a), null);
+        if (hadBlocks && newest && !known.has(newest.id)) {
+          this.newBlockHash = newest.id;
+          setTimeout(() => {
+            this.newBlockHash = null;
+          }, 1500); // Match the animation duration
+        }
+      } catch (error) {
+        console.error('Error fetching blocks:', error);
+      }
+    },
     connectWebSocket() {
-      
+      if (this.stopped) return;
+      this.ws = new WebSocket('wss://mscribe-indexer-32036803921d.herokuapp.com');
+
       this.ws.onopen = () => {
         this.ws.send(JSON.stringify({ action: "init" }));
         this.ws.send(JSON.stringify({ action: "want", data:["blocks"] }));
-        
+
+        if (this.pingInterval) clearInterval(this.pingInterval);
         this.pingInterval = setInterval(() => {
           if (this.ws.readyState === WebSocket.OPEN) {
             this.ws.send(JSON.stringify({ action: "ping" }));

@@ -1,0 +1,17 @@
+# Cloudflare Pages headers (ignored by the Heroku/nginx setup). Mirrors config/nginx.conf.erb.
+/*
+  Strict-Transport-Security: max-age=86400; includeSubDomains
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+
+/
+  Cache-Control: no-store, no-cache
+
+/index.html
+  Cache-Control: no-store, no-cache
+
+/natpaper
+  Cache-Control: no-store, no-cache
+
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
