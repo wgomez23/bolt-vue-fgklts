@@ -63,10 +63,13 @@ export async function saveBlocks(db, records, extra = []) {
     stmts.push(
       db
         .prepare(
-          `INSERT OR REPLACE INTO blocks (height, hash, ts, bits, pool_id, pool_name, pool_slug, reward, source)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+          `INSERT OR REPLACE INTO blocks (height, hash, ts, bits, pool_id, pool_name, pool_slug, reward, payout_addresses, source)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         )
-        .bind(r.height, r.hash, r.ts, r.bits, r.pool.id, r.pool.name, r.pool.slug, r.reward, r.source),
+        .bind(
+          r.height, r.hash, r.ts, r.bits, r.pool.id, r.pool.name, r.pool.slug, r.reward,
+          r.payoutAddresses?.length ? JSON.stringify(r.payoutAddresses) : null, r.source,
+        ),
     );
     stmts.push(poolAddStmt(db, r, +1));
     changed++;
@@ -122,4 +125,17 @@ export async function poolRewards(db, slug, offset, limit) {
     blocks: rows.results.map((r) => ({ blck: r.height, ts: r.ts, amt: r.bits, hash: r.hash, tx: null, fail: false })),
     analytics: { total_rewards: p?.total_rewards ?? 0, balance: null, total: p?.blocks ?? 0 },
   };
+}
+
+// Every coinbase payout address seen per pool: the list a TAP balance lookup would run over.
+export async function payoutAddresses(db) {
+  const { results } = await db
+    .prepare(
+      `SELECT b.pool_slug AS slug, a.value AS address, COUNT(*) AS blocks, SUM(b.bits) AS nat
+       FROM blocks b, json_each(b.payout_addresses) a
+       WHERE b.payout_addresses IS NOT NULL
+       GROUP BY b.pool_slug, a.value ORDER BY nat DESC`,
+    )
+    .all();
+  return results;
 }

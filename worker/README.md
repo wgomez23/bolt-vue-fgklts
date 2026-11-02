@@ -22,6 +22,10 @@ leaderboard and pool popup. It shows, for every block since 885588, how much NAT
 | `GET /pools/:slug?offset&limit` | `{ success, blocks, analytics }` | pool popup |
 | `GET /health` | 200, or 503 if the newest block is over two hours old | uptime monitor |
 
+Each block also stores its coinbase payout addresses (`payout_addresses`), so the addresses
+that received NAT can be listed per pool (`payoutAddresses()` in `src/store.js`). Turning those
+into current NAT balances still needs a TAP indexer to look each address up.
+
 Not covered (still from api.mscribe.io or hidden): pool NAT **balances**, the per-reward
 valid/invalid status, and token stats (`/api/tokens/all`: supply, holders, floor price).
 Those need a TAP indexer or another data source.

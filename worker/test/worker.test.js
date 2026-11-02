@@ -6,7 +6,7 @@ import { fromMempoolBlock, fromEsplora, RateLimitError } from '../src/sources.js
 import { buildMatcher, slugify, coinbaseText } from '../src/pools.js';
 import { natFromBitsHex } from '../src/nat.js';
 import { runUpdate } from '../src/update.js';
-import { latestBlocks, poolList, poolRewards } from '../src/store.js';
+import { latestBlocks, payoutAddresses, poolList, poolRewards } from '../src/store.js';
 
 const START = 885588;
 const chainOf = (from, to, f = () => ({})) => {
@@ -46,7 +46,7 @@ test('esplora block + coinbase normalize like mempool', () => {
     { vin: [{ scriptsig: Buffer.from('/SpiderPool/').toString('hex') }], vout: [{ value: 312_500_000, scriptpubkey_address: 'a' }, { value: 0 }] },
     match,
   );
-  assert.deepEqual(r, { height: 900000, hash: 'h', ts: 1, bits: 386062550, pool: { id: 102, name: 'SpiderPool', slug: 'spiderpool' }, reward: 312_500_000, source: 'esplora' });
+  assert.deepEqual(r, { height: 900000, hash: 'h', ts: 1, bits: 386062550, pool: { id: 102, name: 'SpiderPool', slug: 'spiderpool' }, reward: 312_500_000, payoutAddresses: ['a'], source: 'esplora' });
 });
 
 test('first run catches up in pages of 15 and stops at maxPagesPerRun', async () => {
@@ -149,4 +149,15 @@ test('API reads come back in the shapes the site already uses', async () => {
   assert.equal(pr.blocks[0].blck, START + 20);
   assert.equal(pr.analytics.total, 21);
   assert.equal(pr.analytics.total_rewards, 21 * 386062550);
+});
+
+test('payout addresses are kept per block and grouped per pool', async () => {
+  const db = makeD1();
+  const chain = chainOf(START, START + 9, (h) => (h % 2 ? { payout: 'bc1qfoundry2' } : {}));
+  await runUpdate({ db, mempool: fakeMempool(chain), esplora: noEsplora });
+  const rows = await payoutAddresses(db);
+  assert.deepEqual(
+    rows.map((r) => [r.slug, r.address, r.blocks]).sort(),
+    [['foundryusa', 'bc1qfoundry2', 5], ['foundryusa', 'bc1qfoundryusa', 5]],
+  );
 });

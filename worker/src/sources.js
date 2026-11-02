@@ -28,6 +28,7 @@ export function fromMempoolBlock(b) {
     bits: b.bits,
     pool: pool ? { id: pool.id, name: pool.name, slug: pool.slug } : { id: 0, name: 'Unknown', slug: 'unknown' },
     reward: b.extras?.reward ?? null,
+    payoutAddresses: b.extras?.coinbaseAddresses ?? (b.extras?.coinbaseAddress ? [b.extras.coinbaseAddress] : null),
     source: 'mempool',
   };
 }
@@ -52,6 +53,7 @@ export function fromEsplora(block, coinbaseTx, match) {
     bits: block.bits,
     pool: match({ addresses, scriptsigAscii: coinbaseText(vin.scriptsig || '') }),
     reward,
+    payoutAddresses: [...new Set(addresses)],
     source: 'esplora',
   };
 }

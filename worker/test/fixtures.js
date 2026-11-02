@@ -1,11 +1,11 @@
 // Block objects in the shape mempool.space's /api/v1/blocks returns (only the fields we read).
-export function mempoolBlock(height, { pool = 'Foundry USA', slug = 'foundryusa', id = 111, bits = 386062550, hash } = {}) {
+export function mempoolBlock(height, { pool = 'Foundry USA', slug = 'foundryusa', id = 111, bits = 386062550, hash, payout = `bc1q${slug}` } = {}) {
   return {
     id: hash ?? `hash${height}`,
     height,
     timestamp: 1_760_000_000 + (height - 885588) * 600,
     bits,
-    extras: { reward: 315_000_000, pool: { id, name: pool, slug } },
+    extras: { reward: 315_000_000, pool: { id, name: pool, slug }, coinbaseAddresses: [payout] },
   };
 }
 

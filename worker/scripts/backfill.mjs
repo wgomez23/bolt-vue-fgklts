@@ -64,6 +64,7 @@ function nodeSource() {
           bits: natFromBitsHex(b.bits),
           pool: match({ addresses, scriptsigAscii: coinbaseText(cb.vin[0].coinbase || '') }),
           reward,
+          payoutAddresses: [...new Set(addresses)],
           source: 'node',
         };
       }
@@ -107,8 +108,9 @@ function mempoolPaged() {
 
 // ---------- SQL ----------
 const q = (v) => (v === null || v === undefined ? 'NULL' : typeof v === 'number' ? String(v) : `'${String(v).replace(/'/g, "''")}'`);
+const addrJson = (r) => (r.payoutAddresses?.length ? JSON.stringify(r.payoutAddresses) : null);
 const row = (r) =>
-  `(${[r.height, r.hash, r.ts, r.bits, r.pool.id, r.pool.name, r.pool.slug, r.reward, r.source].map(q).join(',')})`;
+  `(${[r.height, r.hash, r.ts, r.bits, r.pool.id, r.pool.name, r.pool.slug, r.reward, addrJson(r), r.source].map(q).join(',')})`;
 
 const src = source === 'node' ? nodeSource() : mempoolPaged();
 const to = Number(args.to || (await src.tipHeight()));
@@ -121,7 +123,7 @@ let n = 0;
 const flush = () => {
   if (!batch.length) return;
   lines.push(
-    `INSERT OR REPLACE INTO blocks (height, hash, ts, bits, pool_id, pool_name, pool_slug, reward, source) VALUES\n${batch.join(',\n')};`,
+    `INSERT OR REPLACE INTO blocks (height, hash, ts, bits, pool_id, pool_name, pool_slug, reward, payout_addresses, source) VALUES\n${batch.join(',\n')};`,
   );
   batch = [];
 };

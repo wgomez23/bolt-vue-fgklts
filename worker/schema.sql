@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS blocks (
   pool_name  TEXT    NOT NULL,
   pool_slug  TEXT    NOT NULL,
   reward     INTEGER,            -- coinbase reward in sats (subsidy + fees), when known
+  payout_addresses TEXT,         -- JSON array of the coinbase output addresses, for NAT balance lookups
   source     TEXT    NOT NULL    -- mempool | esplora | node
 );
 CREATE INDEX IF NOT EXISTS blocks_by_pool ON blocks (pool_slug, height DESC);
@@ -29,3 +30,6 @@ CREATE TABLE IF NOT EXISTS meta (
   key   TEXT PRIMARY KEY,
   value TEXT NOT NULL
 );
+
+-- For an existing database (added after the first deploy):
+--   ALTER TABLE blocks ADD COLUMN payout_addresses TEXT;
