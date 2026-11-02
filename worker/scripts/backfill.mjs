@@ -134,10 +134,16 @@ for await (const r of src.blocks(from, to)) {
 }
 flush();
 
+// Register every payout address for the TAP balance lookups (existing ones keep their balances).
+lines.push(`INSERT OR IGNORE INTO address_balances (address, pool_slug)
+SELECT a.value, b.pool_slug FROM blocks b, json_each(b.payout_addresses) a
+WHERE b.payout_addresses IS NOT NULL AND b.height BETWEEN ${from} AND ${to};`);
+
 // Rebuild the per-pool totals from the blocks table so they always match it.
 lines.push(`DELETE FROM pools;`);
-lines.push(`INSERT INTO pools (slug, id, name, blocks, total_rewards, total_reward_sats, last_height)
-SELECT b.pool_slug, b.pool_id, b.pool_name, t.blocks, t.nat, t.sats, t.last
+lines.push(`INSERT INTO pools (slug, id, name, blocks, total_rewards, total_reward_sats, last_height, balance)
+SELECT b.pool_slug, b.pool_id, b.pool_name, t.blocks, t.nat, t.sats, t.last,
+       (SELECT SUM(balance) FROM address_balances ab WHERE ab.pool_slug = b.pool_slug AND ab.balance IS NOT NULL)
 FROM (SELECT pool_slug, COUNT(*) AS blocks, SUM(bits) AS nat, SUM(COALESCE(reward, 0)) AS sats, MAX(height) AS last
       FROM blocks GROUP BY pool_slug) t
 JOIN blocks b ON b.height = t.last;`);

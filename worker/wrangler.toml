@@ -8,6 +8,9 @@ crons = ["*/2 * * * *"]
 
 [vars]
 START_HEIGHT = "885588"
+# Set once the TAP reader server is up (see tap-reader-server/README.md), e.g. "https://tap.natgmi.com".
+# Its token is a secret: wrangler secret put TAP_READER_TOKEN
+TAP_READER_URL = ""
 
 [[d1_databases]]
 binding = "DB"

@@ -20,15 +20,17 @@ leaderboard and pool popup. It shows, for every block since 885588, how much NAT
 | `GET /blocks?limit=15` | `{ blocks: [{ id, height, timestamp, bits, extras: { pool, reward } }] }` | blocks strip |
 | `GET /pools?offset&limit` | `{ success, data: { pools, total } }` | miner leaderboard |
 | `GET /pools/:slug?offset&limit` | `{ success, blocks, analytics }` | pool popup |
+| `GET /token` | `{ success, max, mint_left, supply, holders, reader_block, checked_at }` | (not wired yet) |
 | `GET /health` | 200, or 503 if the newest block is over two hours old | uptime monitor |
 
-Each block also stores its coinbase payout addresses (`payout_addresses`), so the addresses
-that received NAT can be listed per pool (`payoutAddresses()` in `src/store.js`). Turning those
-into current NAT balances still needs a TAP indexer to look each address up.
+Each block also stores its coinbase payout addresses. With a TAP reader connected
+(`tap-reader-server/`), the cron keeps each address's current NAT balance and rolls them up
+per pool, so the leaderboard and pool popup show balances, and `GET /token` returns supply
+and holder count. Without it, balances stay hidden.
 
-Not covered (still from api.mscribe.io or hidden): pool NAT **balances**, the per-reward
-valid/invalid status, and token stats (`/api/tokens/all`: supply, holders, floor price).
-Those need a TAP indexer or another data source.
+Not covered yet: the per-reward valid/invalid status (hidden), and the site's token stats
+still come from api.mscribe.io (`/api/tokens/all`). `GET /token` can replace supply and
+holders; the floor price still needs a market data source.
 
 ## Free-plan budget
 

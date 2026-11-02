@@ -72,6 +72,10 @@ export async function saveBlocks(db, records, extra = []) {
         ),
     );
     stmts.push(poolAddStmt(db, r, +1));
+    for (const a of r.payoutAddresses || []) {
+      // Registered for the TAP balance lookups in balances.js.
+      stmts.push(db.prepare('INSERT OR IGNORE INTO address_balances (address, pool_slug) VALUES (?, ?)').bind(a, r.pool.slug));
+    }
     changed++;
   }
   if (stmts.length || extra.length) await db.batch([...stmts, ...extra]);
@@ -107,7 +111,7 @@ export async function poolList(db, offset, limit) {
       slug: p.slug,
       blocks: p.blocks,
       total_rewards: p.total_rewards,
-      balance: null, // needs a TAP indexer; the site hides empty balances
+      balance: p.balance ?? null, // from the TAP reader; null until it has been checked
       extraData: { totalReward: p.total_reward_sats },
     })),
   };
@@ -118,12 +122,12 @@ export async function poolRewards(db, slug, offset, limit) {
     db
       .prepare('SELECT height, hash, ts, bits FROM blocks WHERE pool_slug = ? ORDER BY height DESC LIMIT ? OFFSET ?')
       .bind(slug, limit, offset),
-    db.prepare('SELECT blocks, total_rewards FROM pools WHERE slug = ?').bind(slug),
+    db.prepare('SELECT blocks, total_rewards, balance FROM pools WHERE slug = ?').bind(slug),
   ]);
   const p = pool.results[0];
   return {
     blocks: rows.results.map((r) => ({ blck: r.height, ts: r.ts, amt: r.bits, hash: r.hash, tx: null, fail: false })),
-    analytics: { total_rewards: p?.total_rewards ?? 0, balance: null, total: p?.blocks ?? 0 },
+    analytics: { total_rewards: p?.total_rewards ?? 0, balance: p?.balance ?? null, total: p?.blocks ?? 0 },
   };
 }
 

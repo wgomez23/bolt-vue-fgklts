@@ -22,7 +22,9 @@ CREATE TABLE IF NOT EXISTS pools (
   blocks            INTEGER NOT NULL DEFAULT 0,
   total_rewards     INTEGER NOT NULL DEFAULT 0,   -- sum of NAT (bits) for blocks this pool found
   total_reward_sats INTEGER NOT NULL DEFAULT 0,
-  last_height       INTEGER
+  last_height       INTEGER,
+  balance           INTEGER,                      -- current NAT held by this pool's payout addresses (from the TAP reader)
+  balance_checked_at INTEGER
 );
 CREATE INDEX IF NOT EXISTS pools_by_rewards ON pools (total_rewards DESC);
 
@@ -31,5 +33,17 @@ CREATE TABLE IF NOT EXISTS meta (
   value TEXT NOT NULL
 );
 
--- For an existing database (added after the first deploy):
+-- Current dmt-nat balance of every coinbase payout address, refreshed a few at a time from the TAP reader.
+CREATE TABLE IF NOT EXISTS address_balances (
+  address    TEXT    PRIMARY KEY,
+  pool_slug  TEXT    NOT NULL,
+  balance    INTEGER,            -- null until first checked
+  checked_at INTEGER NOT NULL DEFAULT 0
+);
+CREATE INDEX IF NOT EXISTS address_balances_by_age ON address_balances (checked_at);
+CREATE INDEX IF NOT EXISTS address_balances_by_pool ON address_balances (pool_slug);
+
+-- For a database created before these columns existed:
 --   ALTER TABLE blocks ADD COLUMN payout_addresses TEXT;
+--   ALTER TABLE pools ADD COLUMN balance INTEGER;
+--   ALTER TABLE pools ADD COLUMN balance_checked_at INTEGER;

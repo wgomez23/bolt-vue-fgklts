@@ -3,10 +3,13 @@
 //   GET /blocks              latest blocks, shaped like mempool.space blocks
 //   GET /pools               leaderboard: NAT per pool
 //   GET /pools/:slug         one pool's blocks
+//   GET /token               dmt-nat supply and holders from the TAP reader
 //   GET /health              last update, for an uptime monitor
 import { esploraSource, mempoolSource } from './sources.js';
 import { getMeta, latestBlocks, lastHeight, poolList, poolRewards } from './store.js';
 import { runUpdate } from './update.js';
+import { refreshBalances } from './balances.js';
+import { tapSource } from './tap.js';
 
 const STALE_AFTER_S = 2 * 60 * 60; // a 2-hour gap between blocks is very rare; let the monitor alert
 
@@ -43,6 +46,12 @@ async function route(request, env) {
     const { limit, offset } = page(url, 10, 100);
     return json({ success: true, ...(await poolRewards(db, m[1], offset, limit)) }, { maxAge: 120 });
   }
+  if (url.pathname === '/token') {
+    const t = await getMeta(db, 'token');
+    if (!t) return json({ success: false, error: 'no TAP reader data yet' }, { status: 503, maxAge: 60 });
+    const supply = t.max != null && t.mint_left != null ? (BigInt(t.max) - BigInt(t.mint_left)).toString() : null;
+    return json({ success: true, ...t, supply }, { maxAge: 300 });
+  }
   if (url.pathname === '/health') {
     const [status, height] = await Promise.all([getMeta(db, 'status'), lastHeight(db)]);
     const newest = await db.prepare('SELECT ts FROM blocks ORDER BY height DESC LIMIT 1').first();
@@ -70,6 +79,16 @@ export default {
 
   async scheduled(event, env, ctx) {
     const opts = env.START_HEIGHT ? { startHeight: Number(env.START_HEIGHT) } : {};
-    ctx.waitUntil(runUpdate({ db: env.DB, mempool: mempoolSource(), esplora: esploraSource(), opts }));
+    ctx.waitUntil(
+      (async () => {
+        await runUpdate({ db: env.DB, mempool: mempoolSource(), esplora: esploraSource(), opts });
+        // Miner balances and token stats, only once a TAP reader is set up (see tap-reader-server/).
+        if (env.TAP_READER_URL && env.TAP_READER_TOKEN) {
+          const tap = tapSource({ base: env.TAP_READER_URL, token: env.TAP_READER_TOKEN });
+          const r = await refreshBalances({ db: env.DB, tap });
+          if (r.error) console.log('TAP reader:', r.error);
+        }
+      })(),
+    );
   },
 };
