@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
-# Sets up a Trac TAP reader (https://github.com/Trac-Systems/tap-reader) on a fresh Ubuntu 24.04
-# server for natgmi.com's miner balances and NAT token stats.
+# Sets up a Trac TAP reader (https://github.com/Trac-Systems/tap-reader) on a fresh Debian 13
+# (trixie) server for natgmi.com's miner balances and NAT token stats.
+# Debian, not Ubuntu: as of 2026-11-02 Debian has shipped the kernel fix for CVE-2026-98432
+# (remote TCP flaw) and Ubuntu has not. The script installs all updates first.
 #
-#   sudo DOMAIN=tap.natgmi.com bash setup.sh
+#   DOMAIN=tap.natgmi.com bash setup.sh      (as root)
 #
 # Before running: point DOMAIN's DNS A record at this server, so Caddy can get an HTTPS certificate.
 # What it does:
@@ -24,7 +26,8 @@ TOKEN_FILE=/etc/tap-reader/token
 echo "== Packages"
 export DEBIAN_FRONTEND=noninteractive
 apt-get update -y
-apt-get install -y --no-install-recommends git curl ca-certificates xz-utils ufw caddy build-essential python3
+apt-get -y full-upgrade   # includes the patched kernel
+apt-get install -y --no-install-recommends git curl ca-certificates xz-utils openssl ufw caddy build-essential python3
 
 echo "== Node $NODE_VERSION"
 if ! node --version 2>/dev/null | grep -q "^v$NODE_VERSION$"; then
@@ -43,14 +46,14 @@ echo "== TAP reader"
 id tap >/dev/null 2>&1 || useradd --system --create-home --home-dir /var/lib/tap --shell /usr/sbin/nologin tap
 if [ ! -d "$APP_DIR/.git" ]; then
   install -d -o tap -g tap "$APP_DIR"
-  sudo -u tap git clone https://github.com/Trac-Systems/tap-reader.git "$APP_DIR"
+  runuser -u tap -- git clone https://github.com/Trac-Systems/tap-reader.git "$APP_DIR"
 fi
-sudo -u tap git -C "$APP_DIR" fetch --quiet origin
-sudo -u tap git -C "$APP_DIR" checkout --quiet "$TAP_READER_COMMIT"
-sudo -u tap bash -c "cd '$APP_DIR' && npm install --omit=dev --no-audit --no-fund"
+runuser -u tap -- git -C "$APP_DIR" fetch --quiet origin
+runuser -u tap -- git -C "$APP_DIR" checkout --quiet "$TAP_READER_COMMIT"
+runuser -u tap -- bash -c "cd '$APP_DIR' && npm install --omit=dev --no-audit --no-fund"
 
 # local.json overrides config/default.json (node-config); the mainnet channel stays as Trac ships it.
-sudo -u tap tee "$APP_DIR/config/local.json" >/dev/null <<'JSON'
+runuser -u tap -- tee "$APP_DIR/config/local.json" >/dev/null <<'JSON'
 {
   "enableRest": true,
   "enableRestApiDocs": false,
@@ -110,6 +113,11 @@ ufw allow OpenSSH
 ufw allow 80/tcp
 ufw allow 443/tcp
 ufw --force enable
+
+newest_kernel=$(ls /lib/modules | sort -V | tail -1)
+if [ "$newest_kernel" != "$(uname -r)" ]; then
+  echo "!! A newer kernel ($newest_kernel) was installed. Reboot once now: reboot"
+fi
 
 cat <<DONE
 

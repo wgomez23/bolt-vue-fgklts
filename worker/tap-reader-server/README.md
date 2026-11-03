@@ -6,29 +6,31 @@ syncs TAP data that Trac's indexers publish on their peer-to-peer network.
 
 ## Server
 
-Any Ubuntu 24.04 machine with 4 vCPU, 8 GB RAM and 160 GB SSD (Trac asks for 2-4 cores,
+Any Debian 13 (trixie) machine with 4 vCPU, 8 GB RAM and 160 GB SSD (Trac asks for 2-4 cores,
 8 GB RAM, 150 GB SSD). For example a Hetzner Cloud plan of that size, about $35-40 a month.
 
-1. Create the server (Ubuntu 24.04, your SSH key).
+1. Create the server with **Debian 13** and your SSH key. Not Ubuntu for now: as of
+   2026-11-02 Ubuntu hasn't shipped its kernel fix for CVE-2026-98432, a remote TCP flaw;
+   Debian has. The script installs all updates and tells you if a reboot is needed.
 2. Add a DNS **A record** `tap.natgmi.com` → the server's IP. If natgmi.com's DNS is on
    Cloudflare, leave the record **DNS only** (grey cloud) so Caddy can get its certificate.
 3. Copy `setup.sh` to the server and run:
 
    ```sh
-   sudo DOMAIN=tap.natgmi.com bash setup.sh
+   DOMAIN=tap.natgmi.com bash setup.sh   # as root
    ```
 
    It prints a token at the end. The first sync can take several hours.
 4. Check it's catching up (the number should approach the current block height):
 
    ```sh
-   curl -s -H "Authorization: Bearer $(sudo cat /etc/tap-reader/token)" https://tap.natgmi.com/getCurrentBlock
+   curl -s -H "Authorization: Bearer $(cat /etc/tap-reader/token)" https://tap.natgmi.com/getCurrentBlock
    ```
 
    Then compare one pool payout address's balance against Tapalytics' rich list:
 
    ```sh
-   curl -s -H "Authorization: Bearer $(sudo cat /etc/tap-reader/token)" \
+   curl -s -H "Authorization: Bearer $(cat /etc/tap-reader/token)" \
      https://tap.natgmi.com/getBalance/ADDRESS/dmt-nat
    ```
 
@@ -58,5 +60,5 @@ balances automatically; `GET /token` returns the token stats.
 - The reader copies what Trac's indexers publish. If Trac stops publishing, balances stop
   updating (the site keeps the last values). This is not an independent indexer.
 - It's beta software (v0.15.12, last updated June 2026).
-- Later, the same script works on a dedicated Mac mini running Ubuntu, or the reader can be run
+- Later, the same script works on a dedicated Mac mini running Debian, or the reader can be run
   directly with Node on macOS (`npm install && npm start` in a clone).
